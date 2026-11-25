@@ -10,16 +10,17 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (#s-now..#s-rank, v11, tanpa sidebar)",
+      "source": "prototype/pod-dashboard.html (#s-now..#s-rank incl. #s-scope, v12)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
-        "/api/pod/summary",
-        "/api/pod/trend",
-        "/api/pod/status-tree",
         "/api/pod/aging",
+        "/api/pod/options",
         "/api/pod/performance",
         "/api/pod/ranking",
-        "/api/pod/options"
+        "/api/pod/scope-compare",
+        "/api/pod/status-tree",
+        "/api/pod/summary",
+        "/api/pod/trend"
       ],
       "states": {
         "default": true,
@@ -35,9 +36,9 @@
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v11: sidebar dihapus, cincin → bullet graph, export per kelompok, since-last-visit, saved view, palet bersih",
+        "reason": "v12: Intracity vs Domestic, grafik kinerja & aging, back to top, simpan filter",
         "conformance": "pass",
-        "e2e": "92/92"
+        "e2e": "101/101"
       }
     },
     "SCR-DSH-002": {

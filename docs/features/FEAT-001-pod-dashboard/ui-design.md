@@ -13,6 +13,13 @@ komposisi memakai komponen di `docs/design.md`. Tidak ada design tool yang terhu
 - **States:** default ✓ · tanpa data ✓ · lib grafik gagal ✓ · reduced motion ✓ · HP 390px ✓ · kunjungan pertama ✓ · loading/error API ✗ *gap (T9)*.
 - **Kesesuaian:** palet diganti ke nilai yang lebih jernih (lihat design.md §1), peran warna tidak berubah; tokens.json disinkronkan (52 nilai cocok).
 
+**Tambahan v12 (25 Nov 2026).**
+- **Intracity vs Domestic** (bagian baru `#s-scope`, slide 4/7): bar porsi kiriman, dua kolom berdampingan (total · POD harus balik · belum balik, bullet Returned / On-time / Critical, bar warna umur, rata-rata HK, lewat SLA) + kalimat kesimpulan. "Show only this" → filter Scope; kolom yang tersaring tampil redup dengan "Compare both".
+- **Data simulasi:** intracity kini terjadi di setiap cabang/sub cabang (asal = tujuan), bukan hanya 6 hub → filter cabang/region + Intracity tidak lagi kosong.
+- **Lebih visual:** Kinerja pengembalian default **Grafik** (baris bullet on-time + target 80%) | Tabel; Aging default **Grafik kolom** (belum balik per warna umur vs sudah balik per rentang HK) | Tabel.
+- **Back to top** mengambang setelah gulir 600px; tombol simpan → **"Save my filters / Simpan filter saya"**.
+- Export per kelompok: 8 (tambah `scope`). E2E 101/101.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

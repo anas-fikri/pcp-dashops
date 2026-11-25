@@ -519,6 +519,60 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v12: lebih visual, scope, back to top ---------- */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.totop { position: fixed; right: 20px; bottom: 20px; z-index: 40; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  cursor: pointer; display: grid; place-items: center; box-shadow: 0 8px 22px rgba(15, 23, 42, .16); transition: background var(--dur-fast), color var(--dur-fast), transform var(--dur-fast); }
+.totop svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.totop:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); transform: translateY(-2px); }
+body.present .totop { display: none; }
+/* scope: Intracity vs Domestic */
+.scp-split { display: flex; height: 34px; border-radius: 8px; overflow: hidden; gap: 2px; margin-bottom: 16px; }
+.scp-seg { display: flex; align-items: center; gap: 8px; padding: 0 12px; min-width: 0; white-space: nowrap; overflow: hidden; cursor: pointer; font-size: 13px; font-variant-numeric: tabular-nums; }
+.scp-seg.s1 { background: var(--ink); color: var(--card); } .scp-seg.s2 { background: var(--band-1); color: var(--ink); }
+.scp-seg:hover { filter: brightness(1.12); }
+.scp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.scp-col { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; display: grid; gap: 14px; align-content: start; }
+.scp-col.off { background: var(--soft); border-style: dashed; color: var(--muted); }
+.scp-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.scp-h b { font-size: 17px; font-weight: 800; display: block; color: var(--ink); }
+.scp-big { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.scp-big .go { font-size: inherit; }
+.scp-big .nv b { font-size: 30px; font-weight: 800; letter-spacing: -.03em; }
+.scp-big .k { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+.scp-sev { display: grid; gap: 6px; font-size: 12.5px; }
+.scp-foot { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13px; color: var(--muted); align-items: center; }
+.scp-foot b { color: var(--ink); }
+.scp-verdict { margin-top: 14px; padding: 10px 14px; border-radius: var(--r-sm); background: var(--hi); font-size: 13.5px; }
+/* kinerja: baris bullet */
+.pv-row { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(170px, 1.7fr) repeat(3, minmax(64px, auto)); gap: 8px 16px; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); }
+.pv-row:first-child { border-top: 0; }
+.pv-l b { display: block; font-size: 14px; } .pv-l .desc { font-size: 12px; color: var(--muted); }
+.pv-m { display: grid; justify-items: end; gap: 2px; text-align: right; }
+.pv-m .k { font-size: 11px; color: var(--muted); font-weight: 600; }
+.pv-m .wd { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+/* aging: grafik kolom */
+.ag-chart { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+.ag-col { display: grid; gap: 8px; min-width: 0; }
+.ag-plot { height: 240px; display: flex; align-items: flex-end; gap: 6px; padding: 0 4px; border-bottom: 2px solid var(--line); }
+.ag-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; min-width: 0; }
+.ag-v { text-align: center; font-size: 12px; line-height: 1.2; padding-bottom: 4px; font-variant-numeric: tabular-nums; }
+.ag-v b { display: block; font-size: 14px; font-weight: 800; } .ag-v small { color: var(--muted); }
+.ag-stack { display: flex; flex-direction: column-reverse; border-radius: 4px 4px 0 0; overflow: hidden; transform-origin: bottom; animation: growY var(--dur-slow) var(--ease) both; min-height: 2px; }
+.ag-stack > span { display: block; cursor: pointer; min-height: 2px; }
+.ag-stack > span:hover { filter: brightness(1.15); }
+.ag-x { text-align: center; font-size: 12.5px; font-weight: 700; }
+.ag-x small { display: block; font-weight: 500; color: var(--muted); }
+.ag-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+.ag-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+@keyframes growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .ag-stack { animation: none; } }
+@media (max-width: 860px) {
+  .scp-grid { grid-template-columns: 1fr; } .scp-seg .x { display: none; }
+  .pv-row { grid-template-columns: 1fr 1fr 1fr; } .pv-l, .pv-row > .bullet { grid-column: 1 / -1; } .pv-m { justify-items: start; text-align: left; }
+  .ag-chart { grid-template-columns: repeat(7, 120px); overflow-x: auto; }
+  #aging-viz { overflow-x: auto; }
+}
 </style>
 
 <div class="wrap">
@@ -590,6 +644,12 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
     <div class="tw" id="tree-wrap"><table id="tree"></table></div>
   </section>
 
+  <section class="card slide" id="s-scope">
+    <div class="card-head"><h2><span data-t="scp.title"></span><i class="info" tabindex="0" data-tt="scp.tip">i</i></h2><button type="button" class="xbtn" data-xport="scope" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
+    <p class="sub" data-t="scp.sub"></p>
+    <div id="scp"></div>
+  </section>
+
   <div class="bento slide" id="s-mid">
     <section class="card span-5">
       <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
@@ -597,9 +657,10 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
       <div id="sev-panel"></div>
     </section>
     <section class="card span-7">
-      <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
+      <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><span class="tools-r"><span class="seg" role="group"><button type="button" data-pv="chart" id="pv-chart" data-t="fv.c"></button><button type="button" data-pv="table" id="pv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
       <p class="sub" data-t="perf.sub"></p>
-      <div class="tw"><table id="perf"></table></div>
+      <div class="pviz" id="perf-viz"></div>
+      <div class="tw" id="perf-wrap"><table id="perf"></table></div>
     </section>
   </div>
 
@@ -608,12 +669,14 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
       <h2><span data-t="aging.title"></span><i class="info" tabindex="0" data-tt="aging.tip">i</i></h2>
       <span class="head-tools">
         <span class="seg" role="group" data-tt="metric.tip"><button type="button" data-metric="n" id="mt-n" data-t="mode.n"></button><button type="button" data-metric="v" id="mt-v" data-t="mode.v"></button></span>
-        <span class="seg" role="group"><button type="button" data-am="bucket" id="am-bucket" data-t="mode.bucket"></button><button type="button" data-am="sev" id="am-sev" data-t="mode.sev"></button></span>
+        <span class="seg" role="group"><button type="button" data-av="chart" id="av-chart" data-t="fv.c"></button><button type="button" data-av="table" id="av-table" data-t="fv.t"></button></span>
+        <span class="seg" role="group" id="am-seg"><button type="button" data-am="bucket" id="am-bucket" data-t="mode.bucket"></button><button type="button" data-am="sev" id="am-sev" data-t="mode.sev"></button></span>
         <button type="button" class="xbtn" data-xport="aging" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button>
       </span>
     </div>
-    <p class="sub" data-t="aging.sub"></p>
-    <div class="tw"><table class="hm" id="aging"></table></div>
+    <p class="sub" id="aging-sub"></p>
+    <div id="aging-viz"></div>
+    <div class="tw" id="aging-wrap"><table class="hm" id="aging"></table></div>
   </section>
 
   <section class="card slide" id="s-rank">
@@ -644,6 +707,7 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
   </details>
 
   <footer data-t="footer"></footer>
+  <button type="button" class="totop" id="totop" hidden data-tt="top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span class="sr" data-t="top"></span></button>
 </div>
 
 <div class="modal" id="modal" hidden>
@@ -824,8 +888,8 @@ const T = {
   'view.clear.tip': ['Stop opening with the saved filters.', 'Berhenti membuka dengan filter tersimpan.'],
   'view.clear': ['Forget', 'Lupakan'],
   'view.save.tip': ['Remember these filters; the dashboard opens with them next time (this browser only).', 'Ingat filter ini; dashboard akan terbuka dengan filter ini lain kali (browser ini saja).'],
-  'view.saved': ['★ My view', '★ Tampilan saya'],
-  'view.save': ['☆ Save as my view', '☆ Simpan sebagai tampilan saya'],
+  'view.saved': ['★ My filters saved', '★ Filter saya tersimpan'],
+  'view.save': ['☆ Save my filters', '☆ Simpan filter saya'],
   'since.tip': ['Compared with what you saw last time with the same filters (stored in this browser only).', 'Dibandingkan dengan yang Anda lihat terakhir dengan filter sama (disimpan di browser ini saja).'],
   'since.hold': ['On hold', 'Tertahan'],
   'since.crit': ['Critical', 'Kritis'],
@@ -843,6 +907,22 @@ const T = {
   'bl.crit': ['Critical (purple)', 'Kritis (ungu)'],
   'bl.ot': ['On-time return', 'Tepat waktu'],
   'bl.ret': ['Returned', 'Sudah balik'],
+  'top': ['Back to top', 'Kembali ke atas'],
+  'fv.c': ['Chart', 'Grafik'],
+  'scp.title': ['Intracity vs Domestic', 'Intracity vs Domestik'],
+  'scp.tip': ['Intracity: origin and destination in the same city. Domestic: between cities. Same rules, same SLA per customer; only the route differs.', 'Intracity: asal dan tujuan di kota yang sama. Domestik: antar kota. Aturan dan SLA per customer sama; yang beda hanya rutenya.'],
+  'scp.sub': ['Same filters, split by route. Click any number or bar for its AWB list, or show only one route on the whole dashboard.', 'Filter sama, dipisah per rute. Klik angka atau batang mana pun untuk daftar AWB-nya, atau tampilkan satu rute saja di seluruh dashboard.'],
+  'scp.only': ['Show only this', 'Tampilkan ini saja'],
+  'scp.both': ['Compare both', 'Bandingkan keduanya'],
+  'scp.off': ['Hidden because the Scope filter shows {x} only.', 'Disembunyikan karena filter Scope hanya menampilkan {x}.'],
+  'scp.ship': ['Total shipments', 'Total kiriman'],
+  'scp.out': ['Outstanding POD by age colour · {n} AWB · {v}', 'POD belum balik per warna umur · {n} AWB · {v}'],
+  'scp.share': ['Share of shipments', 'Porsi kiriman'],
+  'scp.v.lower': ['{a} on-time return is {d} pts lower than {b} ({x} vs {y}); average {wa} vs {wb} WD to return.', 'Ketepatan pengembalian {a} {d} poin lebih rendah dari {b} ({x} vs {y}); rata-rata {wa} vs {wb} HK untuk balik.'],
+  'scp.v.same': ['Both routes return POD on time at a similar rate ({x} vs {y}).', 'Kedua rute mengembalikan POD tepat waktu dengan tingkat serupa ({x} vs {y}).'],
+  'ag.sub.c': ['Bar height = POD per age band (working days). Left bar: not returned yet, split by age colour. Right bar: returned, by how long it took. Click a block for its AWB list.', 'Tinggi batang = POD per rentang umur (hari kerja). Batang kiri: belum balik, dipecah per warna umur. Batang kanan: sudah balik, menurut lama kembalinya. Klik blok untuk daftar AWB.'],
+  'ag.not': ['Not returned (age colour)', 'Belum balik (warna umur)'],
+  'ag.ret': ['Returned (time to return)', 'Sudah balik (lama kembali)'],
   'xp.tip': ['Export this group to Excel (follows the active filters).', 'Export kelompok ini ke Excel (mengikuti filter aktif).'],
   'xp': ['Excel', 'Excel'],
   'flow.of': ['of {x}', 'dari {x}'],
@@ -1027,9 +1107,10 @@ const REDOC_REASON = [{ en: 'Company stamp missing', id: 'Cap perusahaan tidak a
 const ROWS = [];
 const BW = BRANCHES.map(b => Math.pow(b.areas[0] * 30 + b.areas[1] + b.areas[2] * 3, 0.6));
 for (let i = 1; i <= 12000; i++) {
-  const intracity = R() < 0.35;
-  const dest = intracity ? BR[HUBS[ri(0, HUBS.length - 1)]] : pick(BRANCHES, BW);
-  const li = intracity ? 0 : pick([0, 1, 2], [dest.areas[0] * 30, dest.areas[1], dest.areas[2] * 3]);
+  const dest = pick(BRANCHES, BW);
+  // intracity = asal & tujuan satu kota; terjadi di setiap cabang/sub cabang yang melayani kota (bukan site/remote)
+  const intracity = (dest.areas[0] > 0 || dest.areas[1] > 0) && R() < 0.4;
+  const li = intracity ? pick([0, 1], [dest.areas[0] * 30, dest.areas[1]]) : pick([0, 1, 2], [dest.areas[0] * 30, dest.areas[1], dest.areas[2] * 3]);
   let org = intracity ? dest.code : HUBS[ri(0, HUBS.length - 1)];
   if (!intracity && org === dest.code) org = HUBS[(HUBS.indexOf(org) + 1) % HUBS.length];
   const otype = dest.office[li] || 'Agen', lv = LEVELS[li], btype = OFF_GROUP[otype];
@@ -1088,7 +1169,7 @@ function computeAges() {
 }
 
 /* ================= state ================= */
-const S = { fv: 'diagram', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
+const S = { fv: 'diagram', pv: 'chart', av: 'chart', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
 try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank', 'basis'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
 const VIEW_KEYS = ['pmode', 'period', 'from', 'to', 'cust', 'scope', 'reg', 'btype', 'lv', 'branch', 'basis'];
 function loadView() { try { const v = JSON.parse(localStorage.getItem('pod-my-view') || 'null'); if (v) { VIEW_KEYS.forEach(k => { if (k in v) S[k] = v[k]; }); return true; } } catch (e) { /* abaikan */ } return false; }
@@ -1171,7 +1252,7 @@ function applyStatic() {
 
 function render() {
   F = ROWS.filter(inGlobal);
-  renderFilters(); renderNow(); renderTree(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
+  renderFilters(); renderNow(); renderTree(); renderScope(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
   if (!$('#modal').hidden) renderModal();
   countUp();
 }
@@ -1459,7 +1540,7 @@ function renderTrend() {
 if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderTrend());
 
 /* ================= presentasi ================= */
-const SLIDES = [['s-now', 'now.title'], ['s-trend', 'tr.title'], ['s-tree', 'tree.title'], ['s-mid', 'sev.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
+const SLIDES = [['s-now', 'now.title'], ['s-trend', 'tr.title'], ['s-tree', 'tree.title'], ['s-scope', 'scp.title'], ['s-mid', 'sev.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
 const P = { on: false, i: 0, fs: false };
 function showSlide() {
   SLIDES.forEach(([id], i) => $('#' + id).classList.toggle('active', i === P.i));
@@ -1544,10 +1625,43 @@ function renderSev() {
       <span class="n t-${x.k}">${nv(sc[x.k], scv[x.k])}</span><span class="p">${fp(pct(sc[x.k], c.belum))}</span></button>`).join('') + '</div></div>';
 }
 
+const OT_BANDS = [[0, 60, 1], [60, 80, 2], [80, 100, 3]];
+function renderScope() {
+  const SC = ['INTRACITY', 'DOMESTIK'], all = F.length;
+  const D = SC.map((sc, i) => { const rows = F.filter(r => r.scope === sc); return { sc, i, rows, c: core(rows) }; });
+  const nm = sc => t('sc.' + sc), ds = sc => t(sc === 'INTRACITY' ? 'g.intra' : 'g.dom');
+  const split = D.filter(d => d.c.all).map(d => `<span class="scp-seg s${d.i + 1}" style="flex-grow:${d.c.all}" data-open="${spec({ node: 'all', scope: d.sc })}"
+    data-tip="${esc(`${nm(d.sc)}: ${fmt(d.c.all)} AWB · ${rp(d.c.vAll, true)} (${fp(pct(d.c.all, all))})`)}"><b>${esc(nm(d.sc))}</b>${fp(pct(d.c.all, all))}<span class="x"> · ${fmt(d.c.all)} AWB · ${rp(d.c.vAll)}</span></span>`).join('');
+  const col = d => {
+    const c = d.c;
+    if (S.scope && S.scope !== d.sc) return `<div class="scp-col off"><div class="scp-h"><div><b>${esc(nm(d.sc))}</b><span class="desc">${esc(ds(d.sc))}</span></div></div>
+      <p>${esc(t('scp.off', { x: nm(S.scope) }))}</p><div><button type="button" class="btn sm" data-clear="scope">${t('scp.both')}</button></div></div>`;
+    const ot = pct(c.ontime, c.sudah);
+    return `<div class="scp-col"><div class="scp-h"><div><b>${esc(nm(d.sc))}</b><span class="desc">${esc(ds(d.sc))}</span></div>${S.scope ? '' : `<button type="button" class="btn sm" data-filter="scope" data-val="${d.sc}">${t('scp.only')}</button>`}</div>
+      <div class="scp-big"><div><span class="k">${t('scp.ship')}</span>${go({ node: 'all', scope: d.sc }, nv(c.all, c.vAll))}</div><div><span class="k">${esc(nl('balik'))}</span>${go({ node: 'balik', scope: d.sc }, nv(c.balik, c.vBalik))}</div><div><span class="k">${esc(nl('belum'))}</span>${go({ node: 'belum', scope: d.sc }, nv(c.belum, c.vBelum))}</div></div>
+      <div class="bullets">${[
+        bulletHtml({ sp: { node: 'sudah', scope: d.sc }, label: t('bl.ret'), tip: t('ring.ret.tip'), value: pct(c.sudah, c.balik), col: 'var(--data-ret)', target: null, bands: [], sub: `${fmt(c.sudah)} AWB · ${rp(c.vSudah)}`, tgtTxt: t('bl.none') }),
+        bulletHtml({ sp: { node: 'sudah', ot: true, scope: d.sc }, label: t('bl.ot'), tip: t('ring.ot.tip'), value: ot, col: 'var(--success)', target: 80, bands: OT_BANDS, sub: `${fmt(c.ontime)} AWB · ${rp(c.vOntime)}`, tgtTxt: t('bl.tgt.ge', { x: '80%' }) }),
+        bulletHtml({ sp: { node: 'belum', sev: 'ungu', scope: d.sc }, label: t('bl.crit'), tip: t('ring.crit.tip'), value: pct(c.ungu, c.belum), col: 'var(--sev-ungu)', target: 15, bands: [[0, 15, 3], [15, 30, 2], [30, 100, 1]], sub: `${fmt(c.ungu)} AWB · ${rp(c.vUngu)}`, tgtTxt: t('bl.tgt.lt', { x: '15%' }) }),
+      ].join('')}</div>
+      <div class="scp-sev"><span class="muted">${esc(t('scp.out', { n: fmt(c.belum), v: rp(c.vBelum) }))}</span>${sevBar(sevCounts(c.belumRows), { node: 'belum', scope: d.sc }, true, sevVals(c.belumRows))}</div>
+      <div class="scp-foot"><span>${t('p.avg')}${info(t('p.avg.tip'))} <b>${fday(c.avgLead)} ${U()}</b></span><span>${t('p.past')}${info(t('p.past.tip'))} ${c.overD ? go({ node: 'dlv', over: true, scope: d.sc }, nv(c.overD, c.vOverD), 't-merah') : 0}</span></div></div>`;
+  };
+  let verdict = '';
+  const [a, b] = D.map(d => d.c);
+  if (!S.scope && a.sudah >= 10 && b.sudah >= 10) {
+    const oa = pct(a.ontime, a.sudah), ob = pct(b.ontime, b.sudah), d = Math.abs(oa - ob);
+    const [lo, hi] = oa < ob ? [D[0], D[1]] : [D[1], D[0]];
+    verdict = `<p class="scp-verdict">${esc(d < 3 ? t('scp.v.same', { x: fp(oa), y: fp(ob) })
+      : t('scp.v.lower', { a: nm(lo.sc), b: nm(hi.sc), d: f1(d), x: fp(pct(lo.c.ontime, lo.c.sudah)), y: fp(pct(hi.c.ontime, hi.c.sudah)), wa: fday(lo.c.avgLead), wb: fday(hi.c.avgLead) }))}</p>`;
+  }
+  $('#scp').innerHTML = `<div class="scp-split" role="img" aria-label="${esc(t('scp.share'))}">${split}</div><div class="scp-grid">${D.map(col).join('')}</div>${verdict}`;
+}
+
 function renderPerf() {
+  $('#pv-chart').setAttribute('aria-pressed', S.pv === 'chart'); $('#pv-table').setAttribute('aria-pressed', S.pv === 'table');
+  $('#perf-viz').hidden = S.pv !== 'chart'; $('#perf-wrap').hidden = S.pv !== 'table';
   const groups = [
-    [t('sc.INTRACITY'), t('g.intra'), { scope: 'INTRACITY' }, r => r.scope === 'INTRACITY'],
-    [t('sc.DOMESTIK'), t('g.dom'), { scope: 'DOMESTIK' }, r => r.scope === 'DOMESTIK'],
     [t('g.sla', { n: 6 }), t('g.sla.d', { n: 6 }), { sla: 6 }, r => r.sla === 6],
     [t('g.sla', { n: 7 }), t('g.sla.d', { n: 7 }), { sla: 7 }, r => r.sla === 7],
     [t('ty.INTERNAL'), t('g.int'), { btype: 'INTERNAL' }, r => r.btype === 'INTERNAL'],
@@ -1562,9 +1676,38 @@ function renderPerf() {
       <td>${c.overD ? go({ node: 'dlv', over: true, ...sp }, nv(c.overD, c.vOverD), 't-merah') : 0}</td></tr>`;
   }
   $('#perf').innerHTML = h + '</tbody>';
+  $('#perf-viz').innerHTML = groups.map(([lbl, short, sp, tf]) => {
+    const c = core(F.filter(tf));
+    return `<div class="pv-row"><div class="pv-l"><b>${esc(lbl)}</b><span class="desc">${esc(short)}</span></div>
+      ${bulletHtml({ sp: { node: 'sudah', ot: true, ...sp }, label: t('p.ot'), tip: t('ring.ot.tip'), value: pct(c.ontime, c.sudah), col: 'var(--success)', target: 80, bands: OT_BANDS, sub: `${fmt(c.ontime)} AWB · ${rp(c.vOntime)}`, tgtTxt: t('bl.tgt.ge', { x: '80%' }) })}
+      <div class="pv-m"><span class="k">${t('p.ret')}</span>${c.sudah ? go({ node: 'sudah', ...sp }, nv(c.sudah, c.vSudah)) : 0}</div>
+      <div class="pv-m"><span class="k">${t('p.avg')}</span><b class="wd">${fday(c.avgLead)}</b></div>
+      <div class="pv-m"><span class="k">${t('p.past')}</span>${c.overD ? go({ node: 'dlv', over: true, ...sp }, nv(c.overD, c.vOverD), 't-merah') : 0}</div></div>`;
+  }).join('');
 }
 
+function agingChart() {
+  const isV = S.metric === 'v', m = rows => (isV ? sumV(rows) : rows.length);
+  const B = F.filter(NODE.belum.t), Sd = F.filter(NODE.sudah.t);
+  const cols = BUCKETS.map(b => ({ b, nb: B.filter(r => r.bk === b.i), sd: Sd.filter(r => r.bk === b.i) }));
+  const max = Math.max(1, ...cols.flatMap(x => [m(x.nb), m(x.sd)]));
+  const lab = rows => (isV ? `<b>${rp(sumV(rows))}</b><small>${fmt(rows.length)} AWB</small>` : `<b>${fmt(rows.length)}</b><small>${rp(sumV(rows))}</small>`);
+  const tip = (what, b, rows, extra) => `${what} · ${b.label} ${U()}${extra ? ' · ' + extra : ''}: ${fmt(rows.length)} AWB · ${rp(sumV(rows), true)}`;
+  const html = cols.map(({ b, nb, sd }) => {
+    const notSegs = SEV.map(x => ({ x, rows: nb.filter(r => r.sev === x.k) })).filter(o => o.rows.length).map(o =>
+      `<span class="bg-${o.x.k}" style="flex:${m(o.rows)} 0 0" data-open="${spec({ node: 'belum', bk: b.i, sev: o.x.k })}" data-tip="${esc(tip(nl('belum'), b, o.rows, L(o.x.label)))}"></span>`).join('');
+    return `<div class="ag-col"><div class="ag-plot">
+      <div class="ag-bar"><span class="ag-v">${lab(nb)}</span><div class="ag-stack" style="height:${(m(nb) / max) * 100}%">${notSegs}</div></div>
+      <div class="ag-bar"><span class="ag-v">${lab(sd)}</span><div class="ag-stack" style="height:${(m(sd) / max) * 100}%">${sd.length ? `<span style="flex:1;background:var(--data-ret)" data-open="${spec({ node: 'sudah', bk: b.i })}" data-tip="${esc(tip(nl('sudah'), b, sd))}"></span>` : ''}</div></div>
+    </div><div class="ag-x">${b.label} ${U()}<small>${fp(pct(nb.length + sd.length, B.length + Sd.length))}</small></div></div>`;
+  }).join('');
+  $('#aging-viz').innerHTML = `<div class="ag-chart">${html}</div><div class="ag-legend"><span><b>${t('ag.not')}:</b></span>${SEV.map(x => `<span><i class="bg-${x.k}"></i>${esc(L(x.label))}</span>`).join('')}<span><i style="background:var(--data-ret)"></i>${t('ag.ret')}</span></div>`;
+}
 function renderAging() {
+  $('#av-chart').setAttribute('aria-pressed', S.av === 'chart'); $('#av-table').setAttribute('aria-pressed', S.av === 'table');
+  $('#aging-viz').hidden = S.av !== 'chart'; $('#aging-wrap').hidden = S.av !== 'table'; $('#am-seg').hidden = S.av !== 'table';
+  $('#aging-sub').textContent = S.av === 'chart' ? t('ag.sub.c') : t('aging.sub');
+  agingChart();
   $('#am-bucket').setAttribute('aria-pressed', S.am === 'bucket'); $('#am-sev').setAttribute('aria-pressed', S.am === 'sev');
   $('#mt-n').setAttribute('aria-pressed', S.metric === 'n'); $('#mt-v').setAttribute('aria-pressed', S.metric === 'v');
   const isV = S.metric === 'v', mval = rows => (isV ? sumV(rows) : rows.length), mfmt = v => (isV ? rp(v) : fmt(v));
@@ -1906,8 +2049,19 @@ function exportGroup(key) {
   } else if (key === 'sev') {
     add([[t('sev.title'), t('colourW', { x: '' }).trim(), t('c.count'), t('c.val'), '%'],
       ...SEV.map(x => { const rr = c.belumRows.filter(r => r.sev === x.k); return [`${L(x.label)} – ${L(x.short)}`, sevRanges(x), rr.length, sumV(rr), r1(pct(rr.length, c.belum))]; })], 'Age colour');
+  } else if (key === 'scope') {
+    const D = ['INTRACITY', 'DOMESTIK'].map(sc => core(F.filter(r => r.scope === sc)));
+    const row = (lbl, f) => [lbl, ...D.flatMap(f)];
+    add([[t('scp.title'), t('sc.INTRACITY') + ' (AWB)', t('sc.INTRACITY') + ' (Rp)', t('sc.DOMESTIK') + ' (AWB)', t('sc.DOMESTIK') + ' (Rp)'],
+      row(t('scp.ship'), x => [x.all, x.vAll]), row(nl('balik'), x => [x.balik, x.vBalik]), row(nl('sudah'), x => [x.sudah, x.vSudah]), row(nl('belum'), x => [x.belum, x.vBelum]),
+      row(t('k5'), x => [x.ontime, x.vOntime]), row(t('bl.crit'), x => [x.ungu, x.vUngu]), row(t('p.past'), x => [x.overD, x.vOverD]), [],
+      [t('scp.title'), t('sc.INTRACITY'), '', t('sc.DOMESTIK')],
+      [t('bl.ret') + ' %', r1(pct(D[0].sudah, D[0].balik)), '', r1(pct(D[1].sudah, D[1].balik))],
+      [t('bl.ot') + ' %', r1(pct(D[0].ontime, D[0].sudah)), '', r1(pct(D[1].ontime, D[1].sudah))],
+      [t('bl.crit') + ' %', r1(pct(D[0].ungu, D[0].belum)), '', r1(pct(D[1].ungu, D[1].belum))],
+      [t('p.avg'), Math.round(D[0].avgLead || 0), '', Math.round(D[1].avgLead || 0)]], 'Intracity vs Domestic');
   } else if (key === 'perf') {
-    const groups = [['INTRACITY', r => r.scope === 'INTRACITY'], ['DOMESTIK', r => r.scope === 'DOMESTIK'], [6, r => r.sla === 6], [7, r => r.sla === 7], ['INTERNAL', r => r.btype === 'INTERNAL'], ['AGENT', r => r.btype === 'AGENT'], ['SITE', r => r.lv === 'SITE']];
+    const groups = [[6, r => r.sla === 6], [7, r => r.sla === 7], ['INTERNAL', r => r.btype === 'INTERNAL'], ['AGENT', r => r.btype === 'AGENT'], ['SITE', r => r.lv === 'SITE']];
     const lbl = g => (g === 6 || g === 7 ? t('g.sla', { n: g }) : g === 'SITE' ? t('lvs.SITE') : t((g === 'INTERNAL' || g === 'AGENT' ? 'ty.' : 'sc.') + g));
     add([[t('p.group'), t('p.ret'), t('p.ret') + ' (Rp)', t('p.avg'), t('p.ot') + ' %', t('p.past'), t('p.past') + ' (Rp)'],
       ...groups.map(([g, f]) => { const cc = core(F.filter(f)); return [lbl(g), cc.sudah, cc.vSudah, Math.round(cc.avgLead || 0), r1(pct(cc.ontime, cc.sudah)), cc.overD, cc.vOverD]; })], 'Return performance');
@@ -1986,8 +2140,8 @@ document.addEventListener('click', e => {
   if (f) {
     const k = f.dataset.filter;
     if (k === 'branch') { S.branch = f.dataset.val; S.btype = ''; S.lv = ''; S.reg = ''; } else S[k] = f.dataset.val;
-    S.rankAll = false; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
-    return toast(t('t.filtered', { x: nameOf(k === 'branch' ? 'br' : k, f.dataset.val) }));
+    S.rankAll = false; render(); if (k !== 'scope') window.scrollTo({ top: 0, behavior: 'smooth' });
+    return toast(t('t.filtered', { x: k === 'scope' ? t('sc.' + f.dataset.val) : nameOf(k === 'branch' ? 'br' : k, f.dataset.val) }));
   }
   const c = tg.closest('[data-clear]'); if (c) { if (c.dataset.clear === '*') ['cust', 'scope', 'reg', 'btype', 'lv', 'branch'].forEach(k => { S[k] = ''; }); else S[c.dataset.clear] = ''; return render(); }
   const ww = tg.closest('[data-ww]'); if (ww) { S.ww = ww.dataset.ww; remember(); buildCalendar(S.ww); computeAges(); return render(); }
@@ -1996,6 +2150,9 @@ document.addEventListener('click', e => {
   if (tg.closest('#view-clear')) { try { localStorage.removeItem('pod-my-view'); } catch (e) { /* abaikan */ } render(); return toast(t('t.viewCleared')); }
   const xp = tg.closest('[data-xport]'); if (xp) return exportGroup(xp.dataset.xport);
   const fv = tg.closest('[data-fv]'); if (fv) { S.fv = fv.dataset.fv; return renderTree(); }
+  const pv = tg.closest('[data-pv]'); if (pv) { S.pv = pv.dataset.pv; return renderPerf(); }
+  const av = tg.closest('[data-av]'); if (av) { S.av = av.dataset.av; return renderAging(); }
+  if (tg.closest('#totop')) { window.scrollTo({ top: 0, behavior: REDUCED.matches ? 'auto' : 'smooth' }); return; }
   const nav = tg.closest('[data-nav]'); if (nav) { e.preventDefault(); const el = document.getElementById(nav.dataset.nav); if (el) el.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'start' }); return; }
   const bs = tg.closest('[data-basis]'); if (bs) { S.basis = bs.dataset.basis; remember(); computeAges(); return render(); }
   const mt = tg.closest('[data-metric]'); if (mt) { S.metric = mt.dataset.metric; return renderAging(); }
@@ -2033,6 +2190,7 @@ document.addEventListener('keydown', e => {
 
 /* ================= init ================= */
 loadView(); buildCalendar(S.ww); computeAges(); applyStatic(); render();
+addEventListener('scroll', () => { $('#totop').hidden = scrollY < 600; }, { passive: true });
 if (window.claude) window.claude.use('downloads').then(d => { if (!d) { const b = $('#export-all'); b.disabled = true; b.dataset.tip = t('t.na'); } });
 })();
 </script>

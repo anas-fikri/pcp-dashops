@@ -117,3 +117,11 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 - **Palet bersih (light / dark):** data-req `#0e7490`/`#2dd4bf`, data-ret `#2563eb`/`#60a5fa`, pending `#94a3b8`/`#64748b`, none `#cbd5e1`/`#334155`; hitam `#475569`/`#cbd5e1`, oranye `#f59e0b`/`#fbbf24` (teks `#b45309`), merah `#dc2626`/`#f87171`, ungu `#7c3aed`/`#a78bfa`; success `#15803d`/`#4ade80`; aksen `#1e3a8a`/`#93c5fd`. Nilai otoritatif ada di tokens.json.
 - **Validasi:** `validate_palette.js` lulus CVD & jarak normal untuk set tren, umur, KPI, split; peringatan kontras (pending, oranye, none < 3:1) diatasi label angka langsung. Hijau↔merah (deutan ΔE 7.9) tidak pernah bersebelahan tanpa label.
 - **Export per kelompok:** setiap kartu punya `.xbtn[data-xport]`; isi = angka persis yang tampil.
+
+## v12 — komponen tambahan
+| Komponen | Kelas | Aturan |
+|---|---|---|
+| Perbandingan scope | `.scp-split`, `.scp-col` (`.off` saat tersaring) | Porsi memakai netral (`--ink` / `--band-1`) + label — scope bukan warna fungsi baru |
+| Baris kinerja | `.pv-row` | Bullet on-time (target 80%) + Returned · Avg HK · Lewat SLA, semuanya bisa diklik |
+| Grafik aging | `.ag-chart > .ag-col` | Batang kiri = belum balik dipecah warna umur; batang kanan = sudah balik `--data-ret`; label jumlah + Rp di atas batang |
+| Back to top | `.totop` | Muncul setelah gulir 600px; disembunyikan saat presentasi; hormati reduced motion |
