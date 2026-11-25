@@ -1,0 +1,138 @@
+# Spesifikasi Dashboard Performance POD
+
+Dokumen ini menerjemahkan sketsa catatan "POD" menjadi aturan yang bisa diimplementasikan.
+Semua keputusan untuk bagian yang ambigu ditandai **[ASUMSI]**. Asumsi ini perlu divalidasi
+oleh tim operasional/POD sebelum go-live. Nilai yang bisa berubah ada di `config/pod.php`.
+
+## 1. Tujuan
+
+- Memantau **POD yang wajib kembali (POD Balik)**: berapa yang sudah kembali, berapa yang belum, dan sudah berapa lama.
+- Menunjukkan **siapa yang harus ditindaklanjuti**: cabang/perwakilan tujuan dan customer dengan backlog atau overdue terbesar.
+- Mengukur **performa pengembalian**: return rate, rata-rata lead time, dan persentase on-time terhadap SLA.
+- Setiap angka bisa **di-drill sampai level AWB** dan **diekspor ke Excel**.
+
+## 2. Pohon status (sesuai sketsa)
+
+```
+POD
+├── Tidak Balik                  pod_required = false
+└── Balik                        pod_required = true
+    ├── Belum Balik
+    │   ├── Not Yet Delivered    NOT_DELIVERED
+    │   └── Delivered            (paket terkirim, POD fisik belum kembali)
+    │       ├── Masih di Pelanggan   MASIH_DI_PELANGGAN
+    │       ├── PODC                 PODC
+    │       ├── Redoc                REDOC
+    │       └── Upload               UPLOAD
+    └── Sudah Balik
+        ├── STPOD                STPOD
+        ├── PODP                 PODP
+        └── Arsip                ARSIP
+```
+
+**Intracity / Domestik** di sketsa digambar bersilangan ke Belum Balik dan Sudah Balik.
+Artinya keduanya **dimensi pemisah**, bukan level hierarki. Di dashboard, keduanya tampil sebagai
+kolom pada pohon status dan sebagai filter.
+
+**[ASUMSI] Arti status.** Label hanya dipakai untuk tampilan; definisi resminya perlu dikonfirmasi:
+
+| Kode | Tafsiran kerja |
+|---|---|
+| Masih di Pelanggan | POD fisik masih ditahan penerima (menunggu cap/tanda tangan) |
+| PODC | POD sudah dikumpulkan kurir/cabang dan dalam perjalanan kembali |
+| Redoc | Dokumen harus diulang (cap/tanda tangan kurang, salah dokumen) |
+| Upload | Soft copy POD sudah di-scan/upload, fisik belum diterima |
+| STPOD | Serah terima POD fisik ke pusat/origin |
+| PODP | POD sudah diserahkan ke pelanggan pengirim |
+| Arsip | POD sudah diarsipkan |
+
+Kalau STPOD/PODP ternyata status antara (belum "selesai"), cukup pindahkan kodenya dari
+`PodStatus::returned()` ke `deliveredPending()`.
+
+## 3. Aturan aging
+
+| Kondisi | Umur dihitung dari | Makna |
+|---|---|---|
+| Belum Balik, Not Yet Delivered | `as_of − shipment_date` | umur kiriman yang belum terkirim |
+| Belum Balik, Delivered (4 status) | `as_of − delivered_at` | umur POD outstanding sejak paket diterima |
+| Sudah Balik | `pod_returned_at − delivered_at` | lead time pengembalian POD |
+| Tidak Balik | – | tidak di-aging |
+
+- Satuan: **hari kalender**, selisih tanggal (jam diabaikan). Hari kirim/delivered = hari ke-0. **[ASUMSI]** Belum memperhitungkan hari libur.
+- **Bucket "per 5 hari × 6":** 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, ditambah **>30** supaya tidak ada data yang hilang.
+- **Warna severity** (dipakai di badge detail, chip, KPI overdue, Excel):
+
+| Warna | Catatan asli | Implementasi |
+|---|---|---|
+| Hitam | 1–3 | 0–3 hari |
+| Oranye | 4–5 | 4–5 hari |
+| Merah | 6–8 | **6–9 hari** (menutup gap hari ke-9) |
+| Ungu | >10 | **≥10 hari** (= definisi *overdue*) |
+
+- **"Sort"** di sketsa diterjemahkan sebagai urutan default daftar detail: **umur terlama di atas**. Semua kolom utama bisa diurutkan ulang.
+
+## 4. KPI dan SLA
+
+| KPI | Rumus |
+|---|---|
+| Total POD Balik | COUNT(pod_required = true) |
+| Return rate | Sudah Balik / POD Balik |
+| Belum Balik | Not Yet Delivered + Delivered |
+| Overdue | Belum Balik dengan umur ≥ 10 hari (ungu) |
+| Rata-rata lead time | AVG(pod_returned_at − delivered_at) untuk Sudah Balik |
+| On-time return | Sudah Balik dengan lead time ≤ SLA scope |
+
+**[ASUMSI] SLA kembali POD:** Intracity 5 hari, Domestik 10 hari. Bisa diubah lewat env
+`POD_SLA_INTRACITY_DAYS` / `POD_SLA_DOMESTIK_DAYS`.
+
+## 5. Alur layar (summary → detail)
+
+1. **Summary** (`/pod`)
+   - Filter global: periode tanggal kirim (default 90 hari terakhir), Customer, PCP/Perwakilan, Cabang, Tier kota, Scope.
+   - 6 kartu KPI, chip distribusi warna, Pohon Status × Intracity/Domestik, Performa Pengembalian, matriks Aging Belum Balik, matriks Lead Time Sudah Balik, dan Top-15 per Cabang/Perwakilan serta per Customer.
+   - **Semua angka adalah link.** Nama cabang/customer memfilter ulang summary.
+2. **Detail** (`/pod/detail?node=…&bucket=…&color=…&scope=…`)
+   - Breadcrumb pohon (bisa naik level), chip "Rinci ke" (turun level), chip warna (toggle), cari AWB, kolom bisa diurutkan, paging 50 baris.
+   - **Invarian yang dijaga test otomatis:** angka di summary = jumlah baris di detail untuk filter yang sama.
+3. **Export Excel** (`/pod/export`, dari summary atau detail) berisi 5 sheet: Summary, Aging (belum balik dan lead time), Per Cabang, Per Customer, Detail.
+   Sheet Detail mengikuti drill-down aktif. Tanpa drill-down, isinya semua POD Balik. Maksimal `POD_EXPORT_MAX_ROWS` baris.
+
+## 6. Kontrak data (integrasi produksi)
+
+Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB). Lihat
+`database/migrations/*_create_pod_shipments_table.php`. Ada dua opsi pengisian:
+
+| Opsi | Kelebihan | Kekurangan |
+|---|---|---|
+| **A. ETL terjadwal** (mis. tiap 15–60 menit) dari DB operasional ke `pod_shipments` | Query dashboard tidak membebani DB transaksi; skema stabil | Data tertunda sesuai jadwal; perlu job sinkronisasi |
+| B. VIEW di DB operasional (read replica) dengan kolom yang sama | Real-time; tanpa job | Bergantung pada skema sistem sumber; perlu index di sumber |
+
+**Rekomendasi: opsi A**, membaca dari read replica. Aturan pemetaan yang wajib dipenuhi sumber:
+
+- `pod_required` = flag layanan/permintaan POD kembali per AWB.
+- `pod_status` = status POD **terakhir**, dipetakan ke 8 kode di §2. NULL untuk Tidak Balik.
+- `delivered_at` NULL ⇔ `pod_status = NOT_DELIVERED` (untuk POD Balik).
+- `pod_returned_at` wajib terisi bila status ∈ {STPOD, PODP, ARSIP}.
+- `dest_branch_*` = cabang/perwakilan yang bertanggung jawab mengembalikan POD.
+- `service_scope`: **[ASUMSI]** INTRACITY bila kota asal = kota tujuan dan dilayani cabang yang sama, selain itu DOMESTIK.
+- `dest_city_tier`: dari master kota (1–3).
+
+Driver yang didukung oleh ekspresi umur: SQLite (dev/test), SQL Server, MySQL/MariaDB, PostgreSQL
+(`app/Services/Pod/AgingSql.php`). Index yang direkomendasikan sudah ada di migrasi.
+
+## 7. Keamanan dan operasional (wajib sebelum produksi)
+
+- [ ] **Autentikasi + RBAC.** Saat ini route belum dilindungi. Pasang SSO/login dan batasi user cabang hanya ke cabangnya (scope `dest_branch_code`). Isi data customer termasuk data bisnis sensitif.
+- [x] Validasi whitelist semua parameter (`PodFilterRequest`). Literal SQL hanya berasal dari nilai config/enum yang tervalidasi.
+- [x] Pencarian AWB meng-escape wildcard LIKE.
+- [x] Rentang tanggal dibatasi (default 366 hari) dan export di-throttle (10/menit) dengan batas baris.
+- [ ] Monitoring: waktu respon summary dan durasi ETL (Prometheus/Grafana yang sudah ada).
+- [ ] Bila volume > ~2 juta baris per periode, pertimbangkan tabel agregat harian/materialized view untuk summary.
+
+## 8. Daftar validasi ke user bisnis
+
+1. Definisi resmi PODC, Redoc, STPOD, PODP; apakah STPOD/PODP dihitung "sudah balik".
+2. Titik awal aging (delivered vs tanggal kirim), dan apakah memakai hari kerja.
+3. Target SLA kembali per scope, mungkin juga per tier kota.
+4. Definisi Intracity vs Domestik di sistem sumber.
+5. Siapa saja pengguna dashboard, dan scope akses masing-masing (pusat, cabang, perwakilan, customer?).
