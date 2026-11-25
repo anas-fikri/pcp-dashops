@@ -10,17 +10,14 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (.secnav + #s-now (5 .kpi), #s-tree (.ptree), #s-aging, #s-rank, #s-ana (.atabs: scope/perf/sev/trend); v15)",
+      "source": "prototype/pod-dashboard.html (.secnav + #s-now (5 .kpi), #s-tree (.ptree + #tree-scope), #s-aging, #s-rank (.rank2); v16 ringkasan saja)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
-        "/api/pod/aging",
-        "/api/pod/options",
-        "/api/pod/performance",
-        "/api/pod/ranking",
-        "/api/pod/scope-compare",
-        "/api/pod/status-tree",
         "/api/pod/summary",
-        "/api/pod/trend"
+        "/api/pod/status-tree",
+        "/api/pod/aging",
+        "/api/pod/ranking",
+        "/api/pod/options"
       ],
       "states": {
         "default": true,
@@ -36,9 +33,9 @@
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v15: keterbacaan — 5 KPI dengan pembanding (bullet dilebur), aging hanya belum balik, analisis bertab, istilah tunggal",
+        "reason": "v16: ringkasan saja tanpa pengalih; AWB+Rp bersamaan; detail hanya di modal",
         "conformance": "pass",
-        "e2e": "106/106"
+        "e2e": "59/59 (suite v16)"
       }
     },
     "SCR-DSH-002": {

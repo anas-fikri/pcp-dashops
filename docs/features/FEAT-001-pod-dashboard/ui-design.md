@@ -42,6 +42,15 @@ Keputusan:
 - **Istilah tunggal:** "Belum balik / Not returned" menggantikan outstanding/on hold/tertahan.
 - Hasil: tinggi halaman desktop 5.503 → ±4.300 px; E2E 106/106 (cek baru: KPI menyebut pembanding, target 80% & batas 15% di KPI, tanpa bullet/total ganda).
 
+**v16 — dashboard = ringkasan saja; detail hanya lewat klik (25 Nov 2026).**
+Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan Rp harus tampil bersamaan tanpa switch.
+- **Prinsip:** halaman hanya berisi ringkasan dengan urutan sketsa; **semua detail ada di modal** yang terbuka saat ringkasan diklik.
+- **Isi halaman (4 bagian):** Kondisi (banner + 5 KPI) · Pohon Status (14 kotak + ringkasan Intracity vs Domestik) · Aging per 5 HK (POD belum balik) · Siapa ditindaklanjuti (10 cabang tujuan + 10 customer).
+- **Dihapus dari halaman:** semua pengalih (AWB|Rp, Grafik|Tabel, Pohon|Tabel, lensa scope, Bucket|Warna, urutan, tab peringkat, tab analisis, Tampilkan semua), panel Focus, strip "sejak kunjungan terakhir", tab Analisis (tren, donut warna, kinerja). Chart.js tidak lagi dimuat.
+- **AWB + Rp selalu bersamaan** di KPI, kotak pohon, Intracity/Domestik, label aging, dan baris tindak lanjut.
+- Export per kelompok: now · flow · aging · rank. Presentasi 4 slide. Tinggi desktop ±3.600 px.
+- E2E ditulis ulang (59/59): tidak ada pengalih di ringkasan; setiap angka ringkasan memuat Rp; pohon 14 kotak AWB & Rp = modal; induk = jumlah anak; KPI/Intracity-Domestik/aging/tindak lanjut = modal & konsisten dengan pohon; modal, filter, export, ID, presentasi, keyboard, HP.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

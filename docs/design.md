@@ -140,3 +140,9 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 - **Satu istilah per konsep:** Belum balik (bukan outstanding/tertahan), Kritis = ungu, Lewat SLA = delivered belum balik > SLA.
 - **Aging hanya untuk POD belum balik**; lama kembali POD sudah balik adalah ukuran kinerja.
 - Komponen: `.now .kpis > .kpi[data-k]` (label · angka + Rp · visual (`.kbar` / `.sevbar` / `.bl-track` dengan `.bl-tgt`) · `.ctx`); `.atabs` + `.apanel` (judul panel disembunyikan, tab yang menamai).
+
+## v16 — aturan "ringkasan saja"
+- Halaman dashboard **tidak memakai pengalih tampilan** (switch/tab/toggle). Kontrol yang boleh: filter, bahasa, presentasi, export.
+- **Setiap jumlah AWB tampil bersama Rp** di tempat yang sama (komponen `.nv` atau label count + Rp).
+- **Detail = modal.** Semua angka/kotak/baris ringkasan adalah tombol yang membuka daftar AWB dengan jumlah yang sama.
+- Komponen baru: `.ssum` (Intracity vs Domestik di bawah pohon), `.rank2 > .rk-list > .rk-row` (10 teratas cabang tujuan & customer).

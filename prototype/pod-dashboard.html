@@ -519,8 +519,35 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v16: ringkasan saja, tanpa pengalih ---------- */
+.pnode.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+.ssum { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.ss-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+.ss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ss-col { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px 6px; }
+.ss-col.off { background: var(--soft); }
+.ss-h { display: flex; align-items: baseline; gap: 8px; padding-bottom: 6px; }
+.ss-h b { font-size: 14px; } .ss-h .muted { font-size: 12px; }
+.ss-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.ss-l small { display: block; font-size: 11.5px; color: var(--muted); }
+.ss-row .go .nv { flex-direction: row; align-items: baseline; gap: 8px; }
+.rank2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.rk-col h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
+.rk-list { list-style: none; margin: 0; padding: 0; }
+.rk-row { width: 100%; display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-areas: "n nm v" ". bar bar"; gap: 4px 10px; align-items: center; text-align: left;
+  padding: 9px 8px; border: 0; border-top: 1px solid var(--line); background: none; font: inherit; color: var(--ink); cursor: pointer; }
+.rk-row:hover { background: var(--hi); }
+.rk-row .rk { grid-area: n; }
+.rk-nm { grid-area: nm; min-width: 0; } .rk-nm b { display: block; font-size: 13.5px; } .rk-nm small { font-size: 11.5px; color: var(--muted); }
+.rk-v { grid-area: v; display: flex; align-items: center; gap: 8px; }
+.rk-bar { grid-area: bar; } .rk-bar .sevbar { height: 6px; }
+li:first-child > .rk-row { border-top: 0; }
+@media (max-width: 860px) { .ss-grid, .rank2 { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .rk-v { flex-direction: column; align-items: flex-end; gap: 4px; } .rk-nm small { display: block; } }
+
 /* ---------- v15: KPI ringkas, analisis bertab, aging belum balik ---------- */
 .now .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 14px; }
+.now .kpi .val b { font-size: 30px; }
 .now .kpi { background: var(--card); border: 0; border-radius: 0; padding: 12px 12px 13px; display: grid; gap: 7px; align-content: start; text-align: left; box-shadow: none; }
 .now .kpi:hover { background: var(--hi); }
 .now .kpi .lbl { font-size: 12px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 6px; }
@@ -695,7 +722,7 @@ body.present .totop { display: none; }
     <button class="btn" type="button" id="present" data-tt="present.tip"><span aria-hidden="true">⛶</span> <span data-t="present"></span></button>
     <button class="btn primary" type="button" id="export-all" data-t="export" data-tt="export.tip"></button>
     <nav class="secnav" aria-label="Sections">
-      <a href="#s-now" data-nav="s-now" data-t="nav.now"></a><a href="#s-tree" data-nav="s-tree" data-t="nav.tree"></a><a href="#s-aging" data-nav="s-aging" data-t="nav.aging"></a><a href="#s-rank" data-nav="s-rank" data-t="nav.rank"></a><a href="#s-ana" data-nav="s-ana" data-t="nav.ana"></a>
+      <a href="#s-now" data-nav="s-now" data-t="nav.now"></a><a href="#s-tree" data-nav="s-tree" data-t="nav.tree"></a><a href="#s-aging" data-nav="s-aging" data-t="nav.aging"></a><a href="#s-rank" data-nav="s-rank" data-t="nav.rank"></a>
     </nav>
   </header>
 
@@ -735,86 +762,30 @@ body.present .totop { display: none; }
     </div>
   </section>
 
-  <section class="bento slide" id="s-now" aria-labelledby="now-title">
-    <div class="card hero now span-8">
-      <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="tools-r"><span class="muted" id="now-meta" style="font-size:12.5px"></span><button type="button" class="xbtn" data-xport="now" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-      <div class="status" id="status" aria-live="polite"></div>
-      <div class="since" id="since"></div>
-      <div class="kpis" id="kpis"></div>
-    </div>
-    <div class="focus span-4" id="focus"></div>
+  <section class="card slide now" id="s-now" aria-labelledby="now-title">
+    <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="tools-r"><span class="muted" id="now-meta" style="font-size:12.5px"></span><button type="button" class="xbtn" data-xport="now" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+    <div class="status" id="status" aria-live="polite"></div>
+    <div class="kpis" id="kpis"></div>
   </section>
 
   <section class="card slide" id="s-tree">
-    <div class="card-head"><h2><span data-t="tree.title"></span><i class="info" tabindex="0" data-tt="tree.tip">i</i></h2>
-      <span class="tools-r"><span class="seg" role="group" aria-label="Scope" id="tl-seg"><button type="button" data-tl="" id="tl-all" data-t="all"></button><button type="button" data-tl="INTRACITY" id="tl-INTRACITY" data-t="sc.INTRACITY"></button><button type="button" data-tl="DOMESTIK" id="tl-DOMESTIK" data-t="sc.DOMESTIK"></button></span><span class="seg" role="group"><button type="button" data-fv="diagram" id="fv-diagram" data-t="fv.d"></button><button type="button" data-fv="table" id="fv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="flow" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-    <p class="sub" id="tree-sub"></p>
+    <div class="card-head"><h2><span data-t="tree.title"></span><i class="info" tabindex="0" data-tt="tree.tip">i</i></h2><span class="tools-r"><button type="button" class="xbtn" data-xport="flow" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+    <p class="sub" data-t="flow.sub"></p>
     <div class="tw" id="flow-wrap"><div class="ptree-wrap" id="flow"></div></div>
     <div class="legend-strip" id="tree-legend"></div>
-    <div class="tw" id="tree-wrap"><table id="tree"></table></div>
+    <div class="ssum" id="tree-scope"></div>
   </section>
 
   <section class="card slide" id="s-aging">
-    <div class="card-head">
-      <h2><span data-t="aging.title"></span><i class="info" tabindex="0" data-tt="aging.tip">i</i></h2>
-      <span class="head-tools">
-        <span class="seg" role="group" data-tt="metric.tip"><button type="button" data-metric="n" id="mt-n" data-t="mode.n"></button><button type="button" data-metric="v" id="mt-v" data-t="mode.v"></button></span>
-        <span class="seg" role="group"><button type="button" data-av="chart" id="av-chart" data-t="fv.c"></button><button type="button" data-av="table" id="av-table" data-t="fv.t"></button></span>
-        <span class="seg" role="group" id="am-seg"><button type="button" data-am="bucket" id="am-bucket" data-t="mode.bucket"></button><button type="button" data-am="sev" id="am-sev" data-t="mode.sev"></button></span>
-        <button type="button" class="xbtn" data-xport="aging" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button>
-      </span>
-    </div>
-    <p class="sub" id="aging-sub"></p>
+    <div class="card-head"><h2><span data-t="aging.title"></span><i class="info" tabindex="0" data-tt="aging.tip">i</i></h2><span class="tools-r"><button type="button" class="xbtn" data-xport="aging" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+    <p class="sub" data-t="ag.sub.c"></p>
     <div id="aging-viz"></div>
-    <div class="tw" id="aging-wrap"><table class="hm" id="aging"></table></div>
   </section>
 
   <section class="card slide" id="s-rank">
-    <div class="card-head">
-      <h2><span data-t="rank.title"></span><i class="info" tabindex="0" data-tt="rank.tip">i</i></h2>
-      <div class="tabs" id="rank-tabs">
-        <button class="chip" type="button" data-rank="br" data-t="rank.br"></button>
-        <button class="chip" type="button" data-rank="cust" data-t="f.cust"></button>
-        <button class="chip" type="button" data-rank="lv" data-t="f.level"></button>
-        <button class="chip" type="button" data-rank="reg" data-t="f.reg"></button>
-        <span class="seg" role="group" data-tt="metric.tip" style="margin-left:6px"><button type="button" data-rsort="n" id="rs-n" data-t="mode.n"></button><button type="button" data-rsort="v" id="rs-v" data-t="mode.v"></button></span>
-        <button type="button" class="xbtn" data-xport="rank" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button>
-      </div>
-    </div>
+    <div class="card-head"><h2><span data-t="rank.title"></span><i class="info" tabindex="0" data-tt="rank.tip">i</i></h2><span class="tools-r"><button type="button" class="xbtn" data-xport="rank" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
     <p class="sub" data-t="rank.sub"></p>
-    <div class="tw"><table class="rank" id="rank"></table></div>
-    <div style="margin-top:10px"><button class="btn" type="button" id="rank-more"></button></div>
-  </section>
-
-
-
-
-  <section class="card slide" id="s-ana">
-    <div class="card-head"><h2><span data-t="ana.title"></span><i class="info" tabindex="0" data-tt="ana.tip">i</i></h2></div>
-    <div class="atabs" role="tablist" aria-label="Analysis">
-      <button type="button" role="tab" data-at="scope" id="at-scope" data-t="nav.scope"></button><button type="button" role="tab" data-at="perf" id="at-perf" data-t="perf.title"></button><button type="button" role="tab" data-at="sev" id="at-sev" data-t="sev.title"></button><button type="button" role="tab" data-at="trend" id="at-trend" data-t="tr.title"></button>
-    </div>
-    <div class="apanel" id="ap-scope" role="tabpanel" aria-labelledby="at-scope" hidden>
-    <div class="card-head"><h2><span data-t="scp.title"></span><i class="info" tabindex="0" data-tt="scp.tip">i</i></h2><button type="button" class="xbtn" data-xport="scope" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
-    <p class="sub" data-t="scp.sub"></p>
-    <div id="scp"></div>
-      </div>
-    <div class="apanel" id="ap-perf" role="tabpanel" aria-labelledby="at-perf" hidden>
-      <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><span class="tools-r"><span class="seg" role="group"><button type="button" data-pv="chart" id="pv-chart" data-t="fv.c"></button><button type="button" data-pv="table" id="pv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-      <p class="sub" data-t="perf.sub"></p>
-      <div class="pviz" id="perf-viz"></div>
-      <div class="tw" id="perf-wrap"><table id="perf"></table></div>
-        </div>
-    <div class="apanel" id="ap-sev" role="tabpanel" aria-labelledby="at-sev" hidden>
-      <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
-      <p class="sub" id="sev-sub"></p>
-      <div id="sev-panel"></div>
-        </div>
-    <div class="apanel" id="ap-trend" role="tabpanel" aria-labelledby="at-trend" hidden>
-    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="tools-r"><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span><button type="button" class="xbtn" data-xport="trend" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-    <p class="sub" data-t="tr.sub"></p>
-    <div class="trend-box" id="trend-box"></div>
-      </div>
+    <div class="rank2"><div class="rk-col"><h3 data-t="rank.br"></h3><ol class="rk-list" id="rk-br"></ol></div><div class="rk-col"><h3 data-t="f.cust"></h3><ol class="rk-list" id="rk-cust"></ol></div></div>
   </section>
 
   <details class="card">
@@ -842,7 +813,6 @@ body.present .totop { display: none; }
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
 (() => {
 'use strict';
@@ -925,7 +895,7 @@ const T = {
   'cell.tip': ['{r} · {c}: {n} AWB · {v} ({p} of row), mostly {s}. Click for the AWB list.', '{r} · {c}: {n} AWB · {v} ({p} dari baris), terbanyak {s}. Klik untuk daftar AWB.'],
   'bucket.tip': ['Age {x} working days', 'Umur {x} hari kerja'],
   'rank.title': ['Who Needs Follow-up', 'Siapa yang Perlu Ditindaklanjuti'],
-  'rank.tip': ['Ranking of POD not returned. Click a name to filter the whole dashboard; click a number or colour bar for the AWB list.', 'Peringkat tunggakan POD. Klik nama untuk memfilter seluruh dashboard; klik angka atau batang warna untuk daftar AWB.'],
+  'rank.tip': ['Top 10 destination branches and customers by POD not returned. Click a row (or a colour block) for its AWB list.', '10 cabang tujuan dan customer dengan POD belum balik terbanyak. Klik baris (atau blok warna) untuk daftar AWB-nya.'],
   'rank.br': ['Destination branch', 'Cabang tujuan'],
   'rank.sub': ['Sorted by most POD not returned.', 'Urut dari tunggakan (belum balik) terbanyak.'],
   'r.not': ['Not returned', 'Belum balik'], 'r.not.tip': ['Number of POD not back yet.', 'Jumlah POD yang belum kembali.'],
@@ -1030,6 +1000,7 @@ const T = {
   'bl.ret': ['Returned', 'Sudah balik'],
   'top': ['Back to top', 'Kembali ke atas'],
   'nav.ana': ['Analysis', 'Analisis'],
+  'rk.of': ['of not returned', 'dari belum balik'], 'rk.tip': ['Open the AWB list not returned for {x}', 'Buka daftar AWB belum balik untuk {x}'],
   'ana.title': ['Analysis', 'Analisis'],
   'ana.tip': ['Supporting views: compare routes, groups, age colours and weeks. The numbers follow the same filters as the rest of the page.', 'Tampilan pendukung: bandingkan rute, grup, warna umur, dan minggu. Angkanya mengikuti filter yang sama dengan seluruh halaman.'],
   'kl.ret': ['Returned', 'Sudah balik'], 'kl.not': ['Not returned', 'Belum balik'], 'kl.ot': ['On time', 'Tepat waktu'], 'kl.crit': ['Critical', 'Kritis'],
@@ -1048,7 +1019,7 @@ const T = {
   'f.none': ['No extra filters · showing all customers, routes and destinations', 'Tanpa filter tambahan · menampilkan semua customer, rute, dan tujuan'],
   'fv.c': ['Chart', 'Grafik'],
   'scp.title': ['Intracity vs Domestic', 'Intracity vs Domestik'],
-  'scp.tip': ['Intracity: origin and destination in the same city. Domestic: between cities. Same rules, same SLA per customer; only the route differs.', 'Intracity: asal dan tujuan di kota yang sama. Domestik: antar kota. Aturan dan SLA per customer sama; yang beda hanya rutenya.'],
+  'scp.tip': ['The sketch splits POD to return into Intracity and Domestic. Same rules and customer SLA; only the route differs. Click a number for its AWB list.', 'Sketsa memecah POD balik menjadi Intracity dan Domestik. Aturan dan SLA customer sama; yang beda hanya rutenya. Klik angka untuk daftar AWB-nya.'],
   'scp.sub': ['Same filters, split by route. Click any number or bar for its AWB list, or show only one route on the whole dashboard.', 'Filter sama, dipisah per rute. Klik angka atau batang mana pun untuk daftar AWB-nya, atau tampilkan satu rute saja di seluruh dashboard.'],
   'scp.only': ['Show only this', 'Tampilkan ini saja'],
   'scp.both': ['Compare both', 'Bandingkan keduanya'],
@@ -1074,7 +1045,7 @@ const T = {
   'ring.crit': ['Critical', 'Kritis'],
   'ring.ot': ['On time', 'Tepat waktu'],
   'ring.ret': ['Returned', 'Sudah balik'],
-  'flow.sub': ['Same structure as the working sketch: every shipment splits into POD to return / no return, then not yet / already returned, then the latest status. % = share of the box it branches from. Switch Intracity / Domestic to see one route. Lists open oldest first.', 'Struktur sama dengan sketsa kerja: setiap kiriman terbagi POD balik / tidak balik, lalu belum / sudah balik, lalu status terakhir. % = porsi dari kotak induknya. Pilih Intracity / Domestik untuk melihat satu rute. Daftar dibuka dengan umur terlama di atas.'],
+  'flow.sub': ['Same structure as the working sketch. Each box = AWB and Rp; % = share of the box it branches from. Click any box for its AWB list (oldest first).', 'Struktur sama dengan sketsa kerja. Setiap kotak = AWB dan Rp; % = porsi dari kotak induknya. Klik kotak mana pun untuk daftar AWB-nya (umur terlama di atas).'],
   'fv.t': ['Table', 'Tabel'],
   'fv.d': ['Tree', 'Pohon'],
   'nav.rank': ['Follow-up', 'Tindak lanjut'],
@@ -1392,7 +1363,7 @@ function applyStatic() {
 
 function render() {
   F = ROWS.filter(inGlobal);
-  renderFilters(); renderNow(); renderTree(); renderTabs(); renderScope(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
+  renderFilters(); renderNow(); renderTree(); renderAging(); renderRank();
   if (!$('#modal').hidden) renderModal();
   countUp();
 }
@@ -1475,8 +1446,6 @@ function renderNow() {
       viz: track(crit, 'var(--sev-ungu)', 15, [[0, 15, 3], [15, 30, 2], [30, 100, 1]]),
       ctx: esc(t('kx.crit', { n: fmt(c.ungu), b: fmt(c.belum) })) }),
   ].join('');
-  renderSince(c);
-  renderFocus(c);
 }
 
 function prevRows() { const [a, b] = range(), len = b - a + 1; return ROWS.filter(r => r.pos >= a - len && r.pos <= a - 1 && inDims(r)); }
@@ -1696,11 +1665,11 @@ function renderTrend() {
 if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderTrend());
 
 /* ================= presentasi ================= */
-const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title'], ['s-ana', 'ana.title']];
+const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
 const P = { on: false, i: 0, fs: false };
 function showSlide() {
   SLIDES.forEach(([id], i) => $('#' + id).classList.toggle('active', i === P.i));
-  const extra = SLIDES[P.i][0] === 's-ana' ? ' · ' + t($('#at-' + S.at).dataset.t) : '';
+  const extra = '';
   $('#p-title').textContent = t('p.slide', { i: P.i + 1, n: SLIDES.length, x: t(SLIDES[P.i][1]) + extra });
   window.scrollTo({ top: 0 });
 }
@@ -1720,24 +1689,25 @@ document.addEventListener('fullscreenchange', () => { if (!document.fullscreenEl
 
 function renderTree() {
   const cnt = Object.fromEntries(NODES.map(n => [n.id, F.filter(n.t)]));
-  const balikN = cnt.balik.length;
-  let h = `<thead><tr><th>${t('c.status')}${info(t('c.status.tip'))}</th><th>${t('c.count')}</th><th>${t('c.val')}${info(t('v.tip'))}</th><th>${t('c.parent')}${info(t('c.parent.tip'))}</th><th>${t('c.ofRet')}${info(t('c.ofRet.tip'))}</th><th>${t('sc.INTRACITY')}</th><th>${t('sc.DOMESTIK')}</th><th class="l">${t('c.colour')}${info(t('c.colour.tip'))}</th></tr></thead><tbody>`;
-  for (const n of NODES) {
-    const rows = cnt[n.id], N = rows.length;
-    const p = n.p ? pct(N, cnt[n.p].length) : null, pb = n.d >= 2 ? pct(N, balikN) : null;
-    const nI = rows.filter(r => r.scope === 'INTRACITY').length;
-    h += `<tr class="d${n.d} clickable" id="row-${n.id}" data-link="${n.id}" data-open="${spec({ node: n.id })}">
-      <td class="status-cell" style="padding-left:${10 + n.d * 18}px"><b>${esc(L(n.label))}</b>${info(L(n.def))}<span class="desc">${esc(L(n.short))}</span></td>
-      <td><b>${fmt(N)}</b></td>
-      <td class="muted">${rpx(sumV(rows))}</td>
-      <td>${p == null ? '' : `<span class="pbar"><span class="meter"><span style="width:${p}%;background:var(--muted)"></span></span><span>${fp(p)}</span></span>`}</td>
-      <td class="muted">${pb == null ? '' : fp(pb)}</td>
-      <td class="${nI ? '' : 'z'}">${nI ? go({ node: n.id, scope: 'INTRACITY' }, nvRows(rows.filter(r => r.scope === 'INTRACITY'))) : 0}</td>
-      <td class="${N - nI ? '' : 'z'}">${N - nI ? go({ node: n.id, scope: 'DOMESTIK' }, nvRows(rows.filter(r => r.scope === 'DOMESTIK'))) : 0}</td>
-      <td class="l">${n.d >= 2 ? sevBar(sevCounts(rows), { node: n.id }, false, sevVals(rows)) : ''}</td></tr>`;
-  }
-  $('#tree').innerHTML = h + '</tbody>';
   renderFlow(cnt);
+  renderScopeSum();
+}
+
+function renderScopeSum() {
+  const SC = ['INTRACITY', 'DOMESTIK'];
+  const rows = [['all', { node: 'all' }, null], ['balik', { node: 'balik' }, 'all'], ['sudah', { node: 'sudah' }, 'balik'], ['belum', { node: 'belum' }, 'balik'], ['ot', { node: 'sudah', ot: true }, 'sudah']];
+  const pick = (id, sc) => { const pool = F.filter(r => r.scope === sc); return id === 'ot' ? pool.filter(r => r.grp === 'S' && !r.over) : pool.filter(NODE[id].t); };
+  const lbl = id => (id === 'ot' ? t('kl.ot') : id === 'all' ? t('tot.title') : nl(id));
+  const col = sc => {
+    const off = S.scope && S.scope !== sc;
+    const body = rows.map(([id, sp, par]) => {
+      const rr = pick(id, sc), pr = par ? pick(par, sc) : null;
+      return `<div class="ss-row"><span class="ss-l">${esc(lbl(id))}${pr ? `<small>${fp(pct(rr.length, pr.length))} ${t('flow.of', { x: lbl(par) })}</small>` : ''}</span>
+        ${off ? '<span class="muted">–</span>' : go({ ...sp, scope: sc }, nv(rr.length, sumV(rr)))}</div>`;
+    }).join('');
+    return `<div class="ss-col${off ? ' off' : ''}"><div class="ss-h"><b>${t('sc.' + sc)}</b><span class="muted">${t(sc === 'INTRACITY' ? 'g.intra' : 'g.dom')}</span></div>${body}</div>`;
+  };
+  $('#tree-scope').innerHTML = `<div class="ss-title">${t('scp.title')}${info(t('scp.tip'))}</div><div class="ss-grid">${SC.map(col).join('')}</div>`;
 }
 
 function renderTabs() {
@@ -1746,12 +1716,8 @@ function renderTabs() {
 }
 
 function renderFlow(cnt) {
-  $('#fv-diagram').setAttribute('aria-pressed', S.fv === 'diagram'); $('#fv-table').setAttribute('aria-pressed', S.fv === 'table');
-  $('#flow-wrap').hidden = S.fv !== 'diagram'; $('#tree-wrap').hidden = S.fv !== 'table'; $('#tl-seg').hidden = S.fv !== 'diagram';
-  $('#tree-sub').textContent = S.fv === 'diagram' ? t('flow.sub') : t('tree.sub');
   // lensa scope (sketsa: Balik → Intracity / Domestik → Belum / Sudah). Filter Scope global mengunci lensa.
-  const lens = S.scope || S.tl;
-  ['', 'INTRACITY', 'DOMESTIK'].forEach(k => { const b = $('#tl-' + (k || 'all')); b.setAttribute('aria-pressed', lens === k); b.disabled = !!S.scope && k !== S.scope; });
+  const lens = '';
   const pool = id => (lens ? cnt[id].filter(r => r.scope === lens) : cnt[id]);
   const fam = id => { const path = pathOf(id); return path.includes('sudah') ? 'var(--data-ret)' : path.includes('belum') ? 'var(--data-pending)' : id === 'tidak' ? 'var(--data-none)' : 'var(--data-req)'; };
   const node = n => {
@@ -1760,7 +1726,7 @@ function renderFlow(cnt) {
     const sev = pathOf(n.id).includes('belum') && rr.length ? sevBar(sevCounts(rr), { node: n.id, ...(lens ? { scope: lens } : {}) }, false, sevVals(rr)) : '';
     const split = '';
     const tip = `${L(n.label)} — ${L(n.short)}: ${fmt(rr.length)} AWB · ${rp(sumV(rr), true)}${par ? ` (${fp(w)} ${t('flow.of', { x: nl(n.p) })})` : ''}${lens ? ' · ' + t('sc.' + lens) : ` · ${t('sc.INTRACITY')} ${fmt(nI)} · ${t('sc.DOMESTIK')} ${fmt(rr.length - nI)}`}`;
-    return `<button type="button" class="pnode ${rr.length ? '' : 'zero'}" style="--bc:${fam(n.id)}" data-node="${n.id}" data-open="${spec({ node: n.id, ...(lens ? { scope: lens } : {}) })}" data-tip="${esc(tip)}">
+    return `<button type="button" class="pnode ${rr.length ? '' : 'zero'}" style="--bc:${fam(n.id)}" data-node="${n.id}" data-n="${rr.length}" data-v="${sumV(rr)}" data-open="${spec({ node: n.id, ...(lens ? { scope: lens } : {}) })}" data-tip="${esc(tip)}">
       <span class="pn-h"><span class="pn-l">${esc(L(n.label))}</span>${par ? `<span class="pn-p">${fp(w)}</span>` : ''}</span>
       <span class="pn-n"><b class="ct">${fmt(rr.length)}</b><small>${rp(sumV(rr))}</small></span>
       ${par ? `<span class="pn-bar"><span style="width:${w || 0}%"></span></span>` : ''}${split}${sev}</button>`;
@@ -1853,7 +1819,7 @@ function renderPerf() {
 }
 
 function agingChart() {
-  const isV = S.metric === 'v', m = rows => (isV ? sumV(rows) : rows.length);
+  const isV = false, m = rows => rows.length;
   const B = F.filter(NODE.belum.t);
   const cols = BUCKETS.map(b => ({ b, nb: B.filter(r => r.bk === b.i) }));
   const max = Math.max(1, ...cols.map(x => m(x.nb)));
@@ -1866,65 +1832,23 @@ function agingChart() {
   }).join('');
   $('#aging-viz').innerHTML = `<div class="ag-chart">${html}</div><div class="ag-legend"><span><b>${t('ag.not')}:</b></span>${SEV.map(x => `<span><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span>${t('lg.sla')}</span></div>`;
 }
-function renderAging() {
-  $('#av-chart').setAttribute('aria-pressed', S.av === 'chart'); $('#av-table').setAttribute('aria-pressed', S.av === 'table');
-  $('#aging-viz').hidden = S.av !== 'chart'; $('#aging-wrap').hidden = S.av !== 'table'; $('#am-seg').hidden = S.av !== 'table';
-  $('#aging-sub').textContent = S.av === 'chart' ? t('ag.sub.c') : t('aging.sub');
-  agingChart();
-  $('#am-bucket').setAttribute('aria-pressed', S.am === 'bucket'); $('#am-sev').setAttribute('aria-pressed', S.am === 'sev');
-  $('#mt-n').setAttribute('aria-pressed', S.metric === 'n'); $('#mt-v').setAttribute('aria-pressed', S.metric === 'v');
-  const isV = S.metric === 'v', mval = rows => (isV ? sumV(rows) : rows.length), mfmt = v => (isV ? rp(v) : fmt(v));
-  const cols = S.am === 'bucket'
-    ? BUCKETS.map(b => ({ label: `${b.label} ${U()}`, tip: t('bucket.tip', { x: b.label }), sp: { bk: b.i }, f: r => r.bk === b.i }))
-    : SEV.map(s => ({ label: L(s.label), tip: `${L(s.short)}. ${sevRanges(s)}`, sev: s.k, sp: { sev: s.k }, f: r => r.sev === s.k }));
-  const sections = [['aging.s1', ['ND', 'dlv', 'MDP', 'PODC', 'REDOC', 'UPLOAD'], 'belum']];
-  let h = `<thead><tr><th>${t('c.status')}</th>${cols.map(c => `<th${c.sev ? ` class="sevh" style="--hc:var(--sev-${c.sev})"` : ''}>${esc(c.label)}${info(c.tip)}</th>`).join('')}<th>${t('total')}</th></tr></thead>`;
-  for (const [title, ids, tot] of sections) {
-    h += `<tbody><tr class="grp"><td colspan="${cols.length + 2}">${t(title)}</td></tr>`;
-    for (const id of [...ids, tot]) {
-      const rows = F.filter(NODE[id].t), n = mval(rows), isTot = id === tot;
-      const rowDom = domSev(sevCounts(rows));
-      h += `<tr class="${isTot ? 'tot' : ''}" data-link="${id}"><td style="padding-left:${['MDP', 'PODC', 'REDOC', 'UPLOAD'].includes(id) ? 28 : 10}px;${id === 'dlv' ? 'font-weight:700' : ''}">${isTot ? esc(t('totalX', { x: nl(id) })) : esc(nl(id)) + info(L(NODE[id].def))}</td>` +
-        cols.map(col => {
-          const cr = rows.filter(col.f), v = mval(cr), dom = col.sev || domSev(sevCounts(cr));
-          const tip = isV ? t('cell.tipv', { r: nl(id), c: col.label, v: rp(v, true), p: fp(pct(v, n)), n: fmt(cr.length), s: L(SEVK[dom].label) })
-            : t('cell.tip', { r: nl(id), c: col.label, n: fmt(v), v: rp(sumV(cr), true), p: fp(pct(v, n)), s: L(SEVK[dom].label) });
-          const sub = isV ? `${fmt(cr.length)} AWB · ${fp(pct(v, n))}` : `${rp(sumV(cr))} · ${fp(pct(v, n))}`;
-          return `<td class="c ${v ? '' : 'zero'}" data-open="${spec({ node: id, ...col.sp })}" data-tip="${esc(tip)}"><span><b class="t-${v ? dom : 'hitam'}">${mfmt(v)}</b><small>${v ? sub : ''}</small></span></td>`;
-        }).join('') + `<td>${isV ? go({ node: id }, mfmt(n), 't-' + (n ? rowDom : 'hitam'), rp(n, true)) : go({ node: id }, nvRows(rows), 't-' + (n ? rowDom : 'hitam'))}</td></tr>`;
-    }
-    h += '</tbody>';
-  }
-  $('#aging').innerHTML = h;
-}
+function renderAging() { agingChart(); }
 
 function renderRank() {
-  document.querySelectorAll('#rank-tabs [data-rank]').forEach(b => b.classList.toggle('on', b.dataset.rank === S.rank));
-  $('#rs-n').setAttribute('aria-pressed', S.rsort === 'n'); $('#rs-v').setAttribute('aria-pressed', S.rsort === 'v');
-  const byV = S.rsort === 'v';
-  const key = S.rank;
-  const list = [...new Set(F.map(r => r[key]))].map(id => { const c = core(F.filter(r => r[key] === id)); return { id, c, sc: sevCounts(c.belumRows) }; })
-    .filter(x => x.c.balik).sort((a, b) => (byV ? b.c.vBelum - a.c.vBelum : b.c.belum - a.c.belum) || String(a.id).localeCompare(String(b.id)));
-  const cF = core(F), totalBelum = byV ? cF.vBelum : cF.belum, show = S.rankAll ? list : list.slice(0, 10);
-  const head = key === 'br' ? t('rank.br') : key === 'cust' ? t('f.cust') : key === 'reg' ? t('f.reg') : t('f.level');
-  let h = `<thead><tr><th>${head}</th><th>${t('r.not')}${info(t('r.not.tip') + ' ' + t('r.val.tip'))}</th><th>${byV ? t('r.shareV') : t('r.share')}${info(byV ? t('r.shareV.tip') : t('r.share.tip'))}</th>
-    <th class="l">${t('c.colour')}${info(t('c.colour.tip'))}</th><th>${t('p.past')}${info(t('p.past.tip'))}</th><th>${t('r.rr')}${info(t('r.rr.tip'))}</th><th>${t('p.ot')}${info(t('p.ot.tip'))}</th></tr></thead><tbody>`;
-  for (const x of show) {
-    const nm = nameOf(key, x.id);
-    const sub = key === 'br' ? BR[x.id].reg : key === 'cust' ? `SLA ${CUST[x.id].sla} ${U()}` : key === 'reg' ? t('r.regdesc', { n: fmt(new Set(F.filter(r => r.reg === x.id).map(r => r.br)).size) }) : t('r.lvdesc');
-    const fk = key === 'br' ? 'branch' : key;
-    const otp = pct(x.c.ontime, x.c.sudah);
-    h += `<tr><td class="name l"><span class="rk">${show.indexOf(x) + 1}</span><button type="button" class="go" data-filter="${fk}" data-val="${esc(x.id)}" data-tip="${esc(t('r.filterTo', { x: nm }))}">${esc(nm)}</button><span class="desc">${esc(sub)}</span></td>
-      <td>${x.c.belum ? go({ node: 'belum', [key]: x.id }, byV
-        ? `<span class="nv"><b data-tip="${esc(rp(x.c.vBelum, true))}">${rp(x.c.vBelum)}</b><small>${fmt(x.c.belum)} AWB</small></span>` : nv(x.c.belum, x.c.vBelum)) : 0}</td><td>${fp(pct(byV ? x.c.vBelum : x.c.belum, totalBelum))}</td>
-      <td class="bar l">${sevBar(x.sc, { node: 'belum', [key]: x.id }, false, sevVals(x.c.belumRows))}</td>
-      <td>${x.c.overD ? go({ node: 'dlv', over: true, [key]: x.id }, nv(x.c.overD, x.c.vOverD), 't-merah') : 0}</td>
-      <td>${fp(pct(x.c.sudah, x.c.balik))}</td><td class="${(otp ?? 100) < 60 ? 't-merah' : ''}">${fp(otp)}</td></tr>`;
-  }
-  $('#rank').innerHTML = h + '</tbody>';
-  const more = $('#rank-more');
-  more.hidden = list.length <= 10;
-  more.textContent = S.rankAll ? t('r.top') : t('r.more', { n: list.length });
+  const c = core(F);
+  const top = key => [...new Set(c.belumRows.map(r => r[key]))].map(id => ({ id, rows: c.belumRows.filter(r => r[key] === id) }))
+    .sort((a, b) => b.rows.length - a.rows.length || sumV(b.rows) - sumV(a.rows) || String(a.id).localeCompare(String(b.id))).slice(0, 10);
+  const li = (key, x, i) => {
+    const sp = { node: 'belum', [key]: x.id }, sc = sevCounts(x.rows);
+    const sub = key === 'br' ? BR[x.id].reg : `SLA ${CUST[x.id].sla} ${U()}`;
+    return `<li><button type="button" class="rk-row" data-k="${key}" data-open="${spec(sp)}" data-n="${x.rows.length}" data-tip="${esc(t('rk.tip', { x: nameOf(key, x.id) }))}">
+      <span class="rk">${i + 1}</span><span class="rk-nm"><b>${esc(nameOf(key, x.id))}</b><small>${esc(sub)} · ${fp(pct(x.rows.length, c.belum))} ${t('rk.of')}</small></span>
+      <span class="rk-v">${nv(x.rows.length, sumV(x.rows))}${sc.ungu ? mention('ungu', esc(t('fo.crit', { n: fmt(sc.ungu) }))) : ''}</span>
+      <span class="rk-bar">${sevBar(sc, sp, false, sevVals(x.rows))}</span></button></li>`;
+  };
+  const none = `<li class="muted">${t('focus.none')}</li>`;
+  $('#rk-br').innerHTML = top('br').map((x, i) => li('br', x, i)).join('') || none;
+  $('#rk-cust').innerHTML = top('cust').map((x, i) => li('cust', x, i)).join('') || none;
 }
 
 function renderRules() {
@@ -2128,8 +2052,8 @@ function applyToDashboard() {
   if (sp.scope) S.scope = sp.scope;
   const target = sp.node || 'all';
   closeModal(); render();
-  const row = document.getElementById('row-' + target);
-  if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 2200); }
+  const row = document.querySelector(`#flow .pnode[data-node="${target}"]`);
+  if (row) { row.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 2200); }
   toast(t('t.applied'));
 }
 
@@ -2234,7 +2158,7 @@ function exportGroup(key) {
     add([head, ...ids.map(id => { const rr = F.filter(NODE[id].t); return [nl(id), ...BUCKETS.map(b => rr.filter(r => r.bk === b.i).length), rr.length]; })], 'Aging (AWB)');
     add([head, ...ids.map(id => { const rr = F.filter(NODE[id].t); return [nl(id), ...BUCKETS.map(b => sumV(rr.filter(r => r.bk === b.i))), sumV(rr)]; })], 'Aging (Rp)');
   } else if (key === 'rank') {
-    const k = S.rank, tot = c.belum;
+    const k = 'br', tot = c.belum;
     const list = [...new Set(F.map(r => r[k]))].map(id => ({ id, cc: core(F.filter(r => r[k] === id)) })).filter(x => x.cc.balik)
       .sort((a, b) => (S.rsort === 'v' ? b.cc.vBelum - a.cc.vBelum : b.cc.belum - a.cc.belum));
     add([['#', k === 'br' ? t('rank.br') : k === 'cust' ? t('f.cust') : k === 'reg' ? t('f.reg') : t('f.level'), t('r.not'), t('r.not') + ' (Rp)', t('r.share'), ...SEV.map(x => L(x.label)), t('p.past'), t('p.past') + ' (Rp)', t('r.rr'), t('p.ot')],
