@@ -17,8 +17,17 @@
   --shadow: 0 1px 2px rgba(38,40,45,.05), 0 6px 20px rgba(38,40,45,.05);
   --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --r-lg: 20px; --r-sm: 8px; --r-pill: 9999px;
+  --ease: cubic-bezier(.2, .8, .2, 1); --dur-fast: 150ms; --dur: 250ms; --dur-slow: 650ms;
+  --spot: rgba(47, 74, 109, .10); --lift: 0 12px 28px rgba(38, 40, 45, .12);
+  /* palet DATA (bukan UI, bukan status, bukan umur) */
+  --data-req: #475d7a; --data-ret: #2a78c8; --data-pending: #98a3b4; --data-none: #d5d9e0;
+  /* band header: energi tanpa menambah warna fungsi */
+  --hero-a: #0f1d33; --hero-b: #233a57; --hero-c: #355a8a; --on-hero: #ffffff; --glow: rgba(53, 90, 138, .10);
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --spot: rgba(143, 179, 227, .14); --lift: 0 12px 28px rgba(0, 0, 0, .45);
+  --data-req: #9aa3b0; --data-ret: #6aa8ea; --data-pending: #5a6577; --data-none: #3a3e46;
+  --hero-a: #0b1424; --hero-b: #1a2c46; --hero-c: #2c4a74; --glow: rgba(143, 179, 227, .08);
   --bg: #17181b; --card: #212328; --soft: #2a2c31; --hi: #263246;
   --ink: #f1f0ee; --muted: #a9acb3; --line: #34363c;
   --accent: #8fb3e3; --accent-strong: #adc8ec; --on-accent: #17181b; --accent-soft: #263246;
@@ -31,6 +40,9 @@
   color-scheme: dark;
 } }
 :root[data-theme="dark"] {
+  --spot: rgba(143, 179, 227, .14); --lift: 0 12px 28px rgba(0, 0, 0, .45);
+  --data-req: #9aa3b0; --data-ret: #6aa8ea; --data-pending: #5a6577; --data-none: #3a3e46;
+  --hero-a: #0b1424; --hero-b: #1a2c46; --hero-c: #2c4a74; --glow: rgba(143, 179, 227, .08);
   --bg: #17181b; --card: #212328; --soft: #2a2c31; --hi: #263246;
   --ink: #f1f0ee; --muted: #a9acb3; --line: #34363c;
   --accent: #8fb3e3; --accent-strong: #adc8ec; --on-accent: #17181b; --accent-soft: #263246;
@@ -44,23 +56,36 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font); }
+body { background: var(--bg) radial-gradient(1200px 420px at 50% -120px, var(--glow), transparent 70%) no-repeat; color: var(--ink); font: 14px/1.5 var(--font); }
 .wrap { max-width: 1320px; margin: 0 auto; padding-block: 20px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 16px; }
 h1, h2, h3 { margin: 0; text-wrap: balance; }
-h2 { font-size: 17px; font-weight: 700; display: inline-flex; align-items: center; }
+h2 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; display: inline-flex; align-items: center; }
+.card-head h2::before, .now h2::before { content: ""; width: 4px; height: 18px; border-radius: 4px; background: var(--accent); margin-right: 10px; flex: none; }
 .muted { color: var(--muted); }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* header */
-.top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
-.top h1 { font-size: 24px; font-weight: 800; letter-spacing: -.01em; }
-.top .meta { color: var(--muted); font-size: 13px; }
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 14px 20px; border-radius: var(--r-lg); color: var(--on-hero);
+  background: linear-gradient(115deg, var(--hero-a), var(--hero-b) 45%, var(--hero-c) 70%, var(--hero-b)); background-size: 220% 100%; animation: sheen 14s ease-in-out infinite alternate;
+  box-shadow: 0 10px 30px rgba(15, 29, 51, .25); }
+@keyframes sheen { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+.top .seg { background: rgba(255, 255, 255, .10); border-color: rgba(255, 255, 255, .22); }
+.top .seg button { color: rgba(255, 255, 255, .8); }
+.top .seg button[aria-pressed="true"] { background: #fff; color: var(--hero-b); }
+.top .btn { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
+.top .btn:hover { background: rgba(255, 255, 255, .12); }
+.top .btn.primary { background: #fff; color: var(--hero-b); border-color: #fff; }
+.top .btn.primary:hover { background: #e8eef7; }
+.top .psum { color: rgba(255, 255, 255, .85); }
+.top h1 { font-size: 25px; font-weight: 800; letter-spacing: -.02em; }
+.top .meta { color: rgba(255, 255, 255, .78); font-size: 13px; }
 .top .spacer { flex: 1; }
 .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--r-pill); padding: 3px 10px; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
 .pill.sim { background: var(--soft); color: var(--muted); border: 1px dashed var(--muted); }
+.top .pill.sim { background: rgba(255, 255, 255, .12); color: #fff; border-color: rgba(255, 255, 255, .5); }
 .btn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--muted); background: var(--card); border-radius: var(--r-pill); padding: 8px 16px; font-weight: 600; font-size: 13px; cursor: pointer; }
 .btn:hover { background: var(--soft); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
@@ -140,10 +165,10 @@ button { font: inherit; color: inherit; }
 .focus .k { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .kpi { position: relative; text-align: left; border: 1px solid var(--line); background: var(--card); border-radius: 16px; padding: 14px 16px 12px; cursor: pointer; display: grid; gap: 6px; align-content: start; }
-.kpi:hover { border-color: var(--muted); background: var(--soft); }
+.kpi:hover { border-color: var(--accent); }
 .kpi .lbl { font-size: 13px; font-weight: 700; display: flex; align-items: center; }
 .kpi .val { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.kpi .val b { font-size: 30px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.kpi .val b { font-size: 34px; font-weight: 800; letter-spacing: -.035em; font-variant-numeric: tabular-nums; line-height: 1.05; }
 .kpi .val span { font-size: 13px; font-weight: 700; padding: 1px 8px; border-radius: var(--r-pill); background: var(--soft); font-variant-numeric: tabular-nums; }
 .kpi .say { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 .kpi .kdot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex: none; }
@@ -159,7 +184,7 @@ button { font: inherit; color: inherit; }
 .sevbar > span:hover { filter: brightness(1.15); }
 .bg-hitam { background: var(--sev-hitam); } .bg-oranye { background: var(--sev-oranye); } .bg-merah { background: var(--sev-merah); } .bg-ungu { background: var(--sev-ungu); }
 .t-ungu { color: var(--sev-ungu); } .t-merah { color: var(--sev-merah); } .t-oranye { color: var(--sev-oranye-ink); } .t-hitam { color: var(--ink); } .t-ok { color: var(--success); }
-.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); }
 .legend { display: grid; gap: 2px; margin-top: 12px; }
 .legend button { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center; text-align: left; border: 0; background: none; padding: 7px 8px; border-radius: var(--r-sm); cursor: pointer; }
 .legend button:hover { background: var(--soft); }
@@ -226,7 +251,7 @@ details.card summary { cursor: pointer; font-weight: 700; font-size: 16px; }
 .x-btn { border: 1px solid var(--line); background: var(--card); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; flex: none; }
 .mstats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
 .money { font-size: 13px; color: var(--muted); } .money b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
-.money.hold b { color: var(--sev-ungu); }
+.money.hold b { color: var(--ink); text-decoration: underline 2px var(--data-pending); text-underline-offset: 3px; } /* "tertahan" = data, bukan umur → tidak ungu */
 .rp { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .head-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 /* angka AWB + nominal Rupiah */
@@ -308,7 +333,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
 .cascade { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding: 6px 10px 8px; border-radius: 12px; background: var(--soft); }
 .filters select { max-width: 230px; }
 @media (min-width: 900px) {
-  .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); padding-block: 10px; margin-block: -10px; }
+  .top { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 8px); z-index: 30; }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 31; background: var(--bg); }
 }
 /* ---------- v5: presentation mode ---------- */
@@ -332,7 +357,38 @@ body.present .status .what { font-size: 20px; } body.present .status .reasons { 
 body.present .fcard .nm { font-size: 20px; }
 body.present th, body.present td { padding: 10px 12px; }
 @media (max-width: 900px) { .focus-grid { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v8: efek & interaksi ---------- */
+@keyframes rise { from { transform: translateY(12px); } }
+@keyframes grow { from { transform: scaleX(0); } }
+@keyframes pop { from { transform: translateY(10px) scale(.98); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--lvl); } 70% { box-shadow: 0 0 0 12px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.card, .kpi, .fcard, .totals, .status { animation: rise var(--dur-slow) var(--ease) both; }
+.kpis .kpi:nth-child(2), .focus-grid .fcard:nth-child(2) { animation-delay: 60ms; }
+.kpis .kpi:nth-child(3), .focus-grid .fcard:nth-child(3) { animation-delay: 120ms; }
+.kpis .kpi:nth-child(4) { animation-delay: 180ms; } .kpis .kpi:nth-child(5) { animation-delay: 240ms; }
+.meter, .sevbar, .split-bar { transform-origin: left center; animation: grow var(--dur-slow) var(--ease) both; }
+.kpi, .fcard { background-image: radial-gradient(240px circle at var(--mx, 50%) var(--my, -60%), var(--spot), transparent 70%);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur); }
+.kpi:hover, .fcard:hover { transform: translateY(-3px); box-shadow: var(--lift); }
+.kpi:active, .fcard:active { transform: translateY(-1px); }
+.lvl-crit .ic { animation: pulse 2s var(--ease) infinite; }
+.seg button { transition: background var(--dur) var(--ease), color var(--dur); }
+.chip, .btn, .legend button, .why button, .split-legend button { transition: background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast); }
+.btn:active, .chip:active { transform: scale(.97); }
+.sevbar > span { transition: filter var(--dur-fast), transform var(--dur-fast); transform-origin: center; }
+.sevbar > span:hover { transform: scaleY(1.35); filter: brightness(1.12); }
+.hm td.c b { display: inline-block; transition: transform var(--dur-fast) var(--ease); }
+.hm td.c:hover b { transform: scale(1.15); }
+tbody tr td { transition: background var(--dur-fast); }
+tr.linked td { background: var(--hi); }
+tr.linked td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.modal { animation: fade var(--dur) ease both; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+.dialog { animation: pop var(--dur) var(--ease) both; }
+.tip, .toast { animation: fade var(--dur-fast) ease both; }
+.trend-box { position: relative; height: 280px; }
+.trend-box canvas { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 </style>
 
 <div class="wrap">
@@ -384,6 +440,12 @@ body.present th, body.present td { padding: 10px 12px; }
     <div class="status" id="status" aria-live="polite"></div>
     <div class="kpis" id="kpis"></div>
     <div class="focus" id="focus"></div>
+  </section>
+
+  <section class="card slide" id="s-trend">
+    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span></div>
+    <p class="sub" data-t="tr.sub"></p>
+    <div class="trend-box" id="trend-box"></div>
   </section>
 
   <section class="card slide" id="s-tree">
@@ -457,6 +519,7 @@ body.present th, body.present td { padding: 10px 12px; }
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
 <script>
 (() => {
 'use strict';
@@ -615,6 +678,17 @@ const T = {
   'ru.stno': ['STPOD no.', 'No. STPOD'], 'ru.stno.d': ['Handover number. One STPOD covers every POD handed over together.', 'Nomor serah terima. Satu STPOD berisi semua POD yang diserahterimakan bersama.'],
   'ru.ppno': ['PODP no.', 'No. PODP'], 'ru.ppno.d': ['Receipt number for sending POD to the customer. One PODP holds many POD.', 'Nomor resi pengiriman POD ke customer. Satu PODP berisi banyak POD.'],
   'colourW': ['Colour {x}', 'Warna {x}'],
+  'tr.few': ['On-time not shown: fewer than {n} POD returned yet.', 'Tepat waktu tidak ditampilkan: POD yang kembali belum mencapai {n}.'],
+  'sp.wk': ['POS week of {d}', 'Minggu POS {d}'],
+  'tr.empty': ['No POD to return in this period.', 'Tidak ada POD balik pada periode ini.'],
+  'tr.na': ['The chart library could not be loaded. All figures remain available in the sections below.', 'Library grafik gagal dimuat. Semua angka tetap tersedia di bagian di bawah.'],
+  'tr.ot': ['On-time return', 'Tepat waktu'],
+  'tr.not': ['Not returned', 'Belum balik'],
+  'tr.ret': ['Returned', 'Sudah balik'],
+  'tr.sub': ['Bars: share returned vs not returned. Line: on-time return (hidden for weeks with fewer than 10 POD back). Older weeks should be almost fully returned; recent weeks are naturally still open.', 'Batang: porsi sudah balik vs belum balik. Garis: ketepatan waktu (disembunyikan untuk minggu dengan kurang dari 10 POD kembali). Minggu lama seharusnya hampir semua kembali; minggu terbaru wajar masih terbuka.'],
+  'tr.hint': ['Click a week to see its AWB', 'Klik satu minggu untuk melihat AWB-nya'],
+  'tr.tip': ['Per POS week: how much of the POD to return is back and how much is not, plus the on-time return rate. All on one 0–100% scale.', 'Per minggu POS: berapa POD balik yang sudah kembali dan belum, plus tingkat ketepatan waktu. Semua pada satu skala 0–100%.'],
+  'tr.title': ['Weekly Trend', 'Tren Mingguan'],
   'tot.tip': ['Every AWB with a POS date in the period that matches the filters, split into POD to return and no return.', 'Semua AWB dengan tanggal POS di periode ini dan sesuai filter, dipecah menjadi POD balik dan tidak balik.'],
   'tot.title': ['Total shipments', 'Total kiriman'],
   'ru.pos.d': ['Date the transaction was recorded. The period filter and date picker use this date.', 'Tanggal transaksi dicatat. Filter periode dan date picker memakai tanggal ini.'],
@@ -840,7 +914,7 @@ function testOf(sp) {
   const n = NODE[sp.node || 'all'];
   return r => n.t(r) && (!sp.scope || r.scope === sp.scope) && (sp.bk == null || r.bk === sp.bk) && (!sp.sev || r.sev === sp.sev)
     && (!sp.br || r.br === sp.br) && (!sp.cust || r.cust === sp.cust) && (!sp.lv || r.lv === sp.lv) && (!sp.btype || r.btype === sp.btype)
-    && (!sp.reg || r.reg === sp.reg) && (!sp.over || r.over) && (!sp.sla || r.sla === sp.sla) && (!sp.podp || r.podp === sp.podp) && (!sp.stpod || r.stpod === sp.stpod);
+    && (!sp.reg || r.reg === sp.reg) && (!sp.over || r.over) && (!sp.sla || r.sla === sp.sla) && (!sp.podp || r.podp === sp.podp) && (!sp.stpod || r.stpod === sp.stpod) && (sp.wk == null || weekOf(r.pos) === sp.wk);
 }
 const sevCounts = rows => { const o = { hitam: 0, oranye: 0, merah: 0, ungu: 0 }; rows.forEach(r => { if (r.sev) o[r.sev]++; }); return o; };
 const sevVals = rows => { const o = { hitam: 0, oranye: 0, merah: 0, ungu: 0 }; rows.forEach(r => { if (r.sev) o[r.sev] += r.val; }); return o; };
@@ -862,6 +936,7 @@ const go = (sp, html, cls = '', tip = '') => `<button type="button" class="go ${
 const mention = (k, html) => `<span class="mention m-${k}">${html}</span>`;
 
 const sumV = rows => rows.reduce((a, r) => a + r.val, 0);
+const weekOf = d => d - ((dDate(d).getUTCDay() + 6) % 7);   // Senin awal minggu
 /* Rupiah: ringkas (rb/jt/M atau K/M/B) untuk ringkasan, lengkap untuk tabel & tooltip */
 function rp(v, full) {
   if (v == null) return '–';
@@ -902,8 +977,9 @@ function applyStatic() {
 
 function render() {
   F = ROWS.filter(inGlobal);
-  renderFilters(); renderNow(); renderTree(); renderSev(); renderPerf(); renderAging(); renderRank();
+  renderFilters(); renderNow(); renderTree(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
   if (!$('#modal').hidden) renderModal();
+  countUp();
 }
 
 function renderFilters() {
@@ -953,16 +1029,16 @@ function renderNow() {
     <span class="reasons">${h.shown.map(r => go(r.sp, mention(r.cls, esc(r.txt)))).join(`<span class="muted">${t('h.and')}</span>`)}<span class="muted">·</span>${go({ node: 'belum' }, mention('hitam', esc(t('h.hold', { v: rp(c.vBelum) }))), '', t('h.hold.tip') + ' ' + rp(c.vBelum, true))}</span>${info(t('h.rule'))}`;
   const tot = SEV.reduce((s, x) => s + sc[x.k], 0) || 1;
   const sevMini = `<div class="meter">${SEV.map(x => `<span class="bg-${x.k}" style="width:${(sc[x.k] / tot) * 100}%"></span>`).join('')}</div>`;
-  const tile = (sp, color, lbl, hint, big, badge, say, bar, money) => `<button type="button" class="kpi" data-open="${spec(sp)}">
+  const tile = (sp, color, lbl, hint, big, badge, say, bar, money, cnt) => `<button type="button" class="kpi" data-open="${spec(sp)}">
     <span class="lbl"><span class="kdot" style="background:${color}"></span>${lbl}${info(hint)}</span>
-    <span class="val"><b>${big}</b>${badge ? `<span>${badge}</span>` : ''}</span>${money}${bar}<span class="say">${say}</span></button>`;
+    <span class="val"><b data-count="${cnt[0] ?? ''}" data-fmt="${cnt[1]}" data-key="kpi-${sp.node}-${cnt[1]}-${lbl.slice(0, 1)}">${big}</b>${badge ? `<span>${badge}</span>` : ''}</span>${money}${bar}<span class="say">${say}</span></button>`;
   const money = (k, v, cls = '') => `<span class="money ${cls}" data-tip="${esc(t('v.tip') + ' ' + rp(v, true))}">${t(k)} <b>${rp(v)}</b></span>`;
   $('#kpis').innerHTML = [
-    tile({ node: 'balik' }, 'var(--muted)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--muted)'), money('k1.v', c.vBalik)),
-    tile({ node: 'sudah' }, 'var(--success)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--success)'), money('k2.v', c.vSudah)),
-    tile({ node: 'belum' }, 'var(--sev-ungu)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini, money('k3.v', c.vBelum, 'hold')),
-    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)'), money('k4.v', c.vOverD)),
-    tile({ node: 'sudah' }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })), meter(pct(c.ontime, c.sudah), 'var(--success)'), money('k5.v', c.vOntime)),
+    tile({ node: 'balik' }, 'var(--data-req)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--data-req)'), money('k1.v', c.vBalik), [c.balik, 'n']),
+    tile({ node: 'sudah' }, 'var(--data-ret)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--data-ret)'), money('k2.v', c.vSudah), [pct(c.sudah, c.balik), 'p']),
+    tile({ node: 'belum' }, 'var(--data-pending)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini, money('k3.v', c.vBelum, 'hold'), [c.belum, 'n']),
+    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)'), money('k4.v', c.vOverD), [c.overD, 'n']),
+    tile({ node: 'sudah' }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })), meter(pct(c.ontime, c.sudah), 'var(--success)'), money('k5.v', c.vOntime), [pct(c.ontime, c.sudah), 'p']),
   ].join('');
   renderTotals(c);
   renderFocus(c);
@@ -972,9 +1048,9 @@ function renderTotals(c) {
   const no = c.all - c.balik, vNo = c.vAll - c.vBalik, pb = pct(c.balik, c.all), pn = pct(no, c.all);
   const seg = (node, w, col, n, v, p) => `<span style="width:${w || 0}%;background:${col}" data-open="${spec({ node })}" data-tip="${esc(`${nl(node)}: ${fmt(n)} AWB · ${rp(v, true)} (${fp(p)})`)}"></span>`;
   const leg = (node, col, n, v, p) => `<button type="button" data-open="${spec({ node })}"><span class="dot" style="background:${col}"></span>${esc(nl(node))}${info(L(NODE[node].def))} <b>${fmt(n)}</b><span class="muted">${fp(p)}</span>${mention('hitam', esc(rp(v)))}</button>`;
-  $('#totals').innerHTML = `<button type="button" class="tot-main" data-open="${spec({ node: 'all' })}"><span class="k">${t('tot.title')}${info(t('tot.tip'))}</span><b>${fmt(c.all)}</b><span class="money" data-tip="${esc(rp(c.vAll, true))}"><b>${rp(c.vAll)}</b></span></button>
-    <div class="split"><div class="split-bar">${seg('balik', pb, 'var(--accent)', c.balik, c.vBalik, pb)}${seg('tidak', pn, 'var(--muted)', no, vNo, pn)}</div>
-      <div class="split-legend">${leg('balik', 'var(--accent)', c.balik, c.vBalik, pb)}${leg('tidak', 'var(--muted)', no, vNo, pn)}</div></div>`;
+  $('#totals').innerHTML = `<button type="button" class="tot-main" data-open="${spec({ node: 'all' })}"><span class="k">${t('tot.title')}${info(t('tot.tip'))}</span><b data-count="${c.all}" data-fmt="n" data-key="tot-n">${fmt(c.all)}</b><span class="money" data-tip="${esc(rp(c.vAll, true))}"><b data-count="${c.vAll}" data-fmt="rp" data-key="tot-v">${rp(c.vAll)}</b></span></button>
+    <div class="split"><div class="split-bar">${seg('balik', pb, 'var(--data-req)', c.balik, c.vBalik, pb)}${seg('tidak', pn, 'var(--data-none)', no, vNo, pn)}</div>
+      <div class="split-legend">${leg('balik', 'var(--data-req)', c.balik, c.vBalik, pb)}${leg('tidak', 'var(--data-none)', no, vNo, pn)}</div></div>`;
 }
 
 function renderFocus(c) {
@@ -990,14 +1066,112 @@ function renderFocus(c) {
       <span class="k">${t(lk)}</span><span class="nm">${esc(nameOf(key, top[0]))}</span>
       <span class="meta"><span>${esc(t('fo.meta', { n: fmt(top[1]), p: fp(pct(top[1], c.belum)) }))}</span>${crit ? mention('ungu', esc(t('fo.crit', { n: fmt(crit) }))) : ''}</span>
       <span class="money hold">${t('k3.v')} <b>${rpx(sumV(rows))}</b></span>
-      ${meter(pct(top[1], c.belum), 'var(--accent)')}<span class="desc">${esc(sub)}</span></button>`;
+      ${meter(pct(top[1], c.belum), 'var(--muted)')}<span class="desc">${esc(sub)}</span></button>`;
   }).join('');
   $('#focus').innerHTML = c.belum ? `<div class="focus-head">${target}<b>${t('fo.title')}</b><span class="muted" style="font-size:13px">${t('fo.sub')}</span>${info(t('fo.tip'))}</div><div class="focus-grid">${tops}</div>`
     : `<div class="focus-head">${target}<b>${t('fo.title')}</b><span class="muted">${t('focus.none')}</span></div>`;
 }
 
+/* ================= efek ================= */
+const REDUCED = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+const prevCount = {};
+function countUp(root = document) {
+  root.querySelectorAll('[data-count]').forEach(el => {
+    const to = parseFloat(el.dataset.count), key = el.dataset.key, kind = el.dataset.fmt;
+    if (!isFinite(to)) return;
+    const from = prevCount[key] ?? 0; prevCount[key] = to;
+    if (REDUCED.matches || from === to) return;
+    const f = v => (kind === 'p' ? fp(v) : kind === 'rp' ? rp(v) : fmt(Math.round(v)));
+    const final = el.textContent, t0 = performance.now(), dur = 650;
+    const step = now => {
+      if (!el.isConnected) return;
+      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = k < 1 ? f(from + (to - from) * e) : final;
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+// sorotan mengikuti kursor pada kartu
+document.addEventListener('pointermove', e => {
+  const card = e.target.closest && e.target.closest('.kpi, .fcard');
+  if (!card) return;
+  const b = card.getBoundingClientRect();
+  card.style.setProperty('--mx', `${e.clientX - b.left}px`); card.style.setProperty('--my', `${e.clientY - b.top}px`);
+});
+// sorotan tertaut: status yang sama di Alur Status & Aging
+let linked = null;
+document.addEventListener('mouseover', e => {
+  const row = e.target.closest && e.target.closest('tr[data-link]');
+  const id = row ? row.dataset.link : null;
+  if (id === linked) return;
+  document.querySelectorAll('tr.linked').forEach(r => r.classList.remove('linked'));
+  linked = id;
+  if (id) document.querySelectorAll(`tr[data-link="${id}"]`).forEach(r => r.classList.add('linked'));
+});
+
+/* ================= tren mingguan (Chart.js) ================= */
+let trendChart = null;
+const MIN_OT = 10; // titik on-time disembunyikan bila POD yang sudah kembali < 10 (terlalu sedikit untuk dibandingkan)
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function renderTrend() {
+  const box = $('#trend-box');
+  if (typeof Chart === 'undefined') { box.innerHTML = `<p class="muted">${esc(t('tr.na'))}</p>`; return; }
+  const weeks = new Map();
+  F.forEach(r => {
+    if (!r.req) return;
+    const w = weekOf(r.pos);
+    let o = weeks.get(w);
+    if (!o) weeks.set(w, o = { w, n: 0, s: 0, b: 0, ot: 0, vs: 0, vb: 0 });
+    o.n++;
+    if (r.grp === 'S') { o.s++; o.vs += r.val; if (!r.over) o.ot++; } else { o.b++; o.vb += r.val; }
+  });
+  const W = [...weeks.values()].sort((a, b) => a.w - b.w);
+  if (trendChart) { trendChart.destroy(); trendChart = null; }
+  if (!W.length) { box.innerHTML = `<p class="muted">${esc(t('tr.empty'))}</p>`; return; }
+  box.innerHTML = `<canvas id="trend" role="img" aria-label="${esc(t('tr.title'))}"></canvas>`;
+  const ink = cssVar('--muted'), grid = cssVar('--line'), font = { family: cssVar('--font') || 'system-ui', size: 12 };
+  trendChart = new Chart($('#trend'), {
+    data: {
+      labels: W.map(x => fd(x.w)),
+      datasets: [
+        { type: 'bar', label: t('tr.ret'), data: W.map(x => r1(pct(x.s, x.n))), backgroundColor: cssVar('--data-ret'), stack: 'share', borderRadius: 4, borderSkipped: false, order: 2, maxBarThickness: 34 },
+        { type: 'bar', label: t('tr.not'), data: W.map(x => r1(pct(x.b, x.n))), backgroundColor: cssVar('--data-pending'), stack: 'share', borderRadius: 4, borderSkipped: false, order: 2, maxBarThickness: 34 },
+        { type: 'line', label: t('tr.ot'), data: W.map(x => (x.s >= MIN_OT ? r1(pct(x.ot, x.s)) : null)), spanGaps: false, borderColor: cssVar('--success'), backgroundColor: cssVar('--success'), stack: 'line',
+          borderWidth: 2, pointRadius: 3, pointHoverRadius: 7, pointBorderColor: cssVar('--card'), pointBorderWidth: 2, tension: .3, order: 1 },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: REDUCED.matches ? false : { duration: 700, easing: 'easeOutCubic' },
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: ink, font, maxRotation: 0, autoSkip: true } },
+        y: { stacked: true, min: 0, max: 100, grid: { color: grid }, border: { display: false }, ticks: { color: ink, font, stepSize: 25, callback: v => v + '%' } },
+      },
+      plugins: {
+        legend: { position: 'top', align: 'end', labels: { color: ink, font, usePointStyle: true, boxWidth: 8, boxHeight: 8 } },
+        tooltip: {
+          backgroundColor: cssVar('--tip-bg'), titleColor: cssVar('--tip-ink'), bodyColor: cssVar('--tip-ink'), footerColor: cssVar('--tip-ink'), padding: 10, boxPadding: 4,
+          callbacks: {
+            title: items => t('sp.wk', { d: fd(W[items[0].dataIndex].w) }),
+            label: ctx => `${ctx.dataset.label}: ${fp(ctx.parsed.y)}`,
+            afterBody: items => (W[items[0].dataIndex].s < MIN_OT ? [t('tr.few', { n: MIN_OT })] : []),
+            footer: items => { const x = W[items[0].dataIndex]; return [`${fmt(x.n)} AWB · ${rp(x.vs + x.vb)}`, `${t('tr.ret')}: ${fmt(x.s)} · ${rp(x.vs)}`, `${t('tr.not')}: ${fmt(x.b)} · ${rp(x.vb)}`]; },
+          },
+        },
+      },
+      onClick: (e, els, chart) => {
+        const pts = chart.getElementsAtEventForMode(e, 'index', { intersect: false }, true);
+        if (pts.length) openModal({ node: 'balik', wk: W[pts[0].index].w });
+      },
+      onHover: (e, els) => { e.native.target.style.cursor = els.length ? 'pointer' : 'default'; },
+    },
+  });
+}
+if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderTrend());
+
 /* ================= presentasi ================= */
-const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-mid', 'sev.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
+const SLIDES = [['s-now', 'now.title'], ['s-trend', 'tr.title'], ['s-tree', 'tree.title'], ['s-mid', 'sev.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
 const P = { on: false, i: 0, fs: false };
 function showSlide() {
   SLIDES.forEach(([id], i) => $('#' + id).classList.toggle('active', i === P.i));
@@ -1027,11 +1201,11 @@ function renderTree() {
     const rows = cnt[n.id], N = rows.length;
     const p = n.p ? pct(N, cnt[n.p].length) : null, pb = n.d >= 2 ? pct(N, balikN) : null;
     const nI = rows.filter(r => r.scope === 'INTRACITY').length;
-    h += `<tr class="d${n.d} clickable" id="row-${n.id}" data-open="${spec({ node: n.id })}">
+    h += `<tr class="d${n.d} clickable" id="row-${n.id}" data-link="${n.id}" data-open="${spec({ node: n.id })}">
       <td class="status-cell" style="padding-left:${10 + n.d * 18}px"><b>${esc(L(n.label))}</b>${info(L(n.def))}<span class="desc">${esc(L(n.short))}</span></td>
       <td><b>${fmt(N)}</b></td>
       <td class="muted">${rpx(sumV(rows))}</td>
-      <td>${p == null ? '' : `<span class="pbar"><span class="meter"><span style="width:${p}%;background:var(--accent)"></span></span><span>${fp(p)}</span></span>`}</td>
+      <td>${p == null ? '' : `<span class="pbar"><span class="meter"><span style="width:${p}%;background:var(--muted)"></span></span><span>${fp(p)}</span></span>`}</td>
       <td class="muted">${pb == null ? '' : fp(pb)}</td>
       <td class="${nI ? '' : 'z'}">${nI ? go({ node: n.id, scope: 'INTRACITY' }, nvRows(rows.filter(r => r.scope === 'INTRACITY'))) : 0}</td>
       <td class="${N - nI ? '' : 'z'}">${N - nI ? go({ node: n.id, scope: 'DOMESTIK' }, nvRows(rows.filter(r => r.scope === 'DOMESTIK'))) : 0}</td>
@@ -1084,7 +1258,7 @@ function renderAging() {
     for (const id of [...ids, tot]) {
       const rows = F.filter(NODE[id].t), n = mval(rows), isTot = id === tot;
       const rowDom = domSev(sevCounts(rows));
-      h += `<tr class="${isTot ? 'tot' : ''}"><td style="padding-left:${['MDP', 'PODC', 'REDOC', 'UPLOAD'].includes(id) ? 28 : 10}px;${id === 'dlv' ? 'font-weight:700' : ''}">${isTot ? esc(t('totalX', { x: nl(id) })) : esc(nl(id)) + info(L(NODE[id].def))}</td>` +
+      h += `<tr class="${isTot ? 'tot' : ''}" data-link="${id}"><td style="padding-left:${['MDP', 'PODC', 'REDOC', 'UPLOAD'].includes(id) ? 28 : 10}px;${id === 'dlv' ? 'font-weight:700' : ''}">${isTot ? esc(t('totalX', { x: nl(id) })) : esc(nl(id)) + info(L(NODE[id].def))}</td>` +
         cols.map(col => {
           const cr = rows.filter(col.f), v = mval(cr), dom = col.sev || domSev(sevCounts(cr));
           const tip = isV ? t('cell.tipv', { r: nl(id), c: col.label, v: rp(v, true), p: fp(pct(v, n)), n: fmt(cr.length), s: L(SEVK[dom].label) })
@@ -1191,6 +1365,7 @@ function specLabel(sp) {
   if (sp.lv) parts.push(['lv', t('lv.' + sp.lv)]);
   if (sp.btype) parts.push(['btype', t('ty.' + sp.btype)]);
   if (sp.sla) parts.push(['sla', t('g.sla', { n: sp.sla })]);
+  if (sp.wk != null) parts.push(['wk', t('sp.wk', { d: fd(sp.wk) })]);
   if (sp.podp) parts.push(['podp', t('sp.podp', { x: sp.podp })]);
   if (sp.stpod) parts.push(['stpod', t('sp.stpod', { x: sp.stpod })]);
   return parts;
