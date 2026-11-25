@@ -229,6 +229,25 @@ details.card summary { cursor: pointer; font-weight: 700; font-size: 16px; }
 .money.hold b { color: var(--sev-ungu); }
 .rp { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .head-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+/* angka AWB + nominal Rupiah */
+.nv { display: inline-grid; justify-items: end; line-height: 1.2; }
+.nv small, .rpm { font-size: 11px; color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.l .nv, .nv.l { justify-items: start; }
+/* total kiriman */
+.totals { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(0, 3fr); gap: 14px 24px; align-items: center; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; }
+.tot-main { text-align: left; border: 0; background: none; padding: 0; cursor: pointer; display: grid; gap: 2px; }
+.tot-main .k { font-size: 12.5px; font-weight: 700; color: var(--muted); display: flex; align-items: center; }
+.tot-main b { font-size: 30px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tot-main .money b { font-size: 18px; letter-spacing: 0; }
+.split { display: grid; gap: 8px; min-width: 0; }
+.split-bar { display: flex; height: 14px; border-radius: 5px; overflow: hidden; background: var(--soft); }
+.split-bar span { display: block; height: 100%; cursor: pointer; border-right: 2px solid var(--card); }
+.split-bar span:last-child { border-right: 0; }
+.split-legend { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.split-legend button { border: 0; background: none; padding: 2px 4px; border-radius: 8px; cursor: pointer; display: inline-flex; gap: 8px; align-items: baseline; font-size: 13.5px; }
+.split-legend button:hover { background: var(--soft); }
+.split-legend b { font-size: 16px; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .totals { grid-template-columns: 1fr; } }
 .mstat { background: var(--soft); border-radius: 14px; padding: 10px 14px; }
 .mstat .lbl { font-size: 12px; color: var(--muted); font-weight: 600; display: flex; align-items: center; }
 .mstat .val { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -341,6 +360,9 @@ body.present th, body.present td { padding: 10px 12px; }
         </div>
         <div class="dp" id="dp" role="dialog" hidden></div>
       </div>
+      <div class="field"><span class="lbl"><span data-t="f.basis"></span><i class="info" tabindex="0" data-tt="f.basis.tip">i</i></span>
+        <span class="seg" role="group"><button type="button" data-basis="dlv" id="bs-dlv" data-t="basis.dlv"></button><button type="button" data-basis="pos" id="bs-pos" data-t="basis.pos"></button></span>
+      </div>
       <label class="field" for="f-cust"><span class="lbl"><span data-t="f.cust"></span><i class="info" tabindex="0" data-tt="f.cust.tip">i</i></span><select id="f-cust"></select></label>
       <label class="field" for="f-scope"><span class="lbl"><span data-t="f.scope"></span><i class="info" tabindex="0" data-tt="f.scope.tip">i</i></span><select id="f-scope"></select></label>
       <div class="cascade" role="group" aria-label="Destination">
@@ -358,6 +380,7 @@ body.present th, body.present td { padding: 10px 12px; }
 
   <section class="card now slide" id="s-now" aria-labelledby="now-title">
     <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="muted" id="now-meta" style="font-size:12.5px"></span></div>
+    <div class="totals" id="totals"></div>
     <div class="status" id="status" aria-live="polite"></div>
     <div class="kpis" id="kpis"></div>
     <div class="focus" id="focus"></div>
@@ -443,11 +466,11 @@ const T = {
   'title': ['POD Performance', 'Performance POD'],
   'sim': ['Simulated data', 'Data simulasi'],
   'sim.tip': ['All figures are randomly generated to test layout and flow. Not operational data.', 'Semua angka dibuat acak untuk menguji tampilan dan alur. Bukan data operasional.'],
-  'asof': ['As of {d} · shipped {a} – {b}', 'Posisi {d} · kirim {a} – {b}'],
+  'asof': ['As of {d} · POS {a} – {b}', 'Posisi {d} · POS {a} – {b}'],
   'export': ['Export Excel', 'Export Excel'],
   'export.tip': ['Download Excel with summary, aging, per branch, per customer and the AWB list for the active filters.', 'Unduh Excel berisi ringkasan, aging, per cabang, per customer, dan daftar AWB sesuai filter aktif.'],
-  'f.period': ['Ship date', 'Tanggal kirim'],
-  'f.period.tip': ['Use either a quick preset or a date range. Shipments are counted by pickup date.', 'Pakai salah satu: periode cepat atau rentang tanggal. Kiriman dihitung dari tanggal kirim (pickup).'],
+  'f.period': ['POS date', 'Tanggal POS'],
+  'f.period.tip': ['Date the transaction was recorded (POS). Both the preset and the date range filter on this date.', 'Tanggal transaksi dicatat (POS). Preset dan rentang tanggal sama-sama menyaring berdasarkan tanggal ini.'],
   'f.preset': ['Preset', 'Periode'], 'f.range': ['Date range', 'Rentang tanggal'],
   'f.lastN': ['Last {n} days', '{n} hari terakhir'],
   'f.cust': ['Customer', 'Customer'],
@@ -469,17 +492,17 @@ const T = {
   'ww.ms': ['Mon–Sat', 'Senin–Sabtu'], 'ww.mf': ['Mon–Fri', 'Senin–Jumat'],
   'now.title': ['POD Condition Now', 'Kondisi POD Saat Ini'],
   'now.tip': ['Read left to right: how many POD must come back, how many have, how many have not, how many are late, and how punctual. Click any box for its AWB list.', 'Baca dari kiri ke kanan: berapa POD wajib kembali, berapa yang sudah, berapa yang belum, berapa yang terlambat, dan seberapa tepat waktu. Klik kotak mana pun untuk daftar AWB-nya.'],
-  'now.meta': ['Working days {w} · SLA per customer (6/7 WD)', 'Hari kerja {w} · SLA sesuai customer (6/7 HK)'],
+  'now.meta': ['Working days {w} · age from {b} · SLA per customer (6/7 WD)', 'Hari kerja {w} · umur dari {b} · SLA sesuai customer (6/7 HK)'],
   'h.crit': ['Action needed', 'Perlu tindakan'], 'h.warn': ['Watch', 'Waspada'], 'h.good': ['Good', 'Baik'],
   'h.ungu': ['{p} of outstanding POD are critical (purple) · limit < 15%', '{p} POD belum balik sudah kritis (ungu) · batas < 15%'],
   'h.ot': ['on-time return {p} · target ≥ 80%', 'ketepatan waktu {p} · target ≥ 80%'],
   'h.and': ['and', 'dan'],
   'h.rule': ['Action needed (red): ≥30% of outstanding POD purple OR on-time < 60%. Watch (orange): ≥15% purple OR on-time < 80%. Otherwise Good (green). Each reason keeps its own colour.', 'Perlu tindakan (merah): ≥30% POD belum balik ungu ATAU tepat waktu < 60%. Waspada (oranye): ≥15% ungu ATAU tepat waktu < 80%. Selain itu Baik (hijau). Setiap alasan memakai warnanya sendiri.'],
-  'k1': ['1 · POD to return', '1 · POD Balik'], 'k1.say': ['Physical POD that must come back, out of {n} shipments.', 'POD fisik yang wajib kembali, dari {n} kiriman.'],
-  'k2': ['2 · Returned', '2 · Sudah Balik'], 'k2.say': ['Back with us, out of {n} required.', 'Sudah kembali, dari {n} yang wajib.'],
-  'k3': ['3 · Not returned', '3 · Belum Balik'], 'k3.crit': ['{n} critical', '{n} kritis'], 'k3.say': ['{nd} parcels not yet delivered.', '{nd} paket belum terkirim.'],
-  'k4': ['4 · Past SLA', '4 · Lewat SLA'], 'k4.tip': ['Delivered, POD not back yet, and its age is over the customer SLA (6/7 WD).', 'Sudah delivered, POD belum kembali, dan umurnya melebihi SLA customer (6/7 HK).'],
-  'k4.say': ['Late, out of {n} delivered POD not yet back.', 'Terlambat dari {n} POD delivered yang belum kembali.'],
+  'k1': ['1 · POD to return', '1 · POD Balik'], 'k1.say': ['Physical POD that must come back, out of {n} shipments ({v}).', 'POD fisik yang wajib kembali, dari {n} kiriman ({v}).'],
+  'k2': ['2 · Returned', '2 · Sudah Balik'], 'k2.say': ['Back with us, out of {n} required ({v}).', 'Sudah kembali, dari {n} yang wajib ({v}).'],
+  'k3': ['3 · Not returned', '3 · Belum Balik'], 'k3.crit': ['{n} critical · {v}', '{n} kritis · {v}'], 'k3.say': ['{nd} parcels not yet delivered ({v}).', '{nd} paket belum terkirim ({v}).'],
+  'k4': ['4 · Past SLA', '4 · Lewat SLA'], 'k4.tip': ['Delivered, POD not back yet, and its age (from the "Age from" date) is over the customer SLA (6/7 WD).', 'Sudah delivered, POD belum kembali, dan umurnya (dari tanggal "Umur dihitung dari") melebihi SLA customer (6/7 HK).'],
+  'k4.say': ['Late, out of {n} delivered POD not yet back ({v}).', 'Terlambat dari {n} POD delivered yang belum kembali ({v}).'],
   'k5': ['5 · On time', '5 · Tepat Waktu'], 'k5.tip': ['Of the returned POD, the share that came back within the customer SLA.', 'Dari POD yang sudah kembali, porsi yang kembali sesuai SLA customer.'],
   'k5.say': ['Returned within SLA. Average {d} WD.', 'Kembali sesuai SLA. Rata-rata {d} HK.'],
   'seeAwb': ['See AWB ›', 'Lihat AWB ›'],
@@ -501,19 +524,19 @@ const T = {
   'perf.title': ['Return Performance', 'Kinerja Pengembalian'],
   'perf.tip': ['Based on POD that are already back. On time = time to return (delivered → POD back) ≤ customer SLA.', 'Dihitung dari POD yang sudah kembali. Tepat waktu = lama kembali (delivered → POD kembali) ≤ SLA customer.'],
   'perf.sub': ['Which group returns POD slowest. Click a number for its AWB list.', 'Grup mana yang paling lambat mengembalikan POD. Klik angka untuk daftar AWB.'],
-  'p.group': ['Group', 'Grup'], 'p.ret': ['Returned', 'Sudah balik'], 'p.avg': ['Avg WD', 'Rata² HK'], 'p.avg.tip': ['Average working days from delivery until the POD is back (rounded).', 'Rata-rata hari kerja dari delivered sampai POD kembali (dibulatkan).'],
+  'p.group': ['Group', 'Grup'], 'p.ret': ['Returned', 'Sudah balik'], 'p.avg': ['Avg WD', 'Rata² HK'], 'p.avg.tip': ['Average working days from the "Age from" date until the POD is back, rounded.', 'Rata-rata hari kerja dari tanggal "Umur dihitung dari" sampai POD kembali, dibulatkan.'],
   'p.ot': ['On time', 'Tepat waktu'], 'p.ot.tip': ['% of returned POD that came back ≤ customer SLA.', '% POD sudah balik yang kembali ≤ SLA customer.'],
   'p.past': ['Past SLA', 'Lewat SLA'], 'p.past.tip': ['Delivered POD not yet back and already over the SLA. These are late right now.', 'POD delivered yang belum kembali dan sudah melewati SLA. Ini tunggakan yang terlambat sekarang.'],
   'g.intra': ['Same-city origin & destination', 'Asal & tujuan satu kota'], 'g.dom': ['Between cities', 'Antar kota'],
   'g.sla': ['Customer SLA {n} WD', 'Customer SLA {n} HK'], 'g.sla.d': ['Return within {n} working days', 'Batas kembali {n} hari kerja'],
   'g.int': ['Delivered by our own office', 'Diantar kantor sendiri'], 'g.agent': ['Delivered by a partner office', 'Diantar kantor mitra'],
   'aging.title': ['Aging per 5 Working Days', 'Aging per 5 Hari Kerja'],
-  'aging.tip': ['Age grouped per 5 working days. Not returned: age since delivery (not yet delivered: since shipping). Returned: time to return.', 'Umur dikelompokkan per 5 hari kerja. Belum balik: umur sejak delivered (belum terkirim: sejak kirim). Sudah balik: lama kembali.'],
+  'aging.tip': ['Age grouped per 5 working days, counted from the "Age from" date (Delivered or POS). Returned rows show the time to return.', 'Umur dikelompokkan per 5 hari kerja, dihitung dari tanggal "Umur dihitung dari" (Delivered atau POS). Baris sudah balik menunjukkan lama kembali.'],
   'mode.bucket': ['Per 5 WD', 'Per 5 HK'], 'mode.sev': ['Per colour', 'Per warna'],
   'aging.sub': ['Every number is coloured by the age colour most common in that cell. Small number = % of the row total.', 'Setiap angka diwarnai sesuai warna umur yang paling banyak di sel itu. Angka kecil = % dari total baris.'],
   'aging.s1': ['Not returned · age', 'Belum balik · umur'], 'aging.s2': ['Returned · time to return', 'Sudah balik · lama kembali'],
   'total': ['Total', 'Total'], 'totalX': ['Total {x}', 'Total {x}'],
-  'cell.tip': ['{r} · {c}: {n} AWB ({p} of row), mostly {s}. Click for the AWB list.', '{r} · {c}: {n} AWB ({p} dari baris), terbanyak {s}. Klik untuk daftar AWB.'],
+  'cell.tip': ['{r} · {c}: {n} AWB · {v} ({p} of row), mostly {s}. Click for the AWB list.', '{r} · {c}: {n} AWB · {v} ({p} dari baris), terbanyak {s}. Klik untuk daftar AWB.'],
   'bucket.tip': ['Age {x} working days', 'Umur {x} hari kerja'],
   'rank.title': ['Who Needs Follow-up', 'Siapa yang Perlu Ditindaklanjuti'],
   'rank.tip': ['Ranking of outstanding POD. Click a name to filter the whole dashboard; click a number or colour bar for the AWB list.', 'Peringkat tunggakan POD. Klik nama untuk memfilter seluruh dashboard; klik angka atau batang warna untuk daftar AWB.'],
@@ -530,16 +553,16 @@ const T = {
   'rules.ww.tip': ['Prototype assumption. Public holidays are not included yet.', 'Asumsi prototype. Libur nasional belum diperhitungkan.'],
   'footer': ['UI/UX prototype · simulated data', 'Prototype UI/UX · data simulasi'],
   'close': ['Close', 'Tutup'], 'back': ['‹ Back to list', '‹ Kembali ke daftar'],
-  'drill': ['Drill: {x} ({n})', 'Rinci: {x} ({n})'],
+  'drill': ['Drill: {x} ({n} · {v})', 'Rinci: {x} ({n} · {v})'],
   'apply': ['↩ Show on dashboard', '↩ Lihat posisinya di dashboard'],
   'apply.tip': ['Close this window, apply its customer/branch/level/scope filters to the dashboard and highlight the row in the Status Flow.', 'Tutup jendela ini, terapkan saringan customer/cabang/level/scope ke dashboard, dan tandai barisnya di Alur Status.'],
   'rm': ['Remove this filter', 'Hapus saringan ini'],
   'm.count': ['AWB count', 'Jumlah AWB'], 'm.count.tip': ['AWB matching this selection.', 'AWB yang sesuai pilihan ini.'],
-  'm.ofParent': ['{p} of {x} ({n})', '{p} dari {x} ({n})'],
+  'm.ofParent': ['{p} of {x} ({n} · {v})', '{p} dari {x} ({n} · {v})'],
   'm.share': ['Share of POD to return', 'Porsi dari POD Balik'], 'm.share.tip': ['This count ÷ all POD to return with the same filters.', 'Jumlah ini ÷ seluruh POD Balik dengan saringan yang sama.'],
   'm.ofRet': ['of {n} POD to return', 'dari {n} POD balik'],
-  'm.avgAge': ['Average age', 'Rata-rata umur'], 'm.avgAge.tip': ['Average working days since delivery (or since shipping if not delivered), rounded.', 'Rata-rata hari kerja sejak delivered (atau sejak kirim bila belum terkirim), dibulatkan.'],
-  'm.avgRet': ['Average time to return', 'Rata-rata lama kembali'], 'm.avgRet.tip': ['Average working days from delivery until the POD is back, rounded.', 'Rata-rata hari kerja dari delivered sampai POD kembali, dibulatkan.'],
+  'm.avgAge': ['Average age', 'Rata-rata umur'], 'm.avgAge.tip': ['Average working days from the "Age from" date, rounded.', 'Rata-rata hari kerja dari tanggal "Umur dihitung dari", dibulatkan.'],
+  'm.avgRet': ['Average time to return', 'Rata-rata lama kembali'], 'm.avgRet.tip': ['Average working days from the "Age from" date until the POD is back, rounded.', 'Rata-rata hari kerja dari tanggal "Umur dihitung dari" sampai POD kembali, dibulatkan.'],
   'm.late': ['Late', 'Tidak tepat waktu'], 'm.past': ['Past SLA', 'Lewat SLA'],
   'm.colAge': ['Age colour · click to filter', 'Warna umur · klik untuk menyaring'], 'm.colRet': ['Time-to-return colour · click to filter', 'Warna lama kembali · klik untuk menyaring'],
   'm.contrib': ['Biggest contributors · click to filter', 'Penyumbang terbesar · klik untuk menyaring'],
@@ -547,14 +570,14 @@ const T = {
   'm.refine': ['Narrow the list to {x}', 'Saring daftar ke {x}'],
   'm.search': ['Search AWB, customer, branch, PODP no…', 'Cari AWB, customer, cabang, no. PODP…'],
   'm.export': ['Export Excel ({n} rows)', 'Export Excel ({n} baris)'],
-  'm.page': ['Page {a} of {b} · {n} AWB', 'Halaman {a} dari {b} · {n} AWB'],
+  'm.page': ['Page {a} of {b} · {n} AWB · {v}', 'Halaman {a} dari {b} · {n} AWB · {v}'],
   'prev': ['‹ Previous', '‹ Sebelumnya'], 'next': ['Next ›', 'Berikutnya ›'],
   'm.empty': ['No AWB for this selection.', 'Tidak ada AWB untuk pilihan ini.'],
   'col.awb': ['AWB', 'AWB'], 'col.awb.tip': ['Click an AWB to see its document journey.', 'Klik AWB untuk melihat perjalanan dokumennya.'],
   'col.origin': ['Origin', 'Asal'], 'col.origin.tip': ['Office where the parcel was shipped from.', 'Kantor asal pengiriman paket.'],
   'col.dest': ['Destination branch', 'Cabang tujuan'], 'col.dest.tip': ['Office that delivers and must return the POD.', 'Kantor yang mengantar dan wajib mengembalikan POD.'],
   'col.ship': ['Shipped', 'Kirim'], 'col.dlv': ['Delivered', 'Delivered'], 'col.ret': ['Returned', 'Kembali'], 'col.ret.tip': ['Date the physical POD came back.', 'Tanggal POD fisik kembali.'],
-  'col.age': ['Age WD', 'Umur HK'], 'col.age.tip': ['Not returned: age since delivery/shipping. Returned: time to return. Whole working days.', 'Belum balik: umur sejak delivered/kirim. Sudah balik: lama kembali. Dalam hari kerja bulat.'],
+  'col.age': ['Age WD', 'Umur HK'], 'col.age.tip': ['Working days from the "Age from" date (Delivered or POS) until today, or until the POD came back.', 'Hari kerja dari tanggal "Umur dihitung dari" (Delivered atau POS) sampai hari ini, atau sampai POD kembali.'],
   'col.sla': ['SLA', 'SLA'], 'col.sla.tip': ['Customer SLA. "!" means past SLA.', 'SLA customer. Tanda "!" = lewat SLA.'],
   'col.ref': ['STPOD / PODP / Note', 'STPOD / PODP / Ket.'], 'col.ref.tip': ['Click a number to see every AWB in the same document.', 'Klik nomor untuk melihat semua AWB di dokumen yang sama.'],
   'pastMark': ['Past customer SLA', 'Melewati SLA customer'],
@@ -565,15 +588,15 @@ const T = {
   'a.late': ['late by {n} WD', 'terlambat {n} HK'], 'a.ontime': ['on time', 'tepat waktu'],
   'a.dlv': ['{a} WD since delivery (SLA {s} WD) → {r}.', 'Sudah {a} HK sejak delivered (SLA {s} HK) → {r}.'],
   'a.over': ['over by {n} WD', 'lewat {n} HK'], 'a.left': ['{n} WD left', 'sisa {n} HK'],
-  'a.nd': ['{a} WD since shipping; parcel not delivered yet.', 'Sudah {a} HK sejak dikirim, paket belum diterima.'],
+  'a.nd': ['{a} WD since POS; parcel not delivered yet.', 'Sudah {a} HK sejak POS, paket belum diterima.'],
   's.ship': ['Shipped from {x}', 'Dikirim dari {x}'], 's.dlv': ['Delivered to recipient by {x}', 'Diterima penerima, diantar {x}'], 's.notYet': ['Not yet', 'Belum'],
   's.pod': ['POD status: {x}', 'Status POD: {x}'], 's.since': ['since {d}', 'sejak {d}'],
   's.stpod': ['POD back & handed over (STPOD)', 'POD kembali & diserahterimakan (STPOD)'], 's.podp': ['Sent to customer (PODP)', 'Dikirim ke customer (PODP)'],
   's.resi': ['Receipt {x}', 'Resi {x}'], 's.arsip': ['Archived', 'Diarsipkan'],
-  'rel.podp': ['All AWB in PODP receipt {x} ({n})', 'Semua AWB di resi PODP {x} ({n})'], 'rel.stpod': ['All AWB in STPOD {x} ({n})', 'Semua AWB di STPOD {x} ({n})'],
-  'rel.status': ['All AWB with status {x} ({n})', 'Semua AWB berstatus {x} ({n})'], 'rel.sev': ['All outstanding POD in {x}', 'Semua belum balik warna {x}'],
+  'rel.podp': ['All AWB in PODP receipt {x} ({n} · {v})', 'Semua AWB di resi PODP {x} ({n} · {v})'], 'rel.stpod': ['All AWB in STPOD {x} ({n} · {v})', 'Semua AWB di STPOD {x} ({n} · {v})'],
+  'rel.status': ['All AWB with status {x} ({n} · {v})', 'Semua AWB berstatus {x} ({n} · {v})'], 'rel.sev': ['All outstanding POD in {x}', 'Semua belum balik warna {x}'],
   'seeCust': ['See all outstanding POD for this customer', 'Lihat semua POD belum balik customer ini'], 'seeBr': ['See all outstanding POD for this destination branch', 'Lihat semua POD belum balik cabang tujuan ini'],
-  'nOut': ['{n} POD not returned', '{n} POD belum balik'],
+  'nOut': ['{n} POD not returned ({v})', '{n} POD belum balik ({v})'],
   'sp.age': ['Age {x} WD', 'Umur {x} HK'], 'sp.col': ['Colour {x}', 'Warna {x}'], 'sp.past': ['Past SLA', 'Lewat SLA'],
   'sp.podp': ['PODP receipt {x}', 'Resi PODP {x}'], 'sp.stpod': ['STPOD {x}', 'STPOD {x}'], 'sp.dest': ['Destination: {x}', 'Tujuan: {x}'],
   't.saved': ['Excel file saved', 'File Excel disimpan'], 't.cancel': ['Export cancelled', 'Export dibatalkan'], 't.wait': ['Wait a moment, then try again', 'Tunggu sebentar, lalu coba lagi'],
@@ -581,9 +604,9 @@ const T = {
   't.filtered': ['Dashboard filtered to {x}', 'Dashboard difilter ke {x}'], 't.applied': ['Filters applied to the dashboard', 'Saringan diterapkan ke dashboard'],
   'dp.start': ['Pick the start date', 'Pilih tanggal awal'], 'dp.end': ['Pick the end date', 'Pilih tanggal akhir'], 'dp.days': ['{n} days', '{n} hari'],
   'dp.thisM': ['This month', 'Bulan ini'], 'dp.lastM': ['Last month', 'Bulan lalu'], 'dp.prev': ['Previous month', 'Bulan sebelumnya'], 'dp.next': ['Next month', 'Bulan berikutnya'],
-  'sevbar.tip': ['{x} · {s}: {n} AWB ({p}). Click for the AWB list.', '{x} · {s}: {n} AWB ({p}). Klik untuk daftar AWB.'],
+  'sevbar.tip': ['{x} · {s}: {n} AWB · {v} ({p}). Click for the AWB list.', '{x} · {s}: {n} AWB · {v} ({p}). Klik untuk daftar AWB.'],
   'ru.wd': ['Working days (WD)', 'Hari kerja (HK)'], 'ru.wd.d': ['Age and SLA are counted in whole working days. Mon–Sat or Mon–Fri can be chosen below. Public holidays are not included yet.', 'Umur dan SLA dihitung dalam hari kerja bulat. Pilihan Senin–Sabtu / Senin–Jumat ada di bawah. Libur nasional belum dihitung.'],
-  'ru.sla': ['Customer SLA', 'SLA customer'], 'ru.sla.d': ['Deadline for the POD to come back after delivery: 6 or 7 WD depending on the customer contract.', 'Batas POD kembali sejak delivered: 6 atau 7 HK sesuai kontrak customer.'],
+  'ru.sla': ['Customer SLA', 'SLA customer'], 'ru.sla.d': ['Deadline for the POD to come back: 6 or 7 WD depending on the customer contract, counted from the "Age from" date (Delivered by default).', 'Batas POD kembali: 6 atau 7 HK sesuai kontrak customer, dihitung dari tanggal "Umur dihitung dari" (default: Delivered).'],
   'ru.past': ['Past SLA', 'Lewat SLA'], 'ru.past.d': ['Delivered POD not back yet whose age is above the customer SLA. For Returned: time to return > SLA (late).', 'POD delivered yang belum kembali dengan umur > SLA customer. Untuk Sudah Balik: lama kembali > SLA (terlambat).'],
   'ru.aging': ['Aging per 5 WD', 'Aging per 5 HK'], 'ru.aging.d': ['Age groups 0–5, 6–10, 11–15, 16–20, 21–25, 26–30 and >30 working days.', 'Kelompok umur 0–5, 6–10, 11–15, 16–20, 21–25, 26–30 dan >30 hari kerja.'],
   'ru.type.d': ['From Office_Type in the coverage master. Internal = Cabang, Satelit. Agent (perwakilan) = Agen, Perwakilan.', 'Dari Office_Type di master coverage area. Internal = Cabang, Satelit. Perwakilan = Agen, Perwakilan.'],
@@ -592,6 +615,21 @@ const T = {
   'ru.stno': ['STPOD no.', 'No. STPOD'], 'ru.stno.d': ['Handover number. One STPOD covers every POD handed over together.', 'Nomor serah terima. Satu STPOD berisi semua POD yang diserahterimakan bersama.'],
   'ru.ppno': ['PODP no.', 'No. PODP'], 'ru.ppno.d': ['Receipt number for sending POD to the customer. One PODP holds many POD.', 'Nomor resi pengiriman POD ke customer. Satu PODP berisi banyak POD.'],
   'colourW': ['Colour {x}', 'Warna {x}'],
+  'tot.tip': ['Every AWB with a POS date in the period that matches the filters, split into POD to return and no return.', 'Semua AWB dengan tanggal POS di periode ini dan sesuai filter, dipecah menjadi POD balik dan tidak balik.'],
+  'tot.title': ['Total shipments', 'Total kiriman'],
+  'ru.pos.d': ['Date the transaction was recorded. The period filter and date picker use this date.', 'Tanggal transaksi dicatat. Filter periode dan date picker memakai tanggal ini.'],
+  'ru.pos': ['POS date', 'Tanggal POS'],
+  'ru.basis.d': ['Delivered = days since the parcel reached the recipient (operational, matches the SLA contract). POS = days since the transaction was recorded (financial view). Not-yet-delivered parcels always count from POS.', 'Delivered = hari sejak paket diterima penerima (operasional, sesuai kontrak SLA). POS = hari sejak transaksi dicatat (sudut pandang keuangan). Paket yang belum terkirim selalu dihitung dari POS.'],
+  'ru.basis': ['Age from (Delivered / POS)', 'Umur dihitung dari (Delivered / POS)'],
+  'a.retpos': ['POD back {a} WD after POS (SLA {s} WD) → {r}.', 'POD kembali {a} HK setelah POS (SLA {s} HK) → {r}.'],
+  'a.pos': ['{a} WD since POS (SLA {s} WD) → {r}.', 'Sudah {a} HK sejak POS (SLA {s} HK) → {r}.'],
+  's.pos': ['Transaction recorded (POS)', 'Transaksi dicatat (POS)'],
+  'col.pos.tip': ['Date the transaction was recorded.', 'Tanggal transaksi dicatat.'],
+  'col.pos': ['POS', 'POS'],
+  'basis.pos': ['POS', 'POS'],
+  'basis.dlv': ['Delivered', 'Delivered'],
+  'f.basis.tip': ['Start date for every age, aging bucket, colour and SLA check. Delivered = operational view (SLA contract). POS = transaction view. Parcels not delivered yet always count from POS.', 'Tanggal awal untuk semua umur, kelompok aging, warna, dan cek SLA. Delivered = sudut pandang operasional (kontrak SLA). POS = sudut pandang transaksi. Paket yang belum terkirim selalu dihitung dari POS.'],
+  'f.basis': ['Age from', 'Umur dihitung dari'],
   'f.reg': ['Region', 'Region'], 'f.reg.tip': ['Operational region of the destination branch (from the coverage master).', 'Region operasional cabang tujuan (dari master coverage area).'],
   'present': ['Present', 'Presentasi'], 'present.tip': ['Full-screen presentation: one section per screen. Use ← → or the bar at the bottom; Esc to exit.', 'Presentasi layar penuh: satu bagian per layar. Pakai ← → atau bar di bawah; Esc untuk keluar.'],
   'p.slide': ['{i}/{n} · {x}', '{i}/{n} · {x}'],
@@ -734,14 +772,15 @@ for (let i = 1; i <= 12000; i++) {
   if (!intracity && org === dest.code) org = HUBS[(HUBS.indexOf(org) + 1) % HUBS.length];
   const otype = dest.office[li] || 'Agen', lv = LEVELS[li], btype = OFF_GROUP[otype];
   const c = pick(CUSTOMERS, [22, 15, 12, 10, 9, 8, 7, 7, 5, 5]);
-  const ship = TODAY - ri(0, 179);
+  const pos = TODAY - ri(0, 179);                          // tanggal POS: transaksi dicatat
+  const ship = Math.min(TODAY, pos + (R() < 0.7 ? 0 : 1));    // manifest / berangkat
   const req = R() < 0.8;
   const transit = intracity ? ri(0, 2) : ri(1, 4) + (lv === 'SITE' ? ri(2, 5) : 0);
   const stuck = R() < 0.03;
   const dlvDay = ship + transit;
   const delivered = !stuck && dlvDay <= TODAY;
   const r = { awb: String(1126000000000 + i * 1337), cust: c.code, br: dest.code, org, btype, lv, otype, reg: dest.reg,
-    scope: intracity ? 'INTRACITY' : 'DOMESTIK', req, ship, dlv: delivered ? dlvDay : null, ret: null, st: null, stpod: null, podp: null, note: null, stAt: null };
+    scope: intracity ? 'INTRACITY' : 'DOMESTIK', req, pos, ship, dlv: delivered ? dlvDay : null, ret: null, st: null, stpod: null, podp: null, note: null, stAt: null };
   if (req) {
     if (!delivered) r.st = 'ND';
     else {
@@ -778,21 +817,23 @@ function computeAges() {
   for (const r of ROWS) {
     r.sla = CUST[r.cust].sla;
     if (!r.req) { r.age = null; r.sev = null; r.bk = null; r.over = false; continue; }
-    r.age = r.grp === 'S' ? hk(r.dlv, r.ret) : r.grp === 'D' ? hk(r.dlv, TODAY) : hk(r.ship, TODAY);
+    // umur dari tanggal pilihan (Delivered/POS); belum terkirim selalu dari POS
+    const from = r.grp === 'N' || S.basis === 'pos' ? r.pos : r.dlv;
+    r.age = r.grp === 'S' ? hk(from, r.ret) : hk(from, TODAY);
     r.sev = sevOf(r.age, r.sla); r.bk = bucketOf(r.age);
     r.over = r.grp !== 'N' && r.age > r.sla;
   }
 }
 
 /* ================= state ================= */
-const S = { metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
-try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
-const remember = () => { try { localStorage.setItem('pod-proto-v3', JSON.stringify({ ww: S.ww, am: S.am, rank: S.rank, lang: LANG })); } catch (e) { /* abaikan */ } };
+const S = { basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
+try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank', 'basis'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
+const remember = () => { try { localStorage.setItem('pod-proto-v3', JSON.stringify({ ww: S.ww, am: S.am, rank: S.rank, basis: S.basis, lang: LANG })); } catch (e) { /* abaikan */ } };
 const range = () => (S.pmode === 'preset' ? [TODAY - S.period + 1, TODAY] : [S.from, S.to]);
 let F = [];
 function inGlobal(r) {
   const [a, b] = range();
-  return r.ship >= a && r.ship <= b && (!S.cust || r.cust === S.cust) && (!S.btype || r.btype === S.btype)
+  return r.pos >= a && r.pos <= b && (!S.cust || r.cust === S.cust) && (!S.btype || r.btype === S.btype)
     && (!S.branch || r.br === S.branch) && (!S.lv || r.lv === S.lv) && (!S.scope || r.scope === S.scope) && (!S.reg || r.reg === S.reg);
 }
 function testOf(sp) {
@@ -802,17 +843,19 @@ function testOf(sp) {
     && (!sp.reg || r.reg === sp.reg) && (!sp.over || r.over) && (!sp.sla || r.sla === sp.sla) && (!sp.podp || r.podp === sp.podp) && (!sp.stpod || r.stpod === sp.stpod);
 }
 const sevCounts = rows => { const o = { hitam: 0, oranye: 0, merah: 0, ungu: 0 }; rows.forEach(r => { if (r.sev) o[r.sev]++; }); return o; };
+const sevVals = rows => { const o = { hitam: 0, oranye: 0, merah: 0, ungu: 0 }; rows.forEach(r => { if (r.sev) o[r.sev] += r.val; }); return o; };
 const domSev = sc => SEV.reduce((a, x) => (sc[x.k] > sc[a] ? x.k : a), 'hitam');
 function groupCount(rows, key) { const m = new Map(); rows.forEach(r => { if (r[key] != null) m.set(r[key], (m.get(r[key]) || 0) + 1); }); return [...m.entries()].sort((a, b) => b[1] - a[1]); }
 const nameOf = (key, v) => key === 'br' || key === 'org' ? brLabel(v) : key === 'reg' ? v : key === 'cust' ? CUST[v].name : key === 'lv' ? t('lv.' + v) : key === 'st' ? L(STATUS[v].label) : v;
 
 /* ================= komponen ================= */
-function sevBar(counts, base, lg) {
+function sevBar(counts, base, lg, vals) {
   const tot = SEV.reduce((s, x) => s + counts[x.k], 0);
+  vals = vals || {};
   if (!tot) return `<div class="sevbar${lg ? ' lg' : ''}"></div>`;
   return `<div class="sevbar${lg ? ' lg' : ''}" role="img" aria-label="${esc(SEV.map(x => `${L(x.label)} ${counts[x.k]}`).join(', '))}">` +
     SEV.filter(x => counts[x.k]).map(x => `<span class="bg-${x.k}" style="width:${(counts[x.k] / tot) * 100}%" data-open="${spec({ ...base, sev: x.k })}"
-      data-tip="${esc(t('sevbar.tip', { x: L(x.label), s: L(x.short), n: fmt(counts[x.k]), p: fp(pct(counts[x.k], tot)) }))}"></span>`).join('') + '</div>';
+      data-tip="${esc(t('sevbar.tip', { x: L(x.label), s: L(x.short), n: fmt(counts[x.k]), v: vals[x.k] != null ? rp(vals[x.k], true) : '', p: fp(pct(counts[x.k], tot)) }))}"></span>`).join('') + '</div>';
 }
 const meter = (p, color) => `<div class="meter"><span style="width:${Math.max(0, Math.min(100, p || 0))}%;background:${color}"></span></div>`;
 const go = (sp, html, cls = '', tip = '') => `<button type="button" class="go ${cls}" data-open="${spec(sp)}"${tip ? ` data-tip="${esc(tip)}"` : ''}>${html}</button>`;
@@ -828,6 +871,9 @@ function rp(v, full) {
   return 'Rp ' + Math.round(v).toLocaleString(LOC());
 }
 const rpx = v => `<span class="rp" data-tip="${esc(rp(v, true))}">${rp(v)}</span>`;
+/* jumlah AWB selalu didampingi nominal Rupiah */
+const nv = (n, v, cls = '') => `<span class="nv ${cls}"><b>${fmt(n)}</b><small data-tip="${esc(rp(v, true))}">${rp(v)}</small></span>`;
+const nvRows = (rows, cls) => nv(rows.length, sumV(rows), cls);
 function core(rows) {
   const balik = rows.filter(r => r.req), sudah = balik.filter(r => r.grp === 'S'), belum = balik.filter(r => r.grp !== 'S'), dlv = belum.filter(r => r.grp === 'D');
   const overRows = dlv.filter(r => r.over);
@@ -881,7 +927,8 @@ function renderFilters() {
     + (items.length ? `<button type="button" class="chip" data-clear="*">${t('reset')}</button>` : '');
   const [a, b] = range();
   $('#asof').textContent = t('asof', { d: fd(TODAY), a: fd(a), b: fd(b) });
-  $('#now-meta').textContent = t('now.meta', { w: t('ww.' + S.ww) });
+  $('#now-meta').textContent = t('now.meta', { w: t('ww.' + S.ww), b: t('basis.' + S.basis) });
+  $('#bs-dlv').setAttribute('aria-pressed', S.basis === 'dlv'); $('#bs-pos').setAttribute('aria-pressed', S.basis === 'pos');
   $('#ww-mf').setAttribute('aria-pressed', S.ww === 'mf'); $('#ww-ms').setAttribute('aria-pressed', S.ww === 'ms');
 }
 
@@ -911,13 +958,23 @@ function renderNow() {
     <span class="val"><b>${big}</b>${badge ? `<span>${badge}</span>` : ''}</span>${money}${bar}<span class="say">${say}</span></button>`;
   const money = (k, v, cls = '') => `<span class="money ${cls}" data-tip="${esc(t('v.tip') + ' ' + rp(v, true))}">${t(k)} <b>${rp(v)}</b></span>`;
   $('#kpis').innerHTML = [
-    tile({ node: 'balik' }, 'var(--muted)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all) })), meter(pct(c.balik, c.all), 'var(--muted)'), money('k1.v', c.vBalik)),
-    tile({ node: 'sudah' }, 'var(--success)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik) })), meter(pct(c.sudah, c.balik), 'var(--success)'), money('k2.v', c.vSudah)),
-    tile({ node: 'belum' }, 'var(--sev-ungu)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu) })))} ${esc(t('k3.say', { nd: fmt(c.nd) }))}`, sevMini, money('k3.v', c.vBelum, 'hold')),
-    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)'), money('k4.v', c.vOverD)),
+    tile({ node: 'balik' }, 'var(--muted)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--muted)'), money('k1.v', c.vBalik)),
+    tile({ node: 'sudah' }, 'var(--success)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--success)'), money('k2.v', c.vSudah)),
+    tile({ node: 'belum' }, 'var(--sev-ungu)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini, money('k3.v', c.vBelum, 'hold')),
+    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)'), money('k4.v', c.vOverD)),
     tile({ node: 'sudah' }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })), meter(pct(c.ontime, c.sudah), 'var(--success)'), money('k5.v', c.vOntime)),
   ].join('');
+  renderTotals(c);
   renderFocus(c);
+}
+
+function renderTotals(c) {
+  const no = c.all - c.balik, vNo = c.vAll - c.vBalik, pb = pct(c.balik, c.all), pn = pct(no, c.all);
+  const seg = (node, w, col, n, v, p) => `<span style="width:${w || 0}%;background:${col}" data-open="${spec({ node })}" data-tip="${esc(`${nl(node)}: ${fmt(n)} AWB · ${rp(v, true)} (${fp(p)})`)}"></span>`;
+  const leg = (node, col, n, v, p) => `<button type="button" data-open="${spec({ node })}"><span class="dot" style="background:${col}"></span>${esc(nl(node))}${info(L(NODE[node].def))} <b>${fmt(n)}</b><span class="muted">${fp(p)}</span>${mention('hitam', esc(rp(v)))}</button>`;
+  $('#totals').innerHTML = `<button type="button" class="tot-main" data-open="${spec({ node: 'all' })}"><span class="k">${t('tot.title')}${info(t('tot.tip'))}</span><b>${fmt(c.all)}</b><span class="money" data-tip="${esc(rp(c.vAll, true))}"><b>${rp(c.vAll)}</b></span></button>
+    <div class="split"><div class="split-bar">${seg('balik', pb, 'var(--accent)', c.balik, c.vBalik, pb)}${seg('tidak', pn, 'var(--muted)', no, vNo, pn)}</div>
+      <div class="split-legend">${leg('balik', 'var(--accent)', c.balik, c.vBalik, pb)}${leg('tidak', 'var(--muted)', no, vNo, pn)}</div></div>`;
 }
 
 function renderFocus(c) {
@@ -976,9 +1033,9 @@ function renderTree() {
       <td class="muted">${rpx(sumV(rows))}</td>
       <td>${p == null ? '' : `<span class="pbar"><span class="meter"><span style="width:${p}%;background:var(--accent)"></span></span><span>${fp(p)}</span></span>`}</td>
       <td class="muted">${pb == null ? '' : fp(pb)}</td>
-      <td class="${nI ? '' : 'z'}">${nI ? go({ node: n.id, scope: 'INTRACITY' }, fmt(nI)) : 0}</td>
-      <td class="${N - nI ? '' : 'z'}">${N - nI ? go({ node: n.id, scope: 'DOMESTIK' }, fmt(N - nI)) : 0}</td>
-      <td class="l">${n.d >= 2 ? sevBar(sevCounts(rows), { node: n.id }) : ''}</td></tr>`;
+      <td class="${nI ? '' : 'z'}">${nI ? go({ node: n.id, scope: 'INTRACITY' }, nvRows(rows.filter(r => r.scope === 'INTRACITY'))) : 0}</td>
+      <td class="${N - nI ? '' : 'z'}">${N - nI ? go({ node: n.id, scope: 'DOMESTIK' }, nvRows(rows.filter(r => r.scope === 'DOMESTIK'))) : 0}</td>
+      <td class="l">${n.d >= 2 ? sevBar(sevCounts(rows), { node: n.id }, false, sevVals(rows)) : ''}</td></tr>`;
   }
   $('#tree').innerHTML = h + '</tbody>';
 }
@@ -987,10 +1044,10 @@ function renderSev() {
   const c = core(F), sc = sevCounts(c.belumRows);
   const scv = Object.fromEntries(SEV.map(x => [x.k, sumV(c.belumRows.filter(r => r.sev === x.k))]));
   $('#sev-sub').textContent = t('sev.sub', { n: fmt(c.belum) });
-  $('#sev-panel').innerHTML = sevBar(sc, { node: 'belum' }, true) + '<div class="legend">' + SEV.map(x => `
+  $('#sev-panel').innerHTML = sevBar(sc, { node: 'belum' }, true, scv) + '<div class="legend">' + SEV.map(x => `
     <button type="button" data-open="${spec({ node: 'belum', sev: x.k })}" data-tip="${esc(L(x.def) + ' ' + sevRanges(x) + '.')}">
       <span class="dot bg-${x.k}"></span><span><b class="t-${x.k}">${L(x.label)}</b> · ${L(x.short)}<span class="desc">${sevRanges(x)} · ${esc(t('sev.v', { v: rp(scv[x.k]) }))}</span></span>
-      <span class="n t-${x.k}">${fmt(sc[x.k])}</span><span class="p">${fp(pct(sc[x.k], c.belum))}</span></button>`).join('') + '</div>';
+      <span class="n t-${x.k}">${nv(sc[x.k], scv[x.k])}</span><span class="p">${fp(pct(sc[x.k], c.belum))}</span></button>`).join('') + '</div>';
 }
 
 function renderPerf() {
@@ -1006,9 +1063,9 @@ function renderPerf() {
   let h = `<thead><tr><th>${t('p.group')}</th><th>${t('p.ret')}</th><th>${t('p.avg')}${info(t('p.avg.tip'))}</th><th class="l">${t('p.ot')}${info(t('p.ot.tip'))}</th><th>${t('p.past')}${info(t('p.past.tip'))}</th></tr></thead><tbody>`;
   for (const [lbl, short, sp, tf] of groups) {
     const c = core(F.filter(tf)), p = pct(c.ontime, c.sudah);
-    h += `<tr><td class="l"><b>${esc(lbl)}</b><span class="desc">${esc(short)}</span></td><td>${c.sudah ? go({ node: 'sudah', ...sp }, fmt(c.sudah)) : 0}</td><td>${fday(c.avgLead)}</td>
+    h += `<tr><td class="l"><b>${esc(lbl)}</b><span class="desc">${esc(short)}</span></td><td>${c.sudah ? go({ node: 'sudah', ...sp }, nv(c.sudah, c.vSudah)) : 0}</td><td>${fday(c.avgLead)}</td>
       <td class="l"><span class="pbar"><span class="meter"><span style="width:${p || 0}%;background:var(--success)"></span></span><span>${fp(p)}</span></span></td>
-      <td>${c.overD ? go({ node: 'dlv', over: true, ...sp }, fmt(c.overD), 't-merah') : 0}</td></tr>`;
+      <td>${c.overD ? go({ node: 'dlv', over: true, ...sp }, nv(c.overD, c.vOverD), 't-merah') : 0}</td></tr>`;
   }
   $('#perf').innerHTML = h + '</tbody>';
 }
@@ -1031,9 +1088,10 @@ function renderAging() {
         cols.map(col => {
           const cr = rows.filter(col.f), v = mval(cr), dom = col.sev || domSev(sevCounts(cr));
           const tip = isV ? t('cell.tipv', { r: nl(id), c: col.label, v: rp(v, true), p: fp(pct(v, n)), n: fmt(cr.length), s: L(SEVK[dom].label) })
-            : t('cell.tip', { r: nl(id), c: col.label, n: fmt(v), p: fp(pct(v, n)), s: L(SEVK[dom].label) });
-          return `<td class="c ${v ? '' : 'zero'}" data-open="${spec({ node: id, ...col.sp })}" data-tip="${esc(tip)}"><span><b class="t-${v ? dom : 'hitam'}">${mfmt(v)}</b><small>${v ? fp(pct(v, n)) : ''}</small></span></td>`;
-        }).join('') + `<td>${go({ node: id }, mfmt(n), 't-' + (n ? rowDom : 'hitam'), isV ? rp(n, true) : '')}</td></tr>`;
+            : t('cell.tip', { r: nl(id), c: col.label, n: fmt(v), v: rp(sumV(cr), true), p: fp(pct(v, n)), s: L(SEVK[dom].label) });
+          const sub = isV ? `${fmt(cr.length)} AWB · ${fp(pct(v, n))}` : `${rp(sumV(cr))} · ${fp(pct(v, n))}`;
+          return `<td class="c ${v ? '' : 'zero'}" data-open="${spec({ node: id, ...col.sp })}" data-tip="${esc(tip)}"><span><b class="t-${v ? dom : 'hitam'}">${mfmt(v)}</b><small>${v ? sub : ''}</small></span></td>`;
+        }).join('') + `<td>${isV ? go({ node: id }, mfmt(n), 't-' + (n ? rowDom : 'hitam'), rp(n, true)) : go({ node: id }, nvRows(rows), 't-' + (n ? rowDom : 'hitam'))}</td></tr>`;
     }
     h += '</tbody>';
   }
@@ -1049,7 +1107,7 @@ function renderRank() {
     .filter(x => x.c.balik).sort((a, b) => (byV ? b.c.vBelum - a.c.vBelum : b.c.belum - a.c.belum) || String(a.id).localeCompare(String(b.id)));
   const cF = core(F), totalBelum = byV ? cF.vBelum : cF.belum, show = S.rankAll ? list : list.slice(0, 10);
   const head = key === 'br' ? t('rank.br') : key === 'cust' ? t('f.cust') : key === 'reg' ? t('f.reg') : t('f.level');
-  let h = `<thead><tr><th>${head}</th><th>${t('r.not')}${info(t('r.not.tip'))}</th><th>${t('r.val')}${info(t('r.val.tip'))}</th><th>${byV ? t('r.shareV') : t('r.share')}${info(byV ? t('r.shareV.tip') : t('r.share.tip'))}</th>
+  let h = `<thead><tr><th>${head}</th><th>${t('r.not')}${info(t('r.not.tip') + ' ' + t('r.val.tip'))}</th><th>${byV ? t('r.shareV') : t('r.share')}${info(byV ? t('r.shareV.tip') : t('r.share.tip'))}</th>
     <th class="l">${t('c.colour')}${info(t('c.colour.tip'))}</th><th>${t('p.past')}${info(t('p.past.tip'))}</th><th>${t('r.rr')}${info(t('r.rr.tip'))}</th><th>${t('p.ot')}${info(t('p.ot.tip'))}</th></tr></thead><tbody>`;
   for (const x of show) {
     const nm = nameOf(key, x.id);
@@ -1057,9 +1115,10 @@ function renderRank() {
     const fk = key === 'br' ? 'branch' : key;
     const otp = pct(x.c.ontime, x.c.sudah);
     h += `<tr><td class="name l"><button type="button" class="go" data-filter="${fk}" data-val="${esc(x.id)}" data-tip="${esc(t('r.filterTo', { x: nm }))}">${esc(nm)}</button><span class="desc">${esc(sub)}</span></td>
-      <td>${x.c.belum ? go({ node: 'belum', [key]: x.id }, fmt(x.c.belum)) : 0}</td><td class="${byV ? '' : 'muted'}">${byV ? '<b>' + rpx(x.c.vBelum) + '</b>' : rpx(x.c.vBelum)}</td><td>${fp(pct(byV ? x.c.vBelum : x.c.belum, totalBelum))}</td>
-      <td class="bar l">${sevBar(x.sc, { node: 'belum', [key]: x.id })}</td>
-      <td>${x.c.overD ? go({ node: 'dlv', over: true, [key]: x.id }, fmt(x.c.overD), 't-merah') : 0}</td>
+      <td>${x.c.belum ? go({ node: 'belum', [key]: x.id }, byV
+        ? `<span class="nv"><b data-tip="${esc(rp(x.c.vBelum, true))}">${rp(x.c.vBelum)}</b><small>${fmt(x.c.belum)} AWB</small></span>` : nv(x.c.belum, x.c.vBelum)) : 0}</td><td>${fp(pct(byV ? x.c.vBelum : x.c.belum, totalBelum))}</td>
+      <td class="bar l">${sevBar(x.sc, { node: 'belum', [key]: x.id }, false, sevVals(x.c.belumRows))}</td>
+      <td>${x.c.overD ? go({ node: 'dlv', over: true, [key]: x.id }, nv(x.c.overD, x.c.vOverD), 't-merah') : 0}</td>
       <td>${fp(pct(x.c.sudah, x.c.balik))}</td><td class="${(otp ?? 100) < 60 ? 't-merah' : ''}">${fp(otp)}</td></tr>`;
   }
   $('#rank').innerHTML = h + '</tbody>';
@@ -1074,6 +1133,7 @@ function renderRules() {
     [t('ru.wd'), t('ru.wd.d')], [t('ru.sla'), t('ru.sla.d')], [t('ru.past'), t('ru.past.d')],
     ...SEV.map(s => [t('colourW', { x: L(s.label) }), `${L(s.short)}. ${L(s.def)} ${sevRanges(s)}.`]),
     [t('ru.aging'), t('ru.aging.d')], [t('f.type'), t('ru.type.d')], [t('f.level'), t('ru.lv.d')], [t('ru.dest'), t('ru.dest.d')],
+    [t('ru.pos'), t('ru.pos.d')], [t('ru.basis'), t('ru.basis.d')],
     [t('ru.stno'), t('ru.stno.d')], [t('ru.ppno'), t('ru.ppno.d')], [t('ru.val'), t('ru.val.d')],
   ];
   $('#rules').innerHTML = items.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('');
@@ -1118,7 +1178,7 @@ function pickDay(d) {
 /* ================= modal ================= */
 const M = { sp: null, q: '', sort: 'age', dir: -1, page: 0, last: null, awb: null };
 const COLS = [['awb', 'col.awb', 'col.awb.tip'], ['cust', 'f.cust', ''], ['org', 'col.origin', 'col.origin.tip'], ['br', 'col.dest', 'col.dest.tip'], ['scope', 'f.scope', ''], ['st', 'c.status', ''],
-  ['ship', 'col.ship', ''], ['dlv', 'col.dlv', ''], ['ret', 'col.ret', 'col.ret.tip'], ['age', 'col.age', 'col.age.tip'], ['sla', 'col.sla', 'col.sla.tip'], ['val', 'col.val', 'col.val.tip'], ['ref', 'col.ref', 'col.ref.tip']];
+  ['pos', 'col.pos', 'col.pos.tip'], ['dlv', 'col.dlv', ''], ['ret', 'col.ret', 'col.ret.tip'], ['age', 'col.age', 'col.age.tip'], ['sla', 'col.sla', 'col.sla.tip'], ['val', 'col.val', 'col.val.tip'], ['ref', 'col.ref', 'col.ref.tip']];
 function specLabel(sp) {
   const parts = [];
   if (sp.scope) parts.push(['scope', t('sc.' + sp.scope)]);
@@ -1145,21 +1205,22 @@ function renderModal(focus) {
   const sp = M.sp, node = NODE[sp.node], rows = pool(sp);
   const base = { ...sp }; delete base.sev; delete base.bk; delete base.over;
   const cntFor = id => pool({ ...base, node: id }).length;
+  const nvFor = id => { const rr = pool({ ...base, node: id }); return { n: fmt(rr.length), v: rp(sumV(rr)) }; };
   const parentN = node.p ? cntFor(node.p) : null, balikN = cntFor('balik');
   const vRows = sumV(rows), vBalik = sumV(pool({ ...base, node: 'balik' }));
   const ageRows = rows.filter(r => r.age != null);
   const avg = ageRows.length ? ageRows.reduce((s, r) => s + r.age, 0) / ageRows.length : null;
   const over = rows.filter(r => r.over).length, nI = rows.filter(r => r.scope === 'INTRACITY').length, sc = sevCounts(rows);
   const isRet = node.id === 'sudah' || node.p === 'sudah';
-  const crumbs = pathOf(sp.node).map((id, i, a) => i === a.length - 1 ? `<b>${esc(nl(id))}</b>` : `<button type="button" data-mnode="${id}" data-tip="${esc(L(NODE[id].short))}">${esc(nl(id))} (${fmt(cntFor(id))})</button>`).join(' › ');
+  const crumbs = pathOf(sp.node).map((id, i, a) => i === a.length - 1 ? `<b>${esc(nl(id))}</b>` : `<button type="button" data-mnode="${id}" data-tip="${esc(L(NODE[id].short))}">${esc(nl(id))} (${nvFor(id).n} · ${nvFor(id).v})</button>`).join(' › ');
   const children = NODES.filter(n => n.p === sp.node);
   const contrib = (key, title) => `<div><h3>${title}</h3>${groupCount(rows, key).slice(0, 4).map(([id, n]) => `
-    <button type="button" data-mrefine='${esc(JSON.stringify({ [key]: id }))}' data-tip="${esc(t('m.refine', { x: nameOf(key, id) }))}"><span>${esc(nameOf(key, id))}</span><b>${fmt(n)}</b><span class="p">${fp(pct(n, rows.length))}</span></button>`).join('')}</div>`;
+    <button type="button" data-mrefine='${esc(JSON.stringify({ [key]: id }))}' data-tip="${esc(t('m.refine', { x: nameOf(key, id) }))}"><span>${esc(nameOf(key, id))}<span class="rpm"> · ${rp(sumV(rows.filter(r => r[key] === id)))}</span></span><b>${fmt(n)}</b><span class="p">${fp(pct(n, rows.length))}</span></button>`).join('')}</div>`;
   const why = [];
   if (!sp.br) why.push(contrib('br', t('m.topBr')));
   if (!sp.cust) why.push(contrib('cust', t('m.topCu')));
   if (!STATUS[sp.node] && sp.node !== 'tidak') why.push(`<div><h3>${t('m.topSt')}</h3>${groupCount(rows, 'st').slice(0, 4).map(([id, n]) => `
-    <button type="button" data-mnode="${id}" data-tip="${esc(L(STATUS[id].short))}"><span>${esc(L(STATUS[id].label))}</span><b>${fmt(n)}</b><span class="p">${fp(pct(n, rows.length))}</span></button>`).join('')}</div>`);
+    <button type="button" data-mnode="${id}" data-tip="${esc(L(STATUS[id].short))}"><span>${esc(L(STATUS[id].label))}<span class="rpm"> · ${rp(sumV(rows.filter(r => r.st === id)))}</span></span><b>${fmt(n)}</b><span class="p">${fp(pct(n, rows.length))}</span></button>`).join('')}</div>`);
   const q = M.q.trim().toLowerCase();
   const list = q ? rows.filter(r => [r.awb, CUST[r.cust].name, BR[r.br].name, r.br, BR[r.org].name, r.stpod, r.podp].some(v => v && v.toLowerCase().includes(q))) : rows.slice();
   const val = (r, k) => k === 'cust' ? CUST[r.cust].name : k === 'br' || k === 'org' ? BR[r[k]].name : k === 'st' ? (r.st || '') : k === 'ref' ? (r.podp || r.stpod || '') : r[k] ?? -1;
@@ -1171,22 +1232,22 @@ function renderModal(focus) {
   const desc = sp.podp ? L(STATUS.PODP.def) : sp.stpod ? L(STATUS.STPOD.def) : L(node.def);
 
   $('#dialog').innerHTML = `
-    <div class="dlg-head"><div><div class="crumbs">${crumbs}</div><h2 class="dlg-title" id="dlg-title">${fmt(rows.length)} AWB · ${esc(title)}</h2>
+    <div class="dlg-head"><div><div class="crumbs">${crumbs}</div><h2 class="dlg-title" id="dlg-title">${fmt(rows.length)} AWB · ${rp(vRows)} · ${esc(title)}</h2>
       <div class="muted" style="font-size:13px;max-width:85ch">${esc(desc)}</div></div>
       <button type="button" class="x-btn" id="dlg-close" aria-label="${t('close')}">×</button></div>
     <div class="chips">${specLabel(sp).map(([k, v]) => `<button type="button" class="chip on" data-munset="${k}" data-tip="${esc(t('rm'))}">${esc(v)} <span class="x" aria-hidden="true">×</span></button>`).join('')}
-      ${children.map(n => `<button type="button" class="chip" data-mnode="${n.id}" data-tip="${esc(L(n.short))}">${esc(t('drill', { x: L(n.label), n: fmt(cntFor(n.id)) }))}</button>`).join('')}
+      ${children.map(n => `<button type="button" class="chip" data-mnode="${n.id}" data-tip="${esc(L(n.short))}">${esc(t('drill', { x: L(n.label), n: nvFor(n.id).n, v: nvFor(n.id).v }))}</button>`).join('')}
       ${docMode(sp) ? '' : `<button type="button" class="chip" id="m-apply" data-tip="${esc(t('apply.tip'))}">${t('apply')}</button>`}</div>
     <div class="mstats">
-      <div class="mstat"><div class="lbl">${t('m.count')}${info(t('m.count.tip'))}</div><div class="val">${fmt(rows.length)}</div><div class="hint">${parentN != null ? esc(t('m.ofParent', { p: fp(pct(rows.length, parentN)), x: nl(node.p), n: fmt(parentN) })) : '&nbsp;'}</div></div>
+      <div class="mstat"><div class="lbl">${t('m.count')}${info(t('m.count.tip'))}</div><div class="val">${fmt(rows.length)}</div><div class="hint">${parentN != null ? esc(t('m.ofParent', { p: fp(pct(rows.length, parentN)), x: nl(node.p), n: fmt(parentN), v: nvFor(node.p).v })) : '&nbsp;'}</div></div>
       <div class="mstat"><div class="lbl">${t('m.share')}${info(t('m.share.tip'))}</div><div class="val">${['tidak', 'all'].includes(node.id) ? '–' : fp(pct(rows.length, balikN))}</div><div class="hint">${t('m.ofRet', { n: fmt(balikN) })}</div></div>
       <div class="mstat"><div class="lbl">${isRet ? t('m.avgRet') : t('m.avgAge')}${info(isRet ? t('m.avgRet.tip') : t('m.avgAge.tip'))}</div><div class="val">${fday(avg)} <span style="font-size:13px" class="muted">${U()}</span></div>
         <div class="hint">${isRet ? t('m.late') : t('m.past')}: <b class="t-merah">${fmt(over)}</b> (${fp(pct(over, rows.length))})</div></div>
       <div class="mstat"><div class="lbl">${t('m.val')}${info(t('m.val.tip'))}</div><div class="val" data-tip="${esc(rp(vRows, true))}">${rp(vRows)}</div><div class="hint">${['tidak', 'all'].includes(node.id) ? '&nbsp;' : esc(t('m.valOf', { p: fp(pct(vRows, vBalik)) }))}</div></div>
-      <div class="mstat"><div class="lbl">${t('sc.INTRACITY')} · ${t('sc.DOMESTIK')}</div><div class="val">${fmt(nI)} · ${fmt(rows.length - nI)}</div><div class="hint">${fp(pct(nI, rows.length))} · ${fp(pct(rows.length - nI, rows.length))}</div></div>
+      <div class="mstat"><div class="lbl">${t('sc.INTRACITY')} · ${t('sc.DOMESTIK')}</div><div class="val">${fmt(nI)} · ${fmt(rows.length - nI)}</div><div class="hint">${rp(sumV(rows.filter(r => r.scope === 'INTRACITY')))} · ${rp(sumV(rows.filter(r => r.scope !== 'INTRACITY')))} · ${fp(pct(nI, rows.length))}</div></div>
     </div>
-    ${ageRows.length ? `<div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${isRet ? t('m.colRet') : t('m.colAge')}</div>${sevBar(sc, sp, true)}
-      <div class="chips" style="margin-top:8px">${SEV.map(x => `<button type="button" class="chip ${sp.sev === x.k ? 'on' : ''}" data-msev="${x.k}" data-tip="${esc(L(x.def) + ' ' + sevRanges(x))}"><span class="dot bg-${x.k}"></span>${L(x.label)} · ${L(x.short)} <b class="t-${x.k}">${fmt(sc[x.k])}</b> <span class="muted">${fp(pct(sc[x.k], ageRows.length))}</span></button>`).join('')}</div></div>` : ''}
+    ${ageRows.length ? `<div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${isRet ? t('m.colRet') : t('m.colAge')}</div>${sevBar(sc, sp, true, sevVals(rows))}
+      <div class="chips" style="margin-top:8px">${SEV.map(x => `<button type="button" class="chip ${sp.sev === x.k ? 'on' : ''}" data-msev="${x.k}" data-tip="${esc(L(x.def) + ' ' + sevRanges(x))}"><span class="dot bg-${x.k}"></span>${L(x.label)} · ${L(x.short)} <b class="t-${x.k}">${fmt(sc[x.k])}</b> <span class="muted">${rp(sumV(rows.filter(r => r.sev === x.k)))} · ${fp(pct(sc[x.k], ageRows.length))}</span></button>`).join('')}</div></div>` : ''}
     ${rows.length ? `<div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${t('m.contrib')}</div><div class="why">${why.join('')}</div></div>` : ''}
     <div class="tools"><input type="search" id="m-q" placeholder="${esc(t('m.search'))}" value="${esc(M.q)}" aria-label="${esc(t('m.search'))}">
       <button type="button" class="btn primary" id="m-export">${t('m.export', { n: fmt(list.length) })}</button></div>
@@ -1196,14 +1257,14 @@ function renderModal(focus) {
         <td class="l"><button type="button" class="go" data-awb="${r.awb}">${r.awb}</button></td><td class="l">${esc(CUST[r.cust].name)}</td>
         <td class="l">${esc(BR[r.org].name)}</td><td class="l">${esc(brLabel(r.br))}<span class="tag">${t('lvs.' + r.lv)}</span><span class="desc">${esc(r.reg)} · ${esc(r.otype)}</span></td>
         <td class="l">${t('sc.' + r.scope)}</td><td class="l">${r.st ? `${esc(L(STATUS[r.st].label))}${info(L(STATUS[r.st].short))}` : esc(nl('tidak'))}</td>
-        <td>${fd(r.ship)}</td><td>${fd(r.dlv)}</td><td>${fd(r.ret)}</td>
+        <td>${fd(r.pos)}</td><td>${fd(r.dlv)}</td><td>${fd(r.ret)}</td>
         <td>${r.sev ? `<span class="age bg-${r.sev}" data-tip="${esc(`${L(SEVK[r.sev].label)}: ${L(SEVK[r.sev].short)} (SLA ${r.sla} ${U()})`)}">${r.age}</span>` : '–'}</td>
         <td>${r.req ? `${r.sla} ${U()}${r.over ? ` <b class="t-merah" data-tip="${esc(t('pastMark'))}">!</b>` : ''}` : '–'}</td>
         <td class="rp">${rp(r.val, true)}</td>
         <td class="l muted">${[r.podp ? `<button type="button" class="go" data-mdoc='${esc(JSON.stringify({ podp: r.podp }))}' data-tip="${esc(t('docPodp'))}">${r.podp}</button>` : '',
           r.st === 'STPOD' ? `<button type="button" class="go" data-mdoc='${esc(JSON.stringify({ stpod: r.stpod }))}' data-tip="${esc(t('docSt'))}">${r.stpod}</button>` : '', r.note != null ? esc(L(REDOC_REASON[r.note])) : ''].filter(Boolean).join(' · ')}</td></tr>`).join('')
         || `<tr><td colspan="${COLS.length}" class="l muted">${t('m.empty')}</td></tr>`}</tbody></table></div>
-    <div class="pager"><span class="muted">${t('m.page', { a: M.page + 1, b: pages, n: fmt(list.length) })}</span>
+    <div class="pager"><span class="muted">${t('m.page', { a: M.page + 1, b: pages, n: fmt(list.length), v: rp(sumV(list)) })}</span>
       <button type="button" class="btn" data-mpage="-1" ${M.page ? '' : 'disabled'}>${t('prev')}</button>
       <button type="button" class="btn" data-mpage="1" ${M.page < pages - 1 ? '' : 'disabled'}>${t('next')}</button></div>`;
   if (focus) $('#dlg-close').focus();
@@ -1212,10 +1273,10 @@ function renderModal(focus) {
 function renderAwb(focus) {
   const r = BY_AWB[M.awb], st = r.st ? STATUS[r.st] : null, node = r.req ? NODE[r.st] : NODE.tidak, sx = r.sev ? SEVK[r.sev] : null;
   const ageTxt = !r.req ? t('a.noReq')
-    : r.grp === 'S' ? t('a.ret', { a: r.age, s: r.sla, r: r.over ? t('a.late', { n: r.age - r.sla }) : t('a.ontime') })
-    : r.grp === 'D' ? t('a.dlv', { a: r.age, s: r.sla, r: r.over ? t('a.over', { n: r.age - r.sla }) : t('a.left', { n: r.sla - r.age }) })
+    : r.grp === 'S' ? t(S.basis === 'pos' ? 'a.retpos' : 'a.ret', { a: r.age, s: r.sla, r: r.over ? t('a.late', { n: r.age - r.sla }) : t('a.ontime') })
+    : r.grp === 'D' ? t(S.basis === 'pos' ? 'a.pos' : 'a.dlv', { a: r.age, s: r.sla, r: r.over ? t('a.over', { n: r.age - r.sla }) : t('a.left', { n: r.sla - r.age }) })
     : t('a.nd', { a: r.age });
-  const steps = [[t('s.ship', { x: BR[r.org].name }), fd(r.ship), true, ''], [t('s.dlv', { x: BR[r.br].name }), r.dlv != null ? fd(r.dlv) : t('s.notYet'), r.dlv != null, r.dlv == null ? 'now' : '']];
+  const steps = [[t('s.pos'), fd(r.pos), true, ''], [t('s.ship', { x: BR[r.org].name }), fd(r.ship), true, ''], [t('s.dlv', { x: BR[r.br].name }), r.dlv != null ? fd(r.dlv) : t('s.notYet'), r.dlv != null, r.dlv == null ? 'now' : '']];
   if (r.req && r.grp === 'D') steps.push([t('s.pod', { x: L(st.label) }), `${L(st.short)} · ${t('s.since', { d: fd(r.stAt) })}${r.note != null ? ' · ' + L(REDOC_REASON[r.note]) : ''}`, false, 'now']);
   if (r.req && r.grp === 'S') {
     steps.push([t('s.stpod'), `${fd(r.ret)} · ${r.stpod}`, true, r.st === 'STPOD' ? 'now' : '']);
@@ -1224,7 +1285,8 @@ function renderAwb(focus) {
   }
   const nPodp = r.podp ? ROWS.filter(x => x.podp === r.podp).length : 0, nSt = r.stpod ? ROWS.filter(x => x.stpod === r.stpod).length : 0;
   const out = x => x.req && x.grp !== 'S';
-  const nBr = F.filter(x => x.br === r.br && out(x)).length, nCu = F.filter(x => x.cust === r.cust && out(x)).length;
+  const oBr = F.filter(x => x.br === r.br && out(x)), oCu = F.filter(x => x.cust === r.cust && out(x));
+  const vPodp = r.podp ? sumV(ROWS.filter(x => x.podp === r.podp)) : 0, vSt = r.stpod ? sumV(ROWS.filter(x => x.stpod === r.stpod)) : 0;
   $('#dialog').innerHTML = `
     <div class="dlg-head"><div><button type="button" class="btn sm" id="m-back">${t('back')}</button>
       <h2 class="dlg-title" id="dlg-title" style="margin-top:10px">AWB ${r.awb}</h2>
@@ -1235,9 +1297,9 @@ function renderAwb(focus) {
         <dl class="facts">
           <dt>${t('c.status')}</dt><dd><b>${st ? esc(L(st.label)) : esc(nl('tidak'))}</b>${st ? `<span class="desc">${esc(L(st.short))}</span>` : ''}</dd>
           <dt>${t('a.age')}</dt><dd>${sx ? `<span class="age bg-${r.sev}">${r.age} ${U()}</span> ${mention(r.sev, esc(L(sx.label) + ' · ' + L(sx.short)))}` : '–'}<span class="desc">${esc(ageTxt)}</span></dd>
-          <dt>${t('f.cust')}</dt><dd>${go({ node: 'belum', cust: r.cust }, esc(CUST[r.cust].name), '', t('seeCust'))}<span class="desc">SLA ${r.sla} ${U()} · ${t('nOut', { n: fmt(nCu) })}</span></dd>
+          <dt>${t('f.cust')}</dt><dd>${go({ node: 'belum', cust: r.cust }, esc(CUST[r.cust].name), '', t('seeCust'))}<span class="desc">SLA ${r.sla} ${U()} · ${t('nOut', { n: fmt(oCu.length), v: rp(sumV(oCu)) })}</span></dd>
           <dt>${t('col.origin')}</dt><dd>${esc(BR[r.org].name)}</dd>
-          <dt>${t('col.dest')}</dt><dd>${go({ node: 'belum', br: r.br }, esc(brLabel(r.br)), '', t('seeBr'))}<span class="desc">${esc(r.reg)} · ${t('lv.' + r.lv)} · ${t('nOut', { n: fmt(nBr) })}</span></dd>
+          <dt>${t('col.dest')}</dt><dd>${go({ node: 'belum', br: r.br }, esc(brLabel(r.br)), '', t('seeBr'))}<span class="desc">${esc(r.reg)} · ${t('lv.' + r.lv)} · ${t('nOut', { n: fmt(oBr.length), v: rp(sumV(oBr)) })}</span></dd>
           <dt>${t('a.office')}</dt><dd>${esc(r.otype)} <span class="tag">${t('ty.' + r.btype)}</span></dd>
           <dt>${t('f.scope')}</dt><dd>${t('sc.' + r.scope)}</dd>
           <dt>${t('a.val')}</dt><dd><b>${rp(r.val, true)}</b><span class="desc">${esc(t('a.kg', { k: r.kg }))}${r.req && r.grp !== 'S' ? ' · ' + esc(t('k3.v')) : ''}</span></dd>
@@ -1246,9 +1308,9 @@ function renderAwb(focus) {
         <ol class="timeline">${steps.map(([a, b, done, cls]) => `<li><span class="pt ${cls || (done ? 'done' : '')}">${done && cls !== 'now' ? '✓' : ''}</span><div><b>${esc(a)}</b><span>${esc(b)}</span></div></li>`).join('')}</ol></div>
     </div>
     <div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${t('a.related')}</div><div class="chips">
-      ${r.podp ? `<button type="button" class="chip" data-mdoc='${esc(JSON.stringify({ podp: r.podp }))}'>${esc(t('rel.podp', { x: r.podp, n: fmt(nPodp) }))}</button>` : ''}
-      ${r.stpod ? `<button type="button" class="chip" data-mdoc='${esc(JSON.stringify({ stpod: r.stpod }))}'>${esc(t('rel.stpod', { x: r.stpod, n: fmt(nSt) }))}</button>` : ''}
-      <button type="button" class="chip" data-mjump="${node.id}">${esc(t('rel.status', { x: nl(node.id), n: fmt(F.filter(node.t).length) }))}</button>
+      ${r.podp ? `<button type="button" class="chip" data-mdoc='${esc(JSON.stringify({ podp: r.podp }))}'>${esc(t('rel.podp', { x: r.podp, n: fmt(nPodp), v: rp(vPodp) }))}</button>` : ''}
+      ${r.stpod ? `<button type="button" class="chip" data-mdoc='${esc(JSON.stringify({ stpod: r.stpod }))}'>${esc(t('rel.stpod', { x: r.stpod, n: fmt(nSt), v: rp(vSt) }))}</button>` : ''}
+      <button type="button" class="chip" data-mjump="${node.id}">${esc(t('rel.status', { x: nl(node.id), n: fmt(F.filter(node.t).length), v: rp(sumV(F.filter(node.t))) }))}</button>
       ${r.sev ? `<button type="button" class="chip" data-mjumpsev="${r.sev}"><span class="dot bg-${r.sev}"></span>${esc(t('rel.sev', { x: L(SEVK[r.sev].label) }))}</button>` : ''}
     </div></div>`;
   if (focus) $('#m-back').focus();
@@ -1273,12 +1335,12 @@ function applyToDashboard() {
 function rowOut(r) {
   return { [t('col.awb')]: r.awb, [t('f.cust')]: CUST[r.cust].name, 'SLA': r.req ? r.sla : '', [t('col.origin')]: BR[r.org].name, [t('col.dest')]: brLabel(r.br), [t('col.reg')]: r.reg, 'Office_Type': r.otype,
     [t('f.type')]: t('ty.' + r.btype), [t('f.level')]: t('lv.' + r.lv), [t('f.scope')]: t('sc.' + r.scope),
-    [t('c.status')]: r.st ? L(STATUS[r.st].label) : nl('tidak'), [t('col.ship')]: dDate(r.ship), [t('col.dlv')]: r.dlv != null ? dDate(r.dlv) : '', [t('col.ret')]: r.ret != null ? dDate(r.ret) : '',
+    [t('c.status')]: r.st ? L(STATUS[r.st].label) : nl('tidak'), [t('col.pos')]: dDate(r.pos), [t('col.ship')]: dDate(r.ship), [t('col.dlv')]: r.dlv != null ? dDate(r.dlv) : '', [t('col.ret')]: r.ret != null ? dDate(r.ret) : '',
     [t('col.age')]: r.age ?? '', [t('c.colour')]: r.sev ? L(SEVK[r.sev].label) : '', [t('c.val')]: r.val, 'kg': r.kg, [t('p.past')]: r.over ? '!' : '', STPOD: r.stpod || '', PODP: r.podp || '', Note: r.note != null ? L(REDOC_REASON[r.note]) : '' };
 }
 function filterLines() {
   const [a, b] = range();
-  return [[t('title') + ' — ' + t('sim')], [t('f.period'), `${fd(a)} – ${fd(b)}`], [t('rules.ww'), t('ww.' + S.ww)],
+  return [[t('title') + ' — ' + t('sim')], [t('f.period'), `${fd(a)} – ${fd(b)}`], [t('rules.ww'), t('ww.' + S.ww)], [t('f.basis'), t('basis.' + S.basis)],
     ...[[t('f.cust'), S.cust && CUST[S.cust].name], [t('f.scope'), S.scope && t('sc.' + S.scope)], [t('f.type'), S.btype && t('ty.' + S.btype)], [t('f.reg'), S.reg], [t('f.level'), S.lv && t('lv.' + S.lv)], [t('f.branch'), S.branch && brLabel(S.branch)]].filter(x => x[1]), []];
 }
 function sheet(aoa) { const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 36 }, ...Array(12).fill({ wch: 14 })]; return ws; }
@@ -1307,6 +1369,7 @@ function exportAll() {
     return ['  '.repeat(n.d) + L(n.label), L(n.short), rows.length, pr == null ? '' : r1(pct(rows.length, pr)), I, rows.length - I]; });
   XLSX.utils.book_append_sheet(wb, sheet([...filterLines(),
     ['', t('c.count'), '%', t('c.val')],
+    [t('tot.title'), c.all, 100, c.vAll], [nl('tidak'), c.all - c.balik, r1(pct(c.all - c.balik, c.all)), c.vAll - c.vBalik],
     [t('k1'), c.balik, r1(pct(c.balik, c.all)), c.vBalik], [t('k2'), c.sudah, r1(pct(c.sudah, c.balik)), c.vSudah], [t('k3'), c.belum, r1(pct(c.belum, c.balik)), c.vBelum],
     [t('k4'), c.overD, r1(pct(c.overD, c.dlv)), c.vOverD], [t('k5'), c.ontime, r1(pct(c.ontime, c.sudah)), c.vOntime], [t('p.avg'), Math.round(c.avgLead || 0)], [],
     [t('sev.title'), t('c.count'), '%'], ...SEV.map(s => [`${L(s.label)} – ${L(s.short)} (${sevRanges(s)})`, sc[s.k], r1(pct(sc[s.k], c.belum))]), [],
@@ -1389,6 +1452,7 @@ document.addEventListener('click', e => {
   const c = tg.closest('[data-clear]'); if (c) { if (c.dataset.clear === '*') ['cust', 'scope', 'reg', 'btype', 'lv', 'branch'].forEach(k => { S[k] = ''; }); else S[c.dataset.clear] = ''; return render(); }
   const ww = tg.closest('[data-ww]'); if (ww) { S.ww = ww.dataset.ww; remember(); buildCalendar(S.ww); computeAges(); return render(); }
   const am = tg.closest('[data-am]'); if (am) { S.am = am.dataset.am; remember(); return renderAging(); }
+  const bs = tg.closest('[data-basis]'); if (bs) { S.basis = bs.dataset.basis; remember(); computeAges(); return render(); }
   const mt = tg.closest('[data-metric]'); if (mt) { S.metric = mt.dataset.metric; return renderAging(); }
   const rs = tg.closest('[data-rsort]'); if (rs) { S.rsort = rs.dataset.rsort; return renderRank(); }
   const rk = tg.closest('[data-rank]'); if (rk) { S.rank = rk.dataset.rank; S.rankAll = false; remember(); return renderRank(); }

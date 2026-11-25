@@ -135,6 +135,16 @@ Temuan kualitas data:
 Tombol **Present** membuka layar penuh, menampilkan satu bagian per layar (5 slide), navigasi ← → / bar bawah, Esc keluar.
 Angka tetap bisa diklik untuk membuka detail saat presentasi.
 
+### Tanggal POS, basis umur, dan nilai Rupiah (v7)
+
+- **Periode & date picker = tanggal POS** (transaksi dicatat). Tanggal kirim/manifest tetap disimpan untuk perjalanan dokumen.
+- **"Umur dihitung dari": Delivered | POS** (default Delivered). Berlaku konsisten untuk umur, aging, warna, rata-rata umur, Lewat SLA, dan Tepat Waktu.
+  Paket yang belum terkirim selalu dihitung dari POS. [ASUMSI] Saat basis POS dipilih, SLA 6/7 HK juga dihitung dari POS.
+- **Setiap jumlah AWB didampingi nominal Rupiah** (ongkos kirim/freight; simulasi di prototype). Ringkas di ringkasan, lengkap di tooltip, tabel AWB, dan Excel.
+- **Total kiriman** tampil paling atas: total AWB + Rp, dipecah menjadi POD Balik dan Tidak Balik (jumlah, %, Rp).
+
+Kontrak data tambahan: `pos_date` (wajib, dasar filter periode), `freight_amount` (Rp per AWB), `chargeable_weight` (kg).
+
 ## 6. Kontrak data (integrasi produksi)
 
 Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB). Lihat
