@@ -10,7 +10,7 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (shell .side + #s-now..#s-rank, v10)",
+      "source": "prototype/pod-dashboard.html (#s-now..#s-rank, v11, tanpa sidebar)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/summary",
@@ -28,15 +28,16 @@
         "reduced_motion": true,
         "loading": false,
         "api_error": false,
-        "mobile_390": true
+        "mobile_390": true,
+        "first_visit": true
       },
       "conformance": "pass",
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "redesign visual besar: app shell, bento, cincin, sparkline, donut, diagram alur",
+        "reason": "v11: sidebar dihapus, cincin → bullet graph, export per kelompok, since-last-visit, saved view, palet bersih",
         "conformance": "pass",
-        "e2e": "87/87"
+        "e2e": "92/92"
       }
     },
     "SCR-DSH-002": {
@@ -96,7 +97,7 @@
       "name": "Export Excel",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (exportAll/exportModal)",
+      "source": "prototype/pod-dashboard.html (exportAll/exportModal/exportGroup)",
       "contracts": [
         "/api/pod/export"
       ],

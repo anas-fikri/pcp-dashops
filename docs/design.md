@@ -109,3 +109,11 @@ design_provenance:
 
 ## 7. Agent quick-reference
 Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html` · Layar: `docs/ux-foundations.md` (SCR-DSH-*) · Spesifikasi layar: `docs/features/FEAT-001-pod-dashboard/ui-design.md` · Kontrak API: `.../technical-design.md`.
+
+
+## v11 — aturan anti "AI look" & palet bersih (25 Nov 2026)
+- **Hindari:** gradasi dekoratif/kilau, glow, bayangan di semua kartu, garis aksen kiri di setiap blok, tanda di setiap judul, grid kartu identik, cincin/gauge untuk KPI vs target.
+- **Pakai:** header datar `--hero-b`; kartu datar dengan garis `--line`; strip KPI bergaris rambut 1px; **bullet graph** (`.bullet`, pita `--band-1..3`, garis target `.bl-tgt`) untuk KPI vs target; delta `.delta.up-good/down-bad/...`.
+- **Palet bersih (light / dark):** data-req `#0e7490`/`#2dd4bf`, data-ret `#2563eb`/`#60a5fa`, pending `#94a3b8`/`#64748b`, none `#cbd5e1`/`#334155`; hitam `#475569`/`#cbd5e1`, oranye `#f59e0b`/`#fbbf24` (teks `#b45309`), merah `#dc2626`/`#f87171`, ungu `#7c3aed`/`#a78bfa`; success `#15803d`/`#4ade80`; aksen `#1e3a8a`/`#93c5fd`. Nilai otoritatif ada di tokens.json.
+- **Validasi:** `validate_palette.js` lulus CVD & jarak normal untuk set tren, umur, KPI, split; peringatan kontras (pending, oranye, none < 3:1) diatasi label angka langsung. Hijau↔merah (deutan ΔE 7.9) tidak pernah bersebelahan tanpa label.
+- **Export per kelompok:** setiap kartu punya `.xbtn[data-xport]`; isi = angka persis yang tampil.
