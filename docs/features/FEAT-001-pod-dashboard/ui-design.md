@@ -27,6 +27,21 @@ komposisi memakai komponen di `docs/design.md`. Tidak ada design tool yang terhu
 - **Navigasi bagian** di header (7 tautan, menandai bagian aktif) sebagai pengganti sidebar.
 - HP: pohon menjadi daftar bertingkat dengan garis kiri. E2E 106/106.
 
+**v15 — re-verifikasi keterbacaan (25 Nov 2026).**
+Temuan tinjauan halaman (sebelum perubahan):
+1. Layar pertama memuat ±40 angka (banner, total, 3 bullet, Focus, 5 KPI); angka yang sama tampil 2–3 kali.
+2. Persentase tanpa pembanding ("79,8%" dari total, "84,9%" dari POD balik, "28,4%" dari delivered, "57,0%" dari sudah balik).
+3. Sinonim untuk satu konsep: not returned / outstanding / on hold; past SLA / late / critical.
+4. Aging memakai 2 batang per rentang (belum balik = umur, sudah balik = lama kembali) — dua ukuran di satu sumbu; sketsa hanya meng-aging Belum Balik.
+5. 7 bagian tingkat atas (panduan: 4–6).
+
+Keputusan:
+- **Kondisi:** banner + **5 KPI** (Total kiriman · Sudah balik · Belum balik · Tepat waktu · Kritis). Bullet target dilebur ke KPI (garis 80% & batas 15%); setiap KPI menulis pembandingnya ("4.088 dari 4.816 POD balik"). Total & bullet terpisah dihapus; sparkline dipindah ke tab Tren.
+- **Aging:** hanya POD belum balik (satu batang per rentang, dipecah warna umur); tabel tanpa bagian "sudah balik"; lama kembali ada di Analisis › Kinerja.
+- **Analisis (`#s-ana`) bertab:** Intracity vs Domestik · Kinerja Pengembalian · Warna Umur · Tren Mingguan. Halaman 5 bagian: Kondisi · Pohon · Aging · Tindak lanjut · Analisis (presentasi 5 slide).
+- **Istilah tunggal:** "Belum balik / Not returned" menggantikan outstanding/on hold/tertahan.
+- Hasil: tinggi halaman desktop 5.503 → ±4.300 px; E2E 106/106 (cek baru: KPI menyebut pembanding, target 80% & batas 15% di KPI, tanpa bullet/total ganda).
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

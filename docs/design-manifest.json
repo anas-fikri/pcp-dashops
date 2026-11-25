@@ -10,7 +10,7 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (.secnav + #s-now, #s-tree (.ptree), #s-aging, #s-rank, #s-scope, #s-trend, #s-mid; v14)",
+      "source": "prototype/pod-dashboard.html (.secnav + #s-now (5 .kpi), #s-tree (.ptree), #s-aging, #s-rank, #s-ana (.atabs: scope/perf/sev/trend); v15)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/aging",
@@ -36,7 +36,7 @@
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v14: pohon status sesuai sketsa sebagai bagian ke-2, urutan bagian mengikuti sketsa, navigasi bagian",
+        "reason": "v15: keterbacaan — 5 KPI dengan pembanding (bullet dilebur), aging hanya belum balik, analisis bertab, istilah tunggal",
         "conformance": "pass",
         "e2e": "106/106"
       }
@@ -89,7 +89,8 @@
       "states": {
         "fullscreen": true,
         "fullscreen_denied": true,
-        "modal_over_slide": true
+        "modal_over_slide": true,
+        "five_slides": true
       },
       "conformance": "pass",
       "status": "specified"

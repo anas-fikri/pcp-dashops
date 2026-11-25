@@ -133,3 +133,10 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 | Lensa scope | `#tl-seg [data-tl]` | All / Intracity / Domestic; angka & modal ikut lensa; nonaktif bila filter Scope global aktif |
 | Legenda | `.legend-strip` | Status (4 warna data) + warna umur dengan rentang hari SLA 6 |
 | Navigasi bagian | `.secnav a[data-nav]` | Di dalam header; aktif = pil putih; tidak tampil saat presentasi |
+
+## v15 — aturan keterbacaan
+- **Setiap persentase menyebut pembandingnya** di teks konteks KPI ("X dari Y …").
+- **Satu angka = satu tempat utama.** Angka ringkas di KPI; rincian di pohon; jangan ulang di blok lain pada layar yang sama.
+- **Satu istilah per konsep:** Belum balik (bukan outstanding/tertahan), Kritis = ungu, Lewat SLA = delivered belum balik > SLA.
+- **Aging hanya untuk POD belum balik**; lama kembali POD sudah balik adalah ukuran kinerja.
+- Komponen: `.now .kpis > .kpi[data-k]` (label · angka + Rp · visual (`.kbar` / `.sevbar` / `.bl-track` dengan `.bl-tgt`) · `.ctx`); `.atabs` + `.apanel` (judul panel disembunyikan, tab yang menamai).

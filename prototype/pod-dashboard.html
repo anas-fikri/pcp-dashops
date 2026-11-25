@@ -519,6 +519,31 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v15: KPI ringkas, analisis bertab, aging belum balik ---------- */
+.now .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 14px; }
+.now .kpi { background: var(--card); border: 0; border-radius: 0; padding: 12px 12px 13px; display: grid; gap: 7px; align-content: start; text-align: left; box-shadow: none; }
+.now .kpi:hover { background: var(--hi); }
+.now .kpi .lbl { font-size: 12px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.now .kpi .val { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.now .kpi .val b { font-size: 26px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.now .kpi .val .kv { font-size: 12.5px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.kviz { display: block; min-height: 14px; }
+.kviz .sevbar { height: 8px; margin: 3px 0; }
+.kviz .bl-track { display: block; height: 12px; margin: 1px 0; }
+.kbar { display: flex; height: 8px; margin: 3px 0; border-radius: 3px; overflow: hidden; background: var(--soft); gap: 1px; }
+.kbar > span { display: block; height: 100%; cursor: pointer; }
+.now .kpi .ctx { font-size: 12px; line-height: 1.4; color: var(--muted); }
+.atabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin: 4px 0 16px; overflow-x: auto; scrollbar-width: none; }
+.atabs button { flex: none; border: 0; background: none; padding: 9px 14px 10px; font: inherit; font-size: 13.5px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.atabs button:hover { color: var(--ink); }
+.atabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.apanel > .card-head h2 { display: none; }
+.apanel > .card-head { justify-content: flex-end; margin-top: -6px; }
+.ag-plot { padding: 0 18%; }
+.ag-chart { gap: 14px; }
+@media (max-width: 1100px) { .now .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .now .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .now .kpi:first-child { grid-column: 1 / -1; } }
+
 /* ---------- v14: pohon status sesuai sketsa, navigasi bagian ---------- */
 .secnav { flex: 1 1 100%; min-width: 0; max-width: 100%; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: 2px -6px -4px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, .14); }
 .secnav::-webkit-scrollbar { display: none; }
@@ -670,7 +695,7 @@ body.present .totop { display: none; }
     <button class="btn" type="button" id="present" data-tt="present.tip"><span aria-hidden="true">⛶</span> <span data-t="present"></span></button>
     <button class="btn primary" type="button" id="export-all" data-t="export" data-tt="export.tip"></button>
     <nav class="secnav" aria-label="Sections">
-      <a href="#s-now" data-nav="s-now" data-t="nav.now"></a><a href="#s-tree" data-nav="s-tree" data-t="nav.tree"></a><a href="#s-aging" data-nav="s-aging" data-t="nav.aging"></a><a href="#s-rank" data-nav="s-rank" data-t="nav.rank"></a><a href="#s-scope" data-nav="s-scope" data-t="nav.scope"></a><a href="#s-trend" data-nav="s-trend" data-t="nav.trend"></a><a href="#s-mid" data-nav="s-mid" data-t="nav.perf"></a>
+      <a href="#s-now" data-nav="s-now" data-t="nav.now"></a><a href="#s-tree" data-nav="s-tree" data-t="nav.tree"></a><a href="#s-aging" data-nav="s-aging" data-t="nav.aging"></a><a href="#s-rank" data-nav="s-rank" data-t="nav.rank"></a><a href="#s-ana" data-nav="s-ana" data-t="nav.ana"></a>
     </nav>
   </header>
 
@@ -715,10 +740,9 @@ body.present .totop { display: none; }
       <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="tools-r"><span class="muted" id="now-meta" style="font-size:12.5px"></span><button type="button" class="xbtn" data-xport="now" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
       <div class="status" id="status" aria-live="polite"></div>
       <div class="since" id="since"></div>
-      <div class="hero-body"><div class="totals" id="totals"></div><div class="bullets" id="bullets"></div></div>
+      <div class="kpis" id="kpis"></div>
     </div>
     <div class="focus span-4" id="focus"></div>
-    <div class="kpis span-12" id="kpis"></div>
   </section>
 
   <section class="card slide" id="s-tree">
@@ -762,31 +786,36 @@ body.present .totop { display: none; }
     <div style="margin-top:10px"><button class="btn" type="button" id="rank-more"></button></div>
   </section>
 
-  <section class="card slide" id="s-trend">
-    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="tools-r"><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span><button type="button" class="xbtn" data-xport="trend" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-    <p class="sub" data-t="tr.sub"></p>
-    <div class="trend-box" id="trend-box"></div>
-  </section>
 
-  <section class="card slide" id="s-scope">
+
+
+  <section class="card slide" id="s-ana">
+    <div class="card-head"><h2><span data-t="ana.title"></span><i class="info" tabindex="0" data-tt="ana.tip">i</i></h2></div>
+    <div class="atabs" role="tablist" aria-label="Analysis">
+      <button type="button" role="tab" data-at="scope" id="at-scope" data-t="nav.scope"></button><button type="button" role="tab" data-at="perf" id="at-perf" data-t="perf.title"></button><button type="button" role="tab" data-at="sev" id="at-sev" data-t="sev.title"></button><button type="button" role="tab" data-at="trend" id="at-trend" data-t="tr.title"></button>
+    </div>
+    <div class="apanel" id="ap-scope" role="tabpanel" aria-labelledby="at-scope" hidden>
     <div class="card-head"><h2><span data-t="scp.title"></span><i class="info" tabindex="0" data-tt="scp.tip">i</i></h2><button type="button" class="xbtn" data-xport="scope" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
     <p class="sub" data-t="scp.sub"></p>
     <div id="scp"></div>
-  </section>
-
-  <div class="bento slide" id="s-mid">
-    <section class="card span-5">
-      <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
-      <p class="sub" id="sev-sub"></p>
-      <div id="sev-panel"></div>
-    </section>
-    <section class="card span-7">
+      </div>
+    <div class="apanel" id="ap-perf" role="tabpanel" aria-labelledby="at-perf" hidden>
       <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><span class="tools-r"><span class="seg" role="group"><button type="button" data-pv="chart" id="pv-chart" data-t="fv.c"></button><button type="button" data-pv="table" id="pv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
       <p class="sub" data-t="perf.sub"></p>
       <div class="pviz" id="perf-viz"></div>
       <div class="tw" id="perf-wrap"><table id="perf"></table></div>
-    </section>
-  </div>
+        </div>
+    <div class="apanel" id="ap-sev" role="tabpanel" aria-labelledby="at-sev" hidden>
+      <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
+      <p class="sub" id="sev-sub"></p>
+      <div id="sev-panel"></div>
+        </div>
+    <div class="apanel" id="ap-trend" role="tabpanel" aria-labelledby="at-trend" hidden>
+    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="tools-r"><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span><button type="button" class="xbtn" data-xport="trend" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+    <p class="sub" data-t="tr.sub"></p>
+    <div class="trend-box" id="trend-box"></div>
+      </div>
+  </section>
 
   <details class="card">
     <summary data-t="rules.title"></summary>
@@ -851,10 +880,10 @@ const T = {
   'now.tip': ['Read left to right: how many POD must come back, how many have, how many have not, how many are late, and how punctual. Click any box for its AWB list.', 'Baca dari kiri ke kanan: berapa POD wajib kembali, berapa yang sudah, berapa yang belum, berapa yang terlambat, dan seberapa tepat waktu. Klik kotak mana pun untuk daftar AWB-nya.'],
   'now.meta': ['Working days {w} · age from {b} · SLA per customer (6/7 WD)', 'Hari kerja {w} · umur dari {b} · SLA sesuai customer (6/7 HK)'],
   'h.crit': ['Action needed', 'Perlu tindakan'], 'h.warn': ['Watch', 'Waspada'], 'h.good': ['Good', 'Baik'],
-  'h.ungu': ['{p} of outstanding POD are critical (purple) · limit < 15%', '{p} POD belum balik sudah kritis (ungu) · batas < 15%'],
+  'h.ungu': ['{p} of POD not returned are critical (purple) · limit < 15%', '{p} POD belum balik sudah kritis (ungu) · batas < 15%'],
   'h.ot': ['on-time return {p} · target ≥ 80%', 'ketepatan waktu {p} · target ≥ 80%'],
   'h.and': ['and', 'dan'],
-  'h.rule': ['Action needed (red): ≥30% of outstanding POD purple OR on-time < 60%. Watch (orange): ≥15% purple OR on-time < 80%. Otherwise Good (green). Each reason keeps its own colour.', 'Perlu tindakan (merah): ≥30% POD belum balik ungu ATAU tepat waktu < 60%. Waspada (oranye): ≥15% ungu ATAU tepat waktu < 80%. Selain itu Baik (hijau). Setiap alasan memakai warnanya sendiri.'],
+  'h.rule': ['Action needed (red): ≥30% of POD not returned purple OR on-time < 60%. Watch (orange): ≥15% purple OR on-time < 80%. Otherwise Good (green). Each reason keeps its own colour.', 'Perlu tindakan (merah): ≥30% POD belum balik ungu ATAU tepat waktu < 60%. Waspada (oranye): ≥15% ungu ATAU tepat waktu < 80%. Selain itu Baik (hijau). Setiap alasan memakai warnanya sendiri.'],
   'k1': ['1 · POD to return', '1 · POD Balik'], 'k1.say': ['Physical POD that must come back, out of {n} shipments ({v}).', 'POD fisik yang wajib kembali, dari {n} kiriman ({v}).'],
   'k2': ['2 · Returned', '2 · Sudah Balik'], 'k2.say': ['Back with us, out of {n} required ({v}).', 'Sudah kembali, dari {n} yang wajib ({v}).'],
   'k3': ['3 · Not returned', '3 · Belum Balik'], 'k3.crit': ['{n} critical · {v}', '{n} kritis · {v}'], 'k3.say': ['{nd} parcels not yet delivered ({v}).', '{nd} paket belum terkirim ({v}).'],
@@ -864,9 +893,9 @@ const T = {
   'k5.say': ['Returned within SLA. Average {d} WD.', 'Kembali sesuai SLA. Rata-rata {d} HK.'],
   'seeAwb': ['See AWB ›', 'Lihat AWB ›'],
   'focus': ['Focus', 'Fokus'],
-  'focus.br': ['Most outstanding at destination branch {x} ({n} · {p})', 'Tunggakan terbanyak di cabang tujuan {x} ({n} · {p})'],
+  'focus.br': ['Most POD not returned at destination branch {x} ({n} · {p})', 'Tunggakan terbanyak di cabang tujuan {x} ({n} · {p})'],
   'focus.cu': ['customer {x} ({n})', 'customer {x} ({n})'], 'focus.st': ['status {x} ({n})', 'status {x} ({n})'],
-  'focus.none': ['No outstanding POD for these filters.', 'Tidak ada tunggakan untuk filter ini.'],
+  'focus.none': ['No POD not returned for these filters.', 'Tidak ada tunggakan untuk filter ini.'],
   'tree.title': ['POD Status Tree', 'Pohon Status POD'],
   'tree.tip': ['Follows the work process: shipment → must return → not yet / already back → latest status. Each row = AWB count at that step. Click a row for its AWB list.', 'Mengikuti proses kerja: kiriman → wajib balik → belum/sudah kembali → status terakhir. Setiap baris = jumlah AWB di tahap itu. Klik baris untuk daftar AWB.'],
   'tree.hint': ['Click a row or number to see its AWB', 'Klik baris atau angka untuk melihat AWB-nya'],
@@ -875,7 +904,7 @@ const T = {
   'c.count': ['Count', 'Jumlah'], 'c.parent': ['% of parent', '% induk'], 'c.parent.tip': ['Share of this row in its parent row (one level up).', 'Porsi baris ini terhadap baris induknya (satu level di atas).'],
   'c.ofRet': ['% of POD to return', '% POD Balik'], 'c.ofRet.tip': ['Share of this row in all POD to return.', 'Porsi baris ini terhadap seluruh POD Balik.'],
   'c.colour': ['Age colour', 'Warna umur'], 'c.colour.tip': ['Spread of age colours for the AWB in this row. For Returned rows the colour comes from the time to return.', 'Sebaran warna umur AWB pada baris ini. Untuk Sudah Balik, warnanya dari lama kembali.'],
-  'sev.title': ['Age Colour of Outstanding POD', 'Warna Umur POD Belum Balik'],
+  'sev.title': ['Age Colour of POD Not Returned', 'Warna Umur POD Belum Balik'],
   'sev.tip': ['Colour compares each POD age with its customer SLA (6 or 7 WD), so 7-WD customers get one extra day per colour.', 'Warna membandingkan umur POD dengan SLA customer-nya (6 atau 7 HK), jadi customer 7 HK mendapat 1 hari lebih longgar per warna.'],
   'sev.sub': ['{n} POD not returned. Colour limits follow each customer SLA.', '{n} POD belum balik. Batas warna mengikuti SLA customer masing-masing.'],
   'perf.title': ['Return Performance', 'Kinerja Pengembalian'],
@@ -888,7 +917,7 @@ const T = {
   'g.sla': ['Customer SLA {n} WD', 'Customer SLA {n} HK'], 'g.sla.d': ['Return within {n} working days', 'Batas kembali {n} hari kerja'],
   'g.int': ['Delivered by our own office', 'Diantar kantor sendiri'], 'g.agent': ['Delivered by a partner office', 'Diantar kantor mitra'],
   'aging.title': ['Aging per 5 Working Days', 'Aging per 5 Hari Kerja'],
-  'aging.tip': ['Age grouped per 5 working days, counted from the "Age from" date (Delivered or POS). Returned rows show the time to return.', 'Umur dikelompokkan per 5 hari kerja, dihitung dari tanggal "Umur dihitung dari" (Delivered atau POS). Baris sudah balik menunjukkan lama kembali.'],
+  'aging.tip': ['Age of POD not returned yet, grouped per 5 working days (the sketch: "aging per 5 days × 6", plus >30 so nothing is lost). Age counts from the "Age from" date (Delivered or POS). Time to return of returned POD is under Analysis › Return Performance.', 'Umur POD yang belum balik, dikelompokkan per 5 hari kerja (sketsa: "aging per 5 hari × 6", ditambah >30 agar tidak ada yang hilang). Umur dihitung dari tanggal "Umur dihitung dari" (Delivered atau POS). Lama kembali POD yang sudah balik ada di Analisis › Kinerja Pengembalian.'],
   'mode.bucket': ['Per 5 WD', 'Per 5 HK'], 'mode.sev': ['Per colour', 'Per warna'],
   'aging.sub': ['Every number is coloured by the age colour most common in that cell. Small number = % of the row total.', 'Setiap angka diwarnai sesuai warna umur yang paling banyak di sel itu. Angka kecil = % dari total baris.'],
   'aging.s1': ['Not returned · age', 'Belum balik · umur'], 'aging.s2': ['Returned · time to return', 'Sudah balik · lama kembali'],
@@ -896,11 +925,11 @@ const T = {
   'cell.tip': ['{r} · {c}: {n} AWB · {v} ({p} of row), mostly {s}. Click for the AWB list.', '{r} · {c}: {n} AWB · {v} ({p} dari baris), terbanyak {s}. Klik untuk daftar AWB.'],
   'bucket.tip': ['Age {x} working days', 'Umur {x} hari kerja'],
   'rank.title': ['Who Needs Follow-up', 'Siapa yang Perlu Ditindaklanjuti'],
-  'rank.tip': ['Ranking of outstanding POD. Click a name to filter the whole dashboard; click a number or colour bar for the AWB list.', 'Peringkat tunggakan POD. Klik nama untuk memfilter seluruh dashboard; klik angka atau batang warna untuk daftar AWB.'],
+  'rank.tip': ['Ranking of POD not returned. Click a name to filter the whole dashboard; click a number or colour bar for the AWB list.', 'Peringkat tunggakan POD. Klik nama untuk memfilter seluruh dashboard; klik angka atau batang warna untuk daftar AWB.'],
   'rank.br': ['Destination branch', 'Cabang tujuan'],
-  'rank.sub': ['Sorted by most outstanding (not returned) POD.', 'Urut dari tunggakan (belum balik) terbanyak.'],
+  'rank.sub': ['Sorted by most POD not returned.', 'Urut dari tunggakan (belum balik) terbanyak.'],
   'r.not': ['Not returned', 'Belum balik'], 'r.not.tip': ['Number of POD not back yet.', 'Jumlah POD yang belum kembali.'],
-  'r.share': ['% of outstanding', '% tunggakan'], 'r.share.tip': ['Share of all outstanding POD for the active filters.', 'Porsi dari seluruh POD belum balik pada filter aktif.'],
+  'r.share': ['% of not returned', '% tunggakan'], 'r.share.tip': ['Share of all POD not returned for the active filters.', 'Porsi dari seluruh POD belum balik pada filter aktif.'],
   'r.rr': ['% returned', '% kembali'], 'r.rr.tip': ['Returned ÷ POD to return.', 'Sudah balik ÷ POD balik.'],
   'r.more': ['Show all ({n})', 'Tampilkan semua ({n})'], 'r.top': ['Show top 10', 'Tampilkan 10 teratas'],
   'r.filterTo': ['Filter the whole dashboard to {x}', 'Filter seluruh dashboard ke {x}'],
@@ -951,8 +980,8 @@ const T = {
   's.stpod': ['POD back & handed over (STPOD)', 'POD kembali & diserahterimakan (STPOD)'], 's.podp': ['Sent to customer (PODP)', 'Dikirim ke customer (PODP)'],
   's.resi': ['Receipt {x}', 'Resi {x}'], 's.arsip': ['Archived', 'Diarsipkan'],
   'rel.podp': ['All AWB in PODP receipt {x} ({n} · {v})', 'Semua AWB di resi PODP {x} ({n} · {v})'], 'rel.stpod': ['All AWB in STPOD {x} ({n} · {v})', 'Semua AWB di STPOD {x} ({n} · {v})'],
-  'rel.status': ['All AWB with status {x} ({n} · {v})', 'Semua AWB berstatus {x} ({n} · {v})'], 'rel.sev': ['All outstanding POD in {x}', 'Semua belum balik warna {x}'],
-  'seeCust': ['See all outstanding POD for this customer', 'Lihat semua POD belum balik customer ini'], 'seeBr': ['See all outstanding POD for this destination branch', 'Lihat semua POD belum balik cabang tujuan ini'],
+  'rel.status': ['All AWB with status {x} ({n} · {v})', 'Semua AWB berstatus {x} ({n} · {v})'], 'rel.sev': ['All POD not returned in {x}', 'Semua belum balik warna {x}'],
+  'seeCust': ['See all POD not returned for this customer', 'Lihat semua POD belum balik customer ini'], 'seeBr': ['See all POD not returned for this destination branch', 'Lihat semua POD belum balik cabang tujuan ini'],
   'nOut': ['{n} POD not returned ({v})', '{n} POD belum balik ({v})'],
   'sp.age': ['Age {x} WD', 'Umur {x} HK'], 'sp.col': ['Colour {x}', 'Warna {x}'], 'sp.past': ['Past SLA', 'Lewat SLA'],
   'sp.podp': ['PODP receipt {x}', 'Resi PODP {x}'], 'sp.stpod': ['STPOD {x}', 'STPOD {x}'], 'sp.dest': ['Destination: {x}', 'Tujuan: {x}'],
@@ -983,7 +1012,7 @@ const T = {
   'view.saved': ['★ My filters saved', '★ Filter saya tersimpan'],
   'view.save': ['☆ Save my filters', '☆ Simpan filter saya'],
   'since.tip': ['Compared with what you saw last time with the same filters (stored in this browser only).', 'Dibandingkan dengan yang Anda lihat terakhir dengan filter sama (disimpan di browser ini saja).'],
-  'since.hold': ['On hold', 'Tertahan'],
+  'since.hold': ['Value not returned', 'Nilai belum balik'],
   'since.crit': ['Critical', 'Kritis'],
   'since.past': ['Past SLA', 'Lewat SLA'],
   'since.not': ['Not returned', 'Belum balik'],
@@ -1000,6 +1029,16 @@ const T = {
   'bl.ot': ['On-time return', 'Tepat waktu'],
   'bl.ret': ['Returned', 'Sudah balik'],
   'top': ['Back to top', 'Kembali ke atas'],
+  'nav.ana': ['Analysis', 'Analisis'],
+  'ana.title': ['Analysis', 'Analisis'],
+  'ana.tip': ['Supporting views: compare routes, groups, age colours and weeks. The numbers follow the same filters as the rest of the page.', 'Tampilan pendukung: bandingkan rute, grup, warna umur, dan minggu. Angkanya mengikuti filter yang sama dengan seluruh halaman.'],
+  'kl.ret': ['Returned', 'Sudah balik'], 'kl.not': ['Not returned', 'Belum balik'], 'kl.ot': ['On time', 'Tepat waktu'], 'kl.crit': ['Critical', 'Kritis'],
+  'kx.all': ['{b} POD to return ({p}) · {n} no return', '{b} POD balik ({p}) · {n} tidak balik'],
+  'kx.ret': ['{n} of {b} POD to return', '{n} dari {b} POD balik'],
+  'kx.not': ['{p} of POD to return · {nd} parcels not delivered yet', '{p} dari POD balik · {nd} paket belum terkirim'],
+  'kx.ot': ['{n} of {s} returned · target ≥ 80%', '{n} dari {s} yang sudah balik · target ≥ 80%'],
+  'kx.crit': ['{n} of {b} not returned · limit < 15%', '{n} dari {b} yang belum balik · batas < 15%'],
+  'kv.not': ['Not returned', 'Belum balik'],
   'nav.now': ['Now', 'Kondisi'], 'nav.tree': ['Status tree', 'Pohon status'], 'nav.aging': ['Aging', 'Aging'], 'nav.rank': ['Follow-up', 'Tindak lanjut'],
   'nav.scope': ['Intracity vs Domestic', 'Intracity vs Domestik'], 'nav.trend': ['Trend', 'Tren'], 'nav.perf': ['Colour & performance', 'Warna & kinerja'],
   'lg.fam': ['Status', 'Status'], 'lg.age': ['Age colour', 'Warna umur'], 'lg.sla': ['(days for SLA 6 WD; SLA 7 WD +1 day)', '(hari untuk SLA 6 HK; SLA 7 HK +1 hari)'],
@@ -1015,11 +1054,11 @@ const T = {
   'scp.both': ['Compare both', 'Bandingkan keduanya'],
   'scp.off': ['Hidden because the Scope filter shows {x} only.', 'Disembunyikan karena filter Scope hanya menampilkan {x}.'],
   'scp.ship': ['Total shipments', 'Total kiriman'],
-  'scp.out': ['Outstanding POD by age colour · {n} AWB · {v}', 'POD belum balik per warna umur · {n} AWB · {v}'],
+  'scp.out': ['Not returned by age colour · {n} AWB · {v}', 'POD belum balik per warna umur · {n} AWB · {v}'],
   'scp.share': ['Share of shipments', 'Porsi kiriman'],
   'scp.v.lower': ['{a} on-time return is {d} pts lower than {b} ({x} vs {y}); average {wa} vs {wb} WD to return.', 'Ketepatan pengembalian {a} {d} poin lebih rendah dari {b} ({x} vs {y}); rata-rata {wa} vs {wb} HK untuk balik.'],
   'scp.v.same': ['Both routes return POD on time at a similar rate ({x} vs {y}).', 'Kedua rute mengembalikan POD tepat waktu dengan tingkat serupa ({x} vs {y}).'],
-  'ag.sub.c': ['Bar height = POD per age band (working days). Left bar: not returned yet, split by age colour. Right bar: returned, by how long it took. Click a block for its AWB list.', 'Tinggi batang = POD per rentang umur (hari kerja). Batang kiri: belum balik, dipecah per warna umur. Batang kanan: sudah balik, menurut lama kembalinya. Klik blok untuk daftar AWB.'],
+  'ag.sub.c': ['POD not returned yet, per age band. One bar per band, split by age colour (relative to each customer SLA). Click a block for its AWB list.', 'POD yang belum balik, per rentang umur. Satu batang per rentang, dipecah per warna umur (relatif terhadap SLA customer). Klik blok untuk daftar AWB.'],
   'ag.not': ['Not returned (age colour)', 'Belum balik (warna umur)'],
   'ag.ret': ['Returned (time to return)', 'Sudah balik (lama kembali)'],
   'xp.tip': ['Export this group to Excel (follows the active filters).', 'Export kelompok ini ke Excel (mengikuti filter aktif).'],
@@ -1029,7 +1068,7 @@ const T = {
   'c.ofAll': ['of all shipments', 'dari semua kiriman'],
   'donut.c': ['not returned', 'belum balik'],
   'spark.tip': ['Last {n} POS weeks: {a} → {b}', '{n} minggu POS terakhir: {a} → {b}'],
-  'ring.crit.tip': ['Share of outstanding POD already purple (≥ 4 WD past SLA).', 'Porsi POD belum balik yang sudah ungu (≥ 4 HK lewat SLA).'],
+  'ring.crit.tip': ['Share of POD not returned that is already purple (≥ 4 WD past SLA).', 'Porsi POD belum balik yang sudah ungu (≥ 4 HK lewat SLA).'],
   'ring.ot.tip': ['Share of returned POD that came back within the customer SLA.', 'Porsi POD yang kembali sesuai SLA customer.'],
   'ring.ret.tip': ['Share of POD to return that is back.', 'Porsi POD balik yang sudah kembali.'],
   'ring.crit': ['Critical', 'Kritis'],
@@ -1074,25 +1113,25 @@ const T = {
   'f.reg': ['Region', 'Region'], 'f.reg.tip': ['Operational region of the destination branch (from the coverage master).', 'Region operasional cabang tujuan (dari master coverage area).'],
   'present': ['Present', 'Presentasi'], 'present.tip': ['Full-screen presentation: one section per screen. Use ← → or the bar at the bottom; Esc to exit.', 'Presentasi layar penuh: satu bagian per layar. Pakai ← → atau bar di bawah; Esc untuk keluar.'],
   'p.slide': ['{i}/{n} · {x}', '{i}/{n} · {x}'],
-  'fo.title': ['Focus now', 'Fokus sekarang'], 'fo.sub': ['Where most outstanding POD sit. Start follow-up here.', 'Di sinilah tunggakan POD terbanyak. Mulai tindak lanjut dari sini.'],
+  'fo.title': ['Focus now', 'Fokus sekarang'], 'fo.sub': ['Where most POD not returned sit. Start follow-up here.', 'Di sinilah tunggakan POD terbanyak. Mulai tindak lanjut dari sini.'],
   'fo.tip': ['The single biggest contributor per dimension among POD not returned for the active filters.', 'Penyumbang tunggakan terbesar per dimensi di antara POD belum balik pada filter aktif.'],
   'fo.br': ['Destination branch', 'Cabang tujuan'], 'fo.cu': ['Customer', 'Customer'], 'fo.st': ['Status', 'Status'],
-  'fo.meta': ['{n} POD · {p} of outstanding', '{n} POD · {p} dari tunggakan'], 'fo.crit': ['{n} critical', '{n} kritis'],
+  'fo.meta': ['{n} POD · {p} of not returned', '{n} POD · {p} dari tunggakan'], 'fo.crit': ['{n} critical', '{n} kritis'],
   'g.site': ['Remote areas (Site)', 'Area remote (Site)'],
   'col.reg': ['Region', 'Region'], 'a.office': ['Served by', 'Dilayani oleh'],
-  'v.tip': ['Freight charge (ongkir) of the AWB, simulated in this prototype. "On hold" = value of POD not returned yet, which can delay invoicing the customer.', 'Ongkos kirim AWB (simulasi di prototype ini). "Tertahan" = nilai POD yang belum kembali, yang bisa menunda penagihan ke customer.'],
+  'v.tip': ['Freight charge (ongkir) of the AWB, simulated in this prototype. "Not returned" value = freight of POD not back yet, which can delay invoicing the customer.', 'Ongkos kirim AWB (simulasi di prototype ini). "Belum balik" = nilai ongkir POD yang belum kembali, yang bisa menunda penagihan ke customer.'],
   'k1.v': ['Value', 'Nilai'], 'k2.v': ['Value', 'Nilai'], 'k3.v': ['On hold', 'Tertahan'], 'k4.v': ['Late value', 'Nilai terlambat'], 'k5.v': ['On-time value', 'Nilai tepat waktu'],
-  'h.hold': ['{v} on hold', '{v} tertahan'], 'h.hold.tip': ['Freight value of POD not returned yet. Click for the AWB list.', 'Nilai ongkir POD yang belum kembali. Klik untuk daftar AWB.'],
+  'h.hold': ['{v} not returned', '{v} belum balik'], 'h.hold.tip': ['Freight value of POD not returned yet. Click for the AWB list.', 'Nilai ongkir POD yang belum kembali. Klik untuk daftar AWB.'],
   'c.val': ['Value (Rp)', 'Nilai (Rp)'],
   'mode.n': ['AWB', 'AWB'], 'mode.v': ['Rp', 'Rp'], 'metric.tip': ['Show AWB counts or freight value (Rp).', 'Tampilkan jumlah AWB atau nilai ongkir (Rp).'],
-  'r.val': ['Value on hold', 'Nilai tertahan'], 'r.val.tip': ['Freight value of POD not returned.', 'Nilai ongkir POD yang belum balik.'],
-  'r.shareV': ['% of value on hold', '% nilai tertahan'], 'r.shareV.tip': ['Share of the total value on hold for the active filters.', 'Porsi dari total nilai tertahan pada filter aktif.'],
+  'r.val': ['Value not returned', 'Nilai belum balik'], 'r.val.tip': ['Freight value of POD not returned.', 'Nilai ongkir POD yang belum balik.'],
+  'r.shareV': ['% of value not returned', '% nilai belum balik'], 'r.shareV.tip': ['Share of the total value on hold for the active filters.', 'Porsi dari total nilai tertahan pada filter aktif.'],
   'm.val': ['Value (Rp)', 'Nilai (Rp)'], 'm.val.tip': ['Total freight value of these AWB.', 'Total nilai ongkir AWB ini.'], 'm.valOf': ['{p} of POD-to-return value', '{p} dari nilai POD balik'],
   'col.val': ['Value', 'Nilai'], 'col.val.tip': ['Freight charge of the AWB (Rp).', 'Ongkos kirim AWB (Rp).'],
   'a.val': ['Value', 'Nilai'], 'a.kg': ['{k} kg chargeable weight', 'berat {k} kg'],
   'ru.val': ['Value (Rp)', 'Nilai (Rp)'], 'ru.val.d': ['Freight charge (ongkir) per AWB; simulated in this prototype. Short forms: K = thousand, M = million, B = billion. Hover a value for the full amount.', 'Ongkos kirim per AWB; simulasi di prototype ini. Singkatan: rb = ribu, jt = juta, M = miliar. Arahkan kursor untuk nilai lengkap.'],
   'cell.tipv': ['{r} · {c}: {v} ({p} of row value) from {n} AWB, mostly {s}. Click for the AWB list.', '{r} · {c}: {v} ({p} dari nilai baris) dari {n} AWB, terbanyak {s}. Klik untuk daftar AWB.'],
-  'sev.v': ['{v} on hold', '{v} tertahan'],
+  'sev.v': ['{v} not returned', '{v} belum balik'],
 };
 let LANG = 'en';
 const t = (k, v = {}) => { const e = T[k]; let s = e ? e[LANG === 'en' ? 0 : 1] : k; for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(b); return s; };
@@ -1270,7 +1309,7 @@ function computeAges() {
 }
 
 /* ================= state ================= */
-const S = { tl: '', fv: 'diagram', pv: 'chart', av: 'chart', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
+const S = { at: 'scope', tl: '', fv: 'diagram', pv: 'chart', av: 'chart', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
 try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank', 'basis'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
 const VIEW_KEYS = ['pmode', 'period', 'from', 'to', 'cust', 'scope', 'reg', 'btype', 'lv', 'branch', 'basis'];
 function loadView() { try { const v = JSON.parse(localStorage.getItem('pod-my-view') || 'null'); if (v) { VIEW_KEYS.forEach(k => { if (k in v) S[k] = v[k]; }); return true; } } catch (e) { /* abaikan */ } return false; }
@@ -1353,7 +1392,7 @@ function applyStatic() {
 
 function render() {
   F = ROWS.filter(inGlobal);
-  renderFilters(); renderNow(); renderTree(); renderScope(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
+  renderFilters(); renderNow(); renderTree(); renderTabs(); renderScope(); renderSev(); renderPerf(); renderAging(); renderRank(); renderTrend();
   if (!$('#modal').hidden) renderModal();
   countUp();
 }
@@ -1411,22 +1450,31 @@ function renderNow() {
   $('#status').className = 'status ' + ['lvl-good', 'lvl-warn', 'lvl-crit'][h.lvl];
   $('#status').innerHTML = `<span class="ic" aria-hidden="true">${h.lvl ? '!' : '✓'}</span><span class="what">${esc(h.word)}</span>
     <span class="reasons">${h.shown.map(r => go(r.sp, mention(r.cls, esc(r.txt)))).join(`<span class="muted">${t('h.and')}</span>`)}<span class="muted">·</span>${go({ node: 'belum' }, mention('hitam', esc(t('h.hold', { v: rp(c.vBelum) }))), '', t('h.hold.tip') + ' ' + rp(c.vBelum, true))}</span>${info(t('h.rule'))}`;
-  const tot = SEV.reduce((s, x) => s + sc[x.k], 0) || 1;
-  const wk = weekly(F);
-  const sevMini = `<div class="meter">${SEV.map(x => `<span class="bg-${x.k}" style="width:${(sc[x.k] / tot) * 100}%"></span>`).join('')}</div>`;
-  const tile = (sp, color, lbl, hint, big, badge, say, bar, money, cnt) => `<button type="button" class="kpi" data-open="${spec(sp)}">
-    <span class="lbl"><span class="kdot" style="background:${color}"></span>${lbl}${info(hint)}</span>
-    <span class="val"><b data-count="${cnt[0] ?? ''}" data-fmt="${cnt[1]}" data-key="kpi-${sp.node}-${cnt[1]}-${lbl.slice(0, 1)}">${big}</b>${badge ? `<span>${badge}</span>` : ''}</span>${money}${bar}<span class="say">${say}</span></button>`;
-  const money = (k, v, cls = '') => `<span class="money ${cls}" data-tip="${esc(t('v.tip') + ' ' + rp(v, true))}">${t(k)} <b>${rp(v)}</b></span>`;
+  const cp = core(prevRows()), [pa, pb] = range(), plen = pb - pa + 1;
+  const ot = pct(c.ontime, c.sudah), crit = pct(c.ungu, c.belum), no = c.all - c.balik;
+  const seg = (sp, w, col, tip) => `<span style="width:${w || 0}%;background:${col}" data-open="${spec(sp)}" data-tip="${esc(tip)}"></span>`;
+  const track = (v, col, target, bands) => `<span class="bl-track">${bands.map(([x, y, k]) => `<span class="band" style="left:${x}%;width:${y - x}%;background:var(--band-${k})"></span>`).join('')}<span class="bl-bar" style="width:${Math.max(0, Math.min(100, v || 0))}%;background:${col}"></span><span class="bl-tgt" style="left:${target}%"></span></span>`;
+  const tile = o => `<button type="button" class="kpi" data-k="${o.k}" data-n="${o.n}" data-open="${spec(o.sp)}">
+    <span class="lbl"><span class="kdot" style="background:${o.col}"></span>${esc(o.lbl)}${info(o.tip)}</span>
+    <span class="val"><b data-count="${o.cnt[0] ?? ''}" data-fmt="${o.cnt[1]}" data-key="kpi-${o.k}">${o.big}</b><small class="kv" data-tip="${esc(t('v.tip') + ' ' + rp(o.v, true))}">${rp(o.v)}</small></span>
+    <span class="kviz">${o.viz}</span><span class="ctx">${o.ctx}</span></button>`;
   $('#kpis').innerHTML = [
-    tile({ node: 'balik' }, 'var(--data-req)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--data-req)') + spark(wk.map(w => w.n), 'var(--data-req)', 'n'), money('k1.v', c.vBalik), [c.balik, 'n']),
-    tile({ node: 'sudah' }, 'var(--data-ret)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--data-ret)') + spark(wk.map(w => pct(w.s, w.n)), 'var(--data-ret)', 'p'), money('k2.v', c.vSudah), [pct(c.sudah, c.balik), 'p']),
-    tile({ node: 'belum' }, 'var(--data-pending)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini + spark(wk.map(w => w.b), 'var(--data-pending)', 'n'), money('k3.v', c.vBelum, 'hold'), [c.belum, 'n']),
-    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)') + spark(wk.map(w => w.od), 'var(--sev-merah)', 'n'), money('k4.v', c.vOverD), [c.overD, 'n']),
-    tile({ node: 'sudah', ot: true }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })) + ' ' + deltaHtml(pct(c.ontime, c.sudah), (cp => pct(cp.ontime, cp.sudah))(core(prevRows())), 'p', true), meter(pct(c.ontime, c.sudah), 'var(--success)') + spark(wk.map(w => (w.s >= 10 ? pct(w.ot, w.s) : null)), 'var(--success)', 'p'), money('k5.v', c.vOntime), [pct(c.ontime, c.sudah), 'p']),
+    tile({ k: 'all', n: c.all, sp: { node: 'all' }, col: 'var(--ink)', lbl: t('tot.title'), tip: t('tot.tip'), big: fmt(c.all), cnt: [c.all, 'n'], v: c.vAll,
+      viz: `<span class="kbar">${seg({ node: 'balik' }, pct(c.balik, c.all), 'var(--data-req)', `${nl('balik')}: ${fmt(c.balik)} AWB · ${rp(c.vBalik, true)}`)}${seg({ node: 'tidak' }, pct(no, c.all), 'var(--data-none)', `${nl('tidak')}: ${fmt(no)} AWB · ${rp(c.vAll - c.vBalik, true)}`)}</span>`,
+      ctx: esc(t('kx.all', { b: fmt(c.balik), p: fp(pct(c.balik, c.all)), n: fmt(no) })) }),
+    tile({ k: 'ret', n: c.sudah, sp: { node: 'sudah' }, col: 'var(--data-ret)', lbl: t('kl.ret'), tip: L(NODE.sudah.def), big: fp(pct(c.sudah, c.balik)), cnt: [pct(c.sudah, c.balik), 'p'], v: c.vSudah,
+      viz: `<span class="kbar">${seg({ node: 'sudah' }, pct(c.sudah, c.balik), 'var(--data-ret)', `${nl('sudah')}: ${fmt(c.sudah)} AWB`)}</span>`,
+      ctx: esc(t('kx.ret', { n: fmt(c.sudah), b: fmt(c.balik) })) }),
+    tile({ k: 'not', n: c.belum, sp: { node: 'belum' }, col: 'var(--data-pending)', lbl: t('kl.not'), tip: L(NODE.belum.def), big: fmt(c.belum), cnt: [c.belum, 'n'], v: c.vBelum,
+      viz: sevBar(sevCounts(c.belumRows), { node: 'belum' }, false, sevVals(c.belumRows)),
+      ctx: esc(t('kx.not', { p: fp(pct(c.belum, c.balik)), nd: fmt(c.nd) })) }),
+    tile({ k: 'ot', n: c.ontime, sp: { node: 'sudah', ot: true }, col: 'var(--success)', lbl: t('kl.ot'), tip: t('k5.tip'), big: fp(ot), cnt: [ot, 'p'], v: c.vOntime,
+      viz: track(ot, 'var(--success)', 80, OT_BANDS),
+      ctx: `${esc(t('kx.ot', { n: fmt(c.ontime), s: fmt(c.sudah) }))} ${deltaHtml(ot, pct(cp.ontime, cp.sudah), 'p', true)}` }),
+    tile({ k: 'crit', n: c.ungu, sp: { node: 'belum', sev: 'ungu' }, col: 'var(--sev-ungu)', lbl: t('kl.crit'), tip: t('ring.crit.tip'), big: fp(crit), cnt: [crit, 'p'], v: c.vUngu,
+      viz: track(crit, 'var(--sev-ungu)', 15, [[0, 15, 3], [15, 30, 2], [30, 100, 1]]),
+      ctx: esc(t('kx.crit', { n: fmt(c.ungu), b: fmt(c.belum) })) }),
   ].join('');
-  renderTotals(c);
-  renderBullets(c);
   renderSince(c);
   renderFocus(c);
 }
@@ -1534,7 +1582,7 @@ function renderFocus(c) {
     return `<button type="button" class="fcard" data-open="${spec(sp)}">
       <span class="k">${t(lk)}</span><span class="nm">${esc(nameOf(key, top[0]))}</span>
       <span class="meta"><span>${esc(t('fo.meta', { n: fmt(top[1]), p: fp(pct(top[1], c.belum)) }))}</span>${crit ? mention('ungu', esc(t('fo.crit', { n: fmt(crit) }))) : ''}</span>
-      <span class="money hold">${t('k3.v')} <b>${rpx(sumV(rows))}</b></span>
+      <span class="money hold">${t('kv.not')} <b>${rpx(sumV(rows))}</b></span>
       ${meter(pct(top[1], c.belum), 'var(--muted)')}<span class="desc">${esc(sub)}</span></button>`;
   }).join('');
   $('#focus').innerHTML = c.belum ? `<div class="focus-head">${target}<b>${t('fo.title')}</b><span class="muted" style="font-size:13px">${t('fo.sub')}</span>${info(t('fo.tip'))}</div><div class="focus-grid">${tops}</div>`
@@ -1648,11 +1696,11 @@ function renderTrend() {
 if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderTrend());
 
 /* ================= presentasi ================= */
-const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title'], ['s-scope', 'scp.title'], ['s-trend', 'tr.title'], ['s-mid', 'sev.title']];
+const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title'], ['s-ana', 'ana.title']];
 const P = { on: false, i: 0, fs: false };
 function showSlide() {
   SLIDES.forEach(([id], i) => $('#' + id).classList.toggle('active', i === P.i));
-  const extra = SLIDES[P.i][0] === 's-mid' ? ' · ' + t('perf.title') : '';
+  const extra = SLIDES[P.i][0] === 's-ana' ? ' · ' + t($('#at-' + S.at).dataset.t) : '';
   $('#p-title').textContent = t('p.slide', { i: P.i + 1, n: SLIDES.length, x: t(SLIDES[P.i][1]) + extra });
   window.scrollTo({ top: 0 });
 }
@@ -1690,6 +1738,11 @@ function renderTree() {
   }
   $('#tree').innerHTML = h + '</tbody>';
   renderFlow(cnt);
+}
+
+function renderTabs() {
+  ['scope', 'perf', 'sev', 'trend'].forEach(k => { const on = S.at === k; $('#at-' + k).setAttribute('aria-selected', on); $('#at-' + k).tabIndex = on ? 0 : -1; $('#ap-' + k).hidden = !on; });
+  if (S.at === 'trend' && typeof trendChart !== 'undefined' && trendChart) requestAnimationFrame(() => trendChart.resize());
 }
 
 function renderFlow(cnt) {
@@ -1801,20 +1854,17 @@ function renderPerf() {
 
 function agingChart() {
   const isV = S.metric === 'v', m = rows => (isV ? sumV(rows) : rows.length);
-  const B = F.filter(NODE.belum.t), Sd = F.filter(NODE.sudah.t);
-  const cols = BUCKETS.map(b => ({ b, nb: B.filter(r => r.bk === b.i), sd: Sd.filter(r => r.bk === b.i) }));
-  const max = Math.max(1, ...cols.flatMap(x => [m(x.nb), m(x.sd)]));
+  const B = F.filter(NODE.belum.t);
+  const cols = BUCKETS.map(b => ({ b, nb: B.filter(r => r.bk === b.i) }));
+  const max = Math.max(1, ...cols.map(x => m(x.nb)));
   const lab = rows => (isV ? `<b>${rp(sumV(rows))}</b><small>${fmt(rows.length)} AWB</small>` : `<b>${fmt(rows.length)}</b><small>${rp(sumV(rows))}</small>`);
-  const tip = (what, b, rows, extra) => `${what} · ${b.label} ${U()}${extra ? ' · ' + extra : ''}: ${fmt(rows.length)} AWB · ${rp(sumV(rows), true)}`;
-  const html = cols.map(({ b, nb, sd }) => {
-    const notSegs = SEV.map(x => ({ x, rows: nb.filter(r => r.sev === x.k) })).filter(o => o.rows.length).map(o =>
-      `<span class="bg-${o.x.k}" style="flex:${m(o.rows)} 0 0" data-open="${spec({ node: 'belum', bk: b.i, sev: o.x.k })}" data-tip="${esc(tip(nl('belum'), b, o.rows, L(o.x.label)))}"></span>`).join('');
-    return `<div class="ag-col"><div class="ag-plot">
-      <div class="ag-bar"><span class="ag-v">${lab(nb)}</span><div class="ag-stack" style="height:${(m(nb) / max) * 100}%">${notSegs}</div></div>
-      <div class="ag-bar"><span class="ag-v">${lab(sd)}</span><div class="ag-stack" style="height:${(m(sd) / max) * 100}%">${sd.length ? `<span style="flex:1;background:var(--data-ret)" data-open="${spec({ node: 'sudah', bk: b.i })}" data-tip="${esc(tip(nl('sudah'), b, sd))}"></span>` : ''}</div></div>
-    </div><div class="ag-x">${b.label} ${U()}<small>${fp(pct(nb.length + sd.length, B.length + Sd.length))}</small></div></div>`;
+  const html = cols.map(({ b, nb }) => {
+    const segs = SEV.map(x => ({ x, rows: nb.filter(r => r.sev === x.k) })).filter(o => o.rows.length).map(o =>
+      `<span class="bg-${o.x.k}" style="flex:${m(o.rows)} 0 0" data-open="${spec({ node: 'belum', bk: b.i, sev: o.x.k })}" data-tip="${esc(`${nl('belum')} · ${b.label} ${U()} · ${L(o.x.label)}: ${fmt(o.rows.length)} AWB · ${rp(sumV(o.rows), true)}`)}"></span>`).join('');
+    return `<div class="ag-col"><div class="ag-plot"><div class="ag-bar"><span class="ag-v">${lab(nb)}</span><div class="ag-stack" style="height:${(m(nb) / max) * 100}%">${segs}</div></div></div>
+      <div class="ag-x">${b.label} ${U()}<small>${fp(pct(nb.length, B.length))}</small></div></div>`;
   }).join('');
-  $('#aging-viz').innerHTML = `<div class="ag-chart">${html}</div><div class="ag-legend"><span><b>${t('ag.not')}:</b></span>${SEV.map(x => `<span><i class="bg-${x.k}"></i>${esc(L(x.label))}</span>`).join('')}<span><i style="background:var(--data-ret)"></i>${t('ag.ret')}</span></div>`;
+  $('#aging-viz').innerHTML = `<div class="ag-chart">${html}</div><div class="ag-legend"><span><b>${t('ag.not')}:</b></span>${SEV.map(x => `<span><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span>${t('lg.sla')}</span></div>`;
 }
 function renderAging() {
   $('#av-chart').setAttribute('aria-pressed', S.av === 'chart'); $('#av-table').setAttribute('aria-pressed', S.av === 'table');
@@ -1827,7 +1877,7 @@ function renderAging() {
   const cols = S.am === 'bucket'
     ? BUCKETS.map(b => ({ label: `${b.label} ${U()}`, tip: t('bucket.tip', { x: b.label }), sp: { bk: b.i }, f: r => r.bk === b.i }))
     : SEV.map(s => ({ label: L(s.label), tip: `${L(s.short)}. ${sevRanges(s)}`, sev: s.k, sp: { sev: s.k }, f: r => r.sev === s.k }));
-  const sections = [['aging.s1', ['ND', 'dlv', 'MDP', 'PODC', 'REDOC', 'UPLOAD'], 'belum'], ['aging.s2', ['STPOD', 'PODP', 'ARSIP'], 'sudah']];
+  const sections = [['aging.s1', ['ND', 'dlv', 'MDP', 'PODC', 'REDOC', 'UPLOAD'], 'belum']];
   let h = `<thead><tr><th>${t('c.status')}</th>${cols.map(c => `<th${c.sev ? ` class="sevh" style="--hc:var(--sev-${c.sev})"` : ''}>${esc(c.label)}${info(c.tip)}</th>`).join('')}<th>${t('total')}</th></tr></thead>`;
   for (const [title, ids, tot] of sections) {
     h += `<tbody><tr class="grp"><td colspan="${cols.length + 2}">${t(title)}</td></tr>`;
@@ -2179,7 +2229,7 @@ function exportGroup(key) {
     add([[t('p.group'), t('p.ret'), t('p.ret') + ' (Rp)', t('p.avg'), t('p.ot') + ' %', t('p.past'), t('p.past') + ' (Rp)'],
       ...groups.map(([g, f]) => { const cc = core(F.filter(f)); return [lbl(g), cc.sudah, cc.vSudah, Math.round(cc.avgLead || 0), r1(pct(cc.ontime, cc.sudah)), cc.overD, cc.vOverD]; })], 'Return performance');
   } else if (key === 'aging') {
-    const ids = ['ND', 'MDP', 'PODC', 'REDOC', 'UPLOAD', 'belum', 'STPOD', 'PODP', 'ARSIP', 'sudah'];
+    const ids = ['ND', 'dlv', 'MDP', 'PODC', 'REDOC', 'UPLOAD', 'belum'];
     const head = [t('c.status'), ...BUCKETS.map(b => `${b.label} ${U()}`), t('total')];
     add([head, ...ids.map(id => { const rr = F.filter(NODE[id].t); return [nl(id), ...BUCKETS.map(b => rr.filter(r => r.bk === b.i).length), rr.length]; })], 'Aging (AWB)');
     add([head, ...ids.map(id => { const rr = F.filter(NODE[id].t); return [nl(id), ...BUCKETS.map(b => sumV(rr.filter(r => r.bk === b.i))), sumV(rr)]; })], 'Aging (Rp)');
@@ -2263,6 +2313,7 @@ document.addEventListener('click', e => {
   if (tg.closest('#view-clear')) { try { localStorage.removeItem('pod-my-view'); } catch (e) { /* abaikan */ } render(); return toast(t('t.viewCleared')); }
   const xp = tg.closest('[data-xport]'); if (xp) return exportGroup(xp.dataset.xport);
   const fv = tg.closest('[data-fv]'); if (fv) { S.fv = fv.dataset.fv; return renderTree(); }
+  const at = tg.closest('[data-at]'); if (at) { S.at = at.dataset.at; return renderTabs(); }
   const tl = tg.closest('[data-tl]'); if (tl && !tl.disabled) { S.tl = tl.dataset.tl; return renderTree(); }
   const pv = tg.closest('[data-pv]'); if (pv) { S.pv = pv.dataset.pv; return renderPerf(); }
   const av = tg.closest('[data-av]'); if (av) { S.av = av.dataset.av; return renderAging(); }
@@ -2304,7 +2355,8 @@ document.addEventListener('keydown', e => {
 
 /* ================= init ================= */
 loadView(); buildCalendar(S.ww); computeAges(); applyStatic(); render();
-addEventListener('scroll', () => { $('#totop').hidden = scrollY < 600; }, { passive: true });
+addEventListener('scroll', () => { $('#totop').hidden = scrollY < 600; if (scrollY < 120) document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === 's-now')); }, { passive: true });
+document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === 's-now'));
 if (window.claude) window.claude.use('downloads').then(d => { if (!d) { const b = $('#export-all'); b.disabled = true; b.dataset.tip = t('t.na'); } });
 })();
 </script>
