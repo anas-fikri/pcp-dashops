@@ -59,15 +59,16 @@ Implikasi data: tabel kanonik perlu kolom `stpod_no` dan `podp_no` supaya satu r
 
 - Satuan: **hari kerja (HK)** ✅. Hari kirim/delivered = hari ke-0. **[ASUMSI]** Hari kerja Senin–Jumat (prototype punya pilihan Senin–Sabtu); libur nasional belum diperhitungkan dan perlu tabel kalender libur.
 - **Bucket "per 5 hari × 6":** 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, ditambah **>30** supaya tidak ada data yang hilang.
-- **Warna severity** (dipakai di badge detail, chip, KPI overdue, Excel):
+- **Warna severity relatif terhadap SLA customer** ✅ (s = 6 atau 7 HK):
 
-| Warna | Catatan asli | Implementasi |
-|---|---|---|
-| Hitam | 1–3 | 0–3 hari |
-| Oranye | 4–5 | 4–5 hari |
-| Merah | 6–8 | **6–9 hari** (menutup gap hari ke-9) |
-| Ungu | >10 | **≥10 hari** (= definisi *overdue*) |
+| Warna | Arti | Rumus | SLA 6 HK | SLA 7 HK |
+|---|---|---|---|---|
+| Hitam | Aman | 0 … s−3 | 0–3 | 0–4 |
+| Oranye | Mendekati SLA | s−2 … s−1 | 4–5 | 5–6 |
+| Merah | Jatuh tempo / lewat SLA | s … s+3 | 6–9 | 7–10 |
+| Ungu | Kritis, eskalasi (= overdue) | ≥ s+4 | ≥10 | ≥11 |
 
+  Untuk SLA 6 HK hasilnya sama dengan catatan asli (gap hari ke-9 masuk merah).
 - **"Sort"** di sketsa diterjemahkan sebagai urutan default daftar detail: **umur terlama di atas**. Semua kolom utama bisa diurutkan ulang.
 
 ## 4. KPI dan SLA
@@ -126,7 +127,7 @@ Driver yang didukung oleh ekspresi umur: SQLite (dev/test), SQL Server, MySQL/Ma
 
 ## 7. Keamanan dan operasional (wajib sebelum produksi)
 
-- [ ] **Autentikasi + RBAC.** Saat ini route belum dilindungi. Pasang SSO/login dan batasi user cabang hanya ke cabangnya (scope `dest_branch_code`). Isi data customer termasuk data bisnis sensitif.
+- [ ] **Autentikasi + RBAC** (disetujui, setelah prototype UI/UX). Saat ini route belum dilindungi. Pasang SSO/login dan batasi user cabang hanya ke cabangnya (scope `dest_branch_code`). Isi data customer termasuk data bisnis sensitif.
 - [x] Validasi whitelist semua parameter (`PodFilterRequest`). Literal SQL hanya berasal dari nilai config/enum yang tervalidasi.
 - [x] Pencarian AWB meng-escape wildcard LIKE.
 - [x] Rentang tanggal dibatasi (default 366 hari) dan export di-throttle (10/menit) dengan batas baris.
