@@ -71,7 +71,9 @@ def main(path: str) -> None:
         (region if len(code_full) <= 10 else region_parent)[code][reg] += 1
         dist = str(r[idx["DistrictName"]] or "")
         if len(code_full) <= 10 and dist:
-            names[code][dist.split(",")[-1].strip()] += 1
+            parts = [x.strip() for x in dist.split(",")]
+            # baris kota utama ("JAKARTA" atau "MEDAN, MEDAN") diberi bobot besar agar jadi nama cabang
+            names[code][parts[-1]] += 100000 if len(parts) == 1 else 1000 if parts[0] == parts[-1] else 1
 
     master = []
     for code in sorted(areas):
