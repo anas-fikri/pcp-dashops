@@ -34,20 +34,19 @@ POD
 Artinya keduanya **dimensi pemisah**, bukan level hierarki. Di dashboard, keduanya tampil sebagai
 kolom pada pohon status dan sebagai filter.
 
-**[ASUMSI] Arti status.** Label hanya dipakai untuk tampilan; definisi resminya perlu dikonfirmasi:
+**Arti status** (✅ = dikonfirmasi user bisnis 25 Nov 2026):
 
-| Kode | Tafsiran kerja |
+| Kode | Arti |
 |---|---|
-| Masih di Pelanggan | POD fisik masih ditahan penerima (menunggu cap/tanda tangan) |
-| PODC | POD sudah dikumpulkan kurir/cabang dan dalam perjalanan kembali |
-| Redoc | Dokumen harus diulang (cap/tanda tangan kurang, salah dokumen) |
-| Upload | Soft copy POD sudah di-scan/upload, fisik belum diterima |
-| STPOD | Serah terima POD fisik ke pusat/origin |
-| PODP | POD sudah diserahkan ke pelanggan pengirim |
-| Arsip | POD sudah diarsipkan |
+| Masih di Pelanggan | [ASUMSI] POD fisik masih ditahan penerima (menunggu cap/tanda tangan) |
+| PODC ✅ | Proof of Delivery Centralize: POD diurus secara tersentralisasi |
+| Redoc ✅ | Redocumentation: POD didokumentasikan ulang |
+| Upload | [ASUMSI] Soft copy POD sudah di-upload, fisik belum diserahterimakan |
+| STPOD ✅ | Serah Terima Proof of Delivery |
+| PODP ✅ | Nomor resi yang memuat banyak POD untuk dikirim ke pelanggan (satu PODP → banyak AWB) |
+| Arsip | [ASUMSI] POD sudah diarsipkan |
 
-Kalau STPOD/PODP ternyata status antara (belum "selesai"), cukup pindahkan kodenya dari
-`PodStatus::returned()` ke `deliveredPending()`.
+Implikasi data: tabel kanonik perlu kolom `stpod_no` dan `podp_no` supaya satu resi PODP bisa ditelusuri ke AWB-AWB di dalamnya.
 
 ## 3. Aturan aging
 
@@ -58,7 +57,7 @@ Kalau STPOD/PODP ternyata status antara (belum "selesai"), cukup pindahkan koden
 | Sudah Balik | `pod_returned_at − delivered_at` | lead time pengembalian POD |
 | Tidak Balik | – | tidak di-aging |
 
-- Satuan: **hari kalender**, selisih tanggal (jam diabaikan). Hari kirim/delivered = hari ke-0. **[ASUMSI]** Belum memperhitungkan hari libur.
+- Satuan: **hari kerja (HK)** ✅. Hari kirim/delivered = hari ke-0. **[ASUMSI]** Hari kerja Senin–Jumat (prototype punya pilihan Senin–Sabtu); libur nasional belum diperhitungkan dan perlu tabel kalender libur.
 - **Bucket "per 5 hari × 6":** 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, ditambah **>30** supaya tidak ada data yang hilang.
 - **Warna severity** (dipakai di badge detail, chip, KPI overdue, Excel):
 
@@ -82,10 +81,15 @@ Kalau STPOD/PODP ternyata status antara (belum "selesai"), cukup pindahkan koden
 | Rata-rata lead time | AVG(pod_returned_at − delivered_at) untuk Sudah Balik |
 | On-time return | Sudah Balik dengan lead time ≤ SLA scope |
 
-**[ASUMSI] SLA kembali POD:** Intracity 5 hari, Domestik 10 hari. Bisa diubah lewat env
-`POD_SLA_INTRACITY_DAYS` / `POD_SLA_DOMESTIK_DAYS`.
+**SLA kembali POD ✅:** ditentukan **per pelanggan**, 6 atau 7 hari kerja sejak delivered.
+Perlu kolom `sla_days` di master customer. "Lewat SLA" = POD delivered yang belum kembali dengan umur > SLA pelanggan.
+Catatan: aplikasi Laravel saat ini masih memakai SLA per scope (5/10 hari kalender); akan disesuaikan setelah UX prototype disetujui.
 
 ## 5. Alur layar (summary → detail)
+
+> Prototype UI/UX interaktif (data simulasi): `prototype/pod-dashboard.html`. Detail dibuka lewat **modal**, bukan pindah halaman.
+> Target: dashboard bisa dipahami < 1 menit, lewat kalimat "Ringkasan 1 menit" + status kesehatan + 5 KPI berwarna.
+
 
 1. **Summary** (`/pod`)
    - Filter global: periode tanggal kirim (default 90 hari terakhir), Customer, PCP/Perwakilan, Cabang, Tier kota, Scope.
