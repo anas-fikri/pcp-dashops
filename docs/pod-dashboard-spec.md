@@ -102,6 +102,16 @@ Catatan: aplikasi Laravel saat ini masih memakai SLA per scope (5/10 hari kalend
 3. **Export Excel** (`/pod/export`, dari summary atau detail) berisi 5 sheet: Summary, Aging (belum balik dan lead time), Per Cabang, Per Customer, Detail.
    Sheet Detail mengikuti drill-down aktif. Tanpa drill-down, isinya semua POD Balik. Maksimal `POD_EXPORT_MAX_ROWS` baris.
 
+### Keputusan UI/UX prototype v3 (25 Nov 2026)
+
+- Bahasa default **English**, bisa pindah ke Bahasa Indonesia.
+- Tidak ada kata/logo perusahaan di UI.
+- Filter: Tanggal kirim (**preset** *atau* **rentang tanggal**), Customer, Scope, **Internal / Perwakilan**, **Branch level** (Branch, Sub Branch, Site) › **Cabang tujuan** (bertingkat).
+- Semua angka cabang = **cabang tujuan** (yang mengantar & wajib mengembalikan POD). Cabang asal tampil di daftar AWB.
+- Angka hari selalu bulat (tanpa desimal); persentase 1 desimal.
+- Banner kondisi hanya menyebut alasan pemicu; latarnya mengikuti warna alasan utama (ungu bila penyebabnya POD kritis/ungu).
+- Tabel aging: **angka** diwarnai sesuai warna umur dominan di sel itu (bukan latar).
+
 ## 6. Kontrak data (integrasi produksi)
 
 Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB). Lihat
@@ -120,7 +130,8 @@ Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB)
 - `pod_returned_at` wajib terisi bila status ∈ {STPOD, PODP, ARSIP}.
 - `dest_branch_*` = cabang/perwakilan yang bertanggung jawab mengembalikan POD.
 - `service_scope`: **[ASUMSI]** INTRACITY bila kota asal = kota tujuan dan dilayani cabang yang sama, selain itu DOMESTIK.
-- `dest_city_tier`: dari master kota (1–3).
+- `dest_branch_type`: INTERNAL | AGENT (perwakilan); `dest_branch_level`: BRANCH | SUB | SITE (menggantikan tier kota).
+- `origin_branch_code`: cabang asal, untuk ditampilkan di detail.
 
 Driver yang didukung oleh ekspresi umur: SQLite (dev/test), SQL Server, MySQL/MariaDB, PostgreSQL
 (`app/Services/Pod/AgingSql.php`). Index yang direkomendasikan sudah ada di migrasi.
