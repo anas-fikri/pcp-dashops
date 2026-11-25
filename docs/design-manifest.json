@@ -10,7 +10,7 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (#s-now..#s-rank incl. #s-scope, v12)",
+      "source": "prototype/pod-dashboard.html (.secnav + #s-now, #s-tree (.ptree), #s-aging, #s-rank, #s-scope, #s-trend, #s-mid; v14)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/aging",
@@ -36,9 +36,9 @@
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v12: Intracity vs Domestic, grafik kinerja & aging, back to top, simpan filter",
+        "reason": "v14: pohon status sesuai sketsa sebagai bagian ke-2, urutan bagian mengikuti sketsa, navigasi bagian",
         "conformance": "pass",
-        "e2e": "101/101"
+        "e2e": "106/106"
       }
     },
     "SCR-DSH-002": {

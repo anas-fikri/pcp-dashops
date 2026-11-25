@@ -20,6 +20,13 @@ komposisi memakai komponen di `docs/design.md`. Tidak ada design tool yang terhu
 - **Back to top** mengambang setelah gulir 600px; tombol simpan → **"Save my filters / Simpan filter saya"**.
 - Export per kelompok: 8 (tambah `scope`). E2E 101/101.
 
+**v14 — kembali ke sketsa sebagai tulang punggung (25 Nov 2026).**
+- **Prinsip:** urutan halaman mengikuti sketsa + mantra Shneiderman (ringkasan → pohon → zoom/filter → detail on demand):
+  1 Kondisi · 2 **Pohon Status** · 3 Aging per 5 HK · 4 Tindak lanjut · 5 Intracity vs Domestik · 6 Tren · 7 Warna & kinerja.
+- **Pohon Status (`#s-tree`, default "Tree")**: pohon kiri→kanan persis struktur sketsa (Semua → Tidak Balik / POD Balik → Belum / Sudah Balik → Not Yet Delivered / Delivered → Masih di pelanggan, PODC, Redoc, Upload; STPOD, PODP, Arsip). Kartu = jumlah + Rp + % dari induk + batang porsi; cabang "Belum Balik" juga menampilkan batang warna umur. Lensa **All | Intracity | Domestic** menggantikan garis silang Intracity/Domestik di sketsa (terkunci bila filter Scope aktif). Legenda status + warna umur (rentang hari SLA 6, +1 untuk SLA 7). Toggle Tree | Table.
+- **Navigasi bagian** di header (7 tautan, menandai bagian aktif) sebagai pengganti sidebar.
+- HP: pohon menjadi daftar bertingkat dengan garis kiri. E2E 106/106.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

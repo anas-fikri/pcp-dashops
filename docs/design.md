@@ -125,3 +125,11 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 | Baris kinerja | `.pv-row` | Bullet on-time (target 80%) + Returned · Avg HK · Lewat SLA, semuanya bisa diklik |
 | Grafik aging | `.ag-chart > .ag-col` | Batang kiri = belum balik dipecah warna umur; batang kanan = sudah balik `--data-ret`; label jumlah + Rp di atas batang |
 | Back to top | `.totop` | Muncul setelah gulir 600px; disembunyikan saat presentasi; hormati reduced motion |
+
+## v14 — pohon status & navigasi
+| Komponen | Kelas | Aturan |
+|---|---|---|
+| Pohon status | `.ptree > li > .pnode` (+ `ul` bersarang) | Struktur = sketsa; garis penghubung `--band-1` 2px; aksen kiri kartu = keluarga warna data (`--data-req/none/pending/ret`); batang warna umur hanya di cabang Belum Balik; ≤860px menjadi daftar bertingkat |
+| Lensa scope | `#tl-seg [data-tl]` | All / Intracity / Domestic; angka & modal ikut lensa; nonaktif bila filter Scope global aktif |
+| Legenda | `.legend-strip` | Status (4 warna data) + warna umur dengan rentang hari SLA 6 |
+| Navigasi bagian | `.secnav a[data-nav]` | Di dalam header; aktif = pil putih; tidak tampil saat presentasi |

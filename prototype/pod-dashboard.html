@@ -519,6 +519,55 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v14: pohon status sesuai sketsa, navigasi bagian ---------- */
+.secnav { flex: 1 1 100%; min-width: 0; max-width: 100%; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin: 2px -6px -4px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, .14); }
+.secnav::-webkit-scrollbar { display: none; }
+.secnav a { flex: none; color: rgba(255, 255, 255, .78); text-decoration: none; font-size: 12.5px; font-weight: 600; padding: 5px 11px; border-radius: var(--r-pill); }
+.secnav a:hover { color: #fff; background: rgba(255, 255, 255, .12); }
+.secnav a.on { color: var(--hero-b); background: #fff; }
+body.present .secnav { display: none; }
+.top { min-width: 0; }
+.slide { scroll-margin-top: 130px; }
+.ptree-wrap { min-width: 1060px; padding: 4px 2px 8px; }
+.ptree, .ptree ul { list-style: none; margin: 0; padding: 0; }
+.ptree li { display: flex; align-items: center; position: relative; }
+.ptree ul { display: flex; flex-direction: column; padding-left: 34px; position: relative; }
+.ptree ul::before { content: ""; position: absolute; left: 0; top: 50%; width: 17px; border-top: 2px solid var(--band-1); }
+.ptree ul > li { padding: 3px 0 3px 17px; }
+.ptree ul > li::before { content: ""; position: absolute; left: 0; top: 50%; width: 17px; border-top: 2px solid var(--band-1); }
+.ptree ul > li::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; border-left: 2px solid var(--band-1); }
+.ptree ul > li:first-child::after { top: 50%; } .ptree ul > li:last-child::after { bottom: 50%; } .ptree ul > li:only-child::after { display: none; }
+.pnode { width: 188px; flex: none; display: grid; gap: 3px; text-align: left; cursor: pointer; padding: 7px 11px 8px 13px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card); box-shadow: inset 4px 0 0 var(--bc); color: var(--ink); font: inherit; transition: border-color var(--dur-fast), transform var(--dur-fast); }
+.pnode:hover { border-color: var(--bc); transform: translateY(-1px); }
+.pnode.zero { opacity: .55; }
+.pn-h { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.pn-l { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.pn-p { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pn-n { display: flex; align-items: baseline; gap: 8px; }
+.pn-n b { font-size: 19px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.pn-n small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pn-bar { height: 3px; border-radius: 2px; background: var(--soft); overflow: hidden; }
+.pn-bar > span { display: block; height: 100%; background: var(--bc); }
+.pn-sc { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--muted); }
+.pn-sc b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.pnode .sevbar { height: 6px; margin-top: 2px; }
+.ptree > li > .pnode { width: 170px; }
+.legend-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; }
+.legend-strip i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.legend-strip small { color: var(--muted); margin-left: 2px; }
+.legend-strip .lg-h { font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: 10.5px; }
+.legend-strip .lg-sep { width: 1px; height: 16px; background: var(--line); }
+.seg button:disabled { opacity: .35; cursor: not-allowed; }
+@media (max-width: 860px) {
+  .ptree-wrap { min-width: 0; }
+  .ptree li { display: block; }
+  .ptree ul { padding-left: 16px; margin-left: 10px; border-left: 2px solid var(--band-1); }
+  .ptree ul::before, .ptree ul > li::before, .ptree ul > li::after { display: none; }
+  .ptree ul > li { padding: 6px 0 0 0; }
+  .pnode, .ptree > li > .pnode { width: 100%; }
+}
+
 /* ---------- v13: filter rapi ---------- */
 .filter-card { padding: 16px 18px; }
 .filters { display: grid; gap: 14px; }
@@ -620,6 +669,9 @@ body.present .totop { display: none; }
     <span class="psum" id="psum"></span>
     <button class="btn" type="button" id="present" data-tt="present.tip"><span aria-hidden="true">⛶</span> <span data-t="present"></span></button>
     <button class="btn primary" type="button" id="export-all" data-t="export" data-tt="export.tip"></button>
+    <nav class="secnav" aria-label="Sections">
+      <a href="#s-now" data-nav="s-now" data-t="nav.now"></a><a href="#s-tree" data-nav="s-tree" data-t="nav.tree"></a><a href="#s-aging" data-nav="s-aging" data-t="nav.aging"></a><a href="#s-rank" data-nav="s-rank" data-t="nav.rank"></a><a href="#s-scope" data-nav="s-scope" data-t="nav.scope"></a><a href="#s-trend" data-nav="s-trend" data-t="nav.trend"></a><a href="#s-mid" data-nav="s-mid" data-t="nav.perf"></a>
+    </nav>
   </header>
 
   <section class="card filter-card" aria-label="Filters">
@@ -669,39 +721,14 @@ body.present .totop { display: none; }
     <div class="kpis span-12" id="kpis"></div>
   </section>
 
-  <section class="card slide" id="s-trend">
-    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="tools-r"><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span><button type="button" class="xbtn" data-xport="trend" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-    <p class="sub" data-t="tr.sub"></p>
-    <div class="trend-box" id="trend-box"></div>
-  </section>
-
   <section class="card slide" id="s-tree">
     <div class="card-head"><h2><span data-t="tree.title"></span><i class="info" tabindex="0" data-tt="tree.tip">i</i></h2>
-      <span class="tools-r"><span class="seg" role="group"><button type="button" data-fv="diagram" id="fv-diagram" data-t="fv.d"></button><button type="button" data-fv="table" id="fv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="flow" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+      <span class="tools-r"><span class="seg" role="group" aria-label="Scope" id="tl-seg"><button type="button" data-tl="" id="tl-all" data-t="all"></button><button type="button" data-tl="INTRACITY" id="tl-INTRACITY" data-t="sc.INTRACITY"></button><button type="button" data-tl="DOMESTIK" id="tl-DOMESTIK" data-t="sc.DOMESTIK"></button></span><span class="seg" role="group"><button type="button" data-fv="diagram" id="fv-diagram" data-t="fv.d"></button><button type="button" data-fv="table" id="fv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="flow" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
     <p class="sub" id="tree-sub"></p>
-    <div class="tw" id="flow-wrap"><div class="flow" id="flow"></div></div>
+    <div class="tw" id="flow-wrap"><div class="ptree-wrap" id="flow"></div></div>
+    <div class="legend-strip" id="tree-legend"></div>
     <div class="tw" id="tree-wrap"><table id="tree"></table></div>
   </section>
-
-  <section class="card slide" id="s-scope">
-    <div class="card-head"><h2><span data-t="scp.title"></span><i class="info" tabindex="0" data-tt="scp.tip">i</i></h2><button type="button" class="xbtn" data-xport="scope" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
-    <p class="sub" data-t="scp.sub"></p>
-    <div id="scp"></div>
-  </section>
-
-  <div class="bento slide" id="s-mid">
-    <section class="card span-5">
-      <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
-      <p class="sub" id="sev-sub"></p>
-      <div id="sev-panel"></div>
-    </section>
-    <section class="card span-7">
-      <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><span class="tools-r"><span class="seg" role="group"><button type="button" data-pv="chart" id="pv-chart" data-t="fv.c"></button><button type="button" data-pv="table" id="pv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
-      <p class="sub" data-t="perf.sub"></p>
-      <div class="pviz" id="perf-viz"></div>
-      <div class="tw" id="perf-wrap"><table id="perf"></table></div>
-    </section>
-  </div>
 
   <section class="card slide" id="s-aging">
     <div class="card-head">
@@ -734,6 +761,32 @@ body.present .totop { display: none; }
     <div class="tw"><table class="rank" id="rank"></table></div>
     <div style="margin-top:10px"><button class="btn" type="button" id="rank-more"></button></div>
   </section>
+
+  <section class="card slide" id="s-trend">
+    <div class="card-head"><h2><span data-t="tr.title"></span><i class="info" tabindex="0" data-tt="tr.tip">i</i></h2><span class="tools-r"><span class="muted" style="font-size:12.5px" data-t="tr.hint"></span><button type="button" class="xbtn" data-xport="trend" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+    <p class="sub" data-t="tr.sub"></p>
+    <div class="trend-box" id="trend-box"></div>
+  </section>
+
+  <section class="card slide" id="s-scope">
+    <div class="card-head"><h2><span data-t="scp.title"></span><i class="info" tabindex="0" data-tt="scp.tip">i</i></h2><button type="button" class="xbtn" data-xport="scope" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
+    <p class="sub" data-t="scp.sub"></p>
+    <div id="scp"></div>
+  </section>
+
+  <div class="bento slide" id="s-mid">
+    <section class="card span-5">
+      <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2><button type="button" class="xbtn" data-xport="sev" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></div>
+      <p class="sub" id="sev-sub"></p>
+      <div id="sev-panel"></div>
+    </section>
+    <section class="card span-7">
+      <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2><span class="tools-r"><span class="seg" role="group"><button type="button" data-pv="chart" id="pv-chart" data-t="fv.c"></button><button type="button" data-pv="table" id="pv-table" data-t="fv.t"></button></span><button type="button" class="xbtn" data-xport="perf" data-tt="xp.tip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-t="xp"></span></button></span></div>
+      <p class="sub" data-t="perf.sub"></p>
+      <div class="pviz" id="perf-viz"></div>
+      <div class="tw" id="perf-wrap"><table id="perf"></table></div>
+    </section>
+  </div>
 
   <details class="card">
     <summary data-t="rules.title"></summary>
@@ -814,7 +867,7 @@ const T = {
   'focus.br': ['Most outstanding at destination branch {x} ({n} · {p})', 'Tunggakan terbanyak di cabang tujuan {x} ({n} · {p})'],
   'focus.cu': ['customer {x} ({n})', 'customer {x} ({n})'], 'focus.st': ['status {x} ({n})', 'status {x} ({n})'],
   'focus.none': ['No outstanding POD for these filters.', 'Tidak ada tunggakan untuk filter ini.'],
-  'tree.title': ['POD Status Flow', 'Alur Status POD'],
+  'tree.title': ['POD Status Tree', 'Pohon Status POD'],
   'tree.tip': ['Follows the work process: shipment → must return → not yet / already back → latest status. Each row = AWB count at that step. Click a row for its AWB list.', 'Mengikuti proses kerja: kiriman → wajib balik → belum/sudah kembali → status terakhir. Setiap baris = jumlah AWB di tahap itu. Klik baris untuk daftar AWB.'],
   'tree.hint': ['Click a row or number to see its AWB', 'Klik baris atau angka untuk melihat AWB-nya'],
   'tree.sub': ['% of parent = share of the row one level above. Example: "Not returned 15.1%" means 15.1% of POD to return.', '% induk = porsi dari baris satu level di atasnya. Contoh: "Belum Balik 15,1%" berarti 15,1% dari POD Balik.'],
@@ -947,6 +1000,9 @@ const T = {
   'bl.ot': ['On-time return', 'Tepat waktu'],
   'bl.ret': ['Returned', 'Sudah balik'],
   'top': ['Back to top', 'Kembali ke atas'],
+  'nav.now': ['Now', 'Kondisi'], 'nav.tree': ['Status tree', 'Pohon status'], 'nav.aging': ['Aging', 'Aging'], 'nav.rank': ['Follow-up', 'Tindak lanjut'],
+  'nav.scope': ['Intracity vs Domestic', 'Intracity vs Domestik'], 'nav.trend': ['Trend', 'Tren'], 'nav.perf': ['Colour & performance', 'Warna & kinerja'],
+  'lg.fam': ['Status', 'Status'], 'lg.age': ['Age colour', 'Warna umur'], 'lg.sla': ['(days for SLA 6 WD; SLA 7 WD +1 day)', '(hari untuk SLA 6 HK; SLA 7 HK +1 hari)'],
   'fg.ship': ['Shipments', 'Kiriman'],
   'fg.dest': ['Destination', 'Tujuan'],
   'fg.dest.h': ['Narrow step by step: each list only shows what fits the step before it.', 'Persempit bertahap: setiap daftar hanya berisi yang cocok dengan langkah sebelumnya.'],
@@ -979,9 +1035,9 @@ const T = {
   'ring.crit': ['Critical', 'Kritis'],
   'ring.ot': ['On time', 'Tepat waktu'],
   'ring.ret': ['Returned', 'Sudah balik'],
-  'flow.sub': ['Each row splits one step into its parts; block width = share of that step (same as % of parent). Click a block for its AWB.', 'Setiap baris memecah satu tahap menjadi bagiannya; lebar blok = porsi dari tahap itu (sama dengan % induk). Klik blok untuk AWB-nya.'],
+  'flow.sub': ['Same structure as the working sketch: every shipment splits into POD to return / no return, then not yet / already returned, then the latest status. % = share of the box it branches from. Switch Intracity / Domestic to see one route. Lists open oldest first.', 'Struktur sama dengan sketsa kerja: setiap kiriman terbagi POD balik / tidak balik, lalu belum / sudah balik, lalu status terakhir. % = porsi dari kotak induknya. Pilih Intracity / Domestik untuk melihat satu rute. Daftar dibuka dengan umur terlama di atas.'],
   'fv.t': ['Table', 'Tabel'],
-  'fv.d': ['Diagram', 'Diagram'],
+  'fv.d': ['Tree', 'Pohon'],
   'nav.rank': ['Follow-up', 'Tindak lanjut'],
   'nav.aging': ['Aging', 'Aging'],
   'nav.mid': ['Colour & performance', 'Warna & kinerja'],
@@ -1214,7 +1270,7 @@ function computeAges() {
 }
 
 /* ================= state ================= */
-const S = { fv: 'diagram', pv: 'chart', av: 'chart', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
+const S = { tl: '', fv: 'diagram', pv: 'chart', av: 'chart', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
 try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank', 'basis'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
 const VIEW_KEYS = ['pmode', 'period', 'from', 'to', 'cust', 'scope', 'reg', 'btype', 'lv', 'branch', 'basis'];
 function loadView() { try { const v = JSON.parse(localStorage.getItem('pod-my-view') || 'null'); if (v) { VIEW_KEYS.forEach(k => { if (k in v) S[k] = v[k]; }); return true; } } catch (e) { /* abaikan */ } return false; }
@@ -1592,7 +1648,7 @@ function renderTrend() {
 if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderTrend());
 
 /* ================= presentasi ================= */
-const SLIDES = [['s-now', 'now.title'], ['s-trend', 'tr.title'], ['s-tree', 'tree.title'], ['s-scope', 'scp.title'], ['s-mid', 'sev.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title']];
+const SLIDES = [['s-now', 'now.title'], ['s-tree', 'tree.title'], ['s-aging', 'aging.title'], ['s-rank', 'rank.title'], ['s-scope', 'scp.title'], ['s-trend', 'tr.title'], ['s-mid', 'sev.title']];
 const P = { on: false, i: 0, fs: false };
 function showSlide() {
   SLIDES.forEach(([id], i) => $('#' + id).classList.toggle('active', i === P.i));
@@ -1638,23 +1694,28 @@ function renderTree() {
 
 function renderFlow(cnt) {
   $('#fv-diagram').setAttribute('aria-pressed', S.fv === 'diagram'); $('#fv-table').setAttribute('aria-pressed', S.fv === 'table');
-  $('#flow-wrap').hidden = S.fv !== 'diagram'; $('#tree-wrap').hidden = S.fv !== 'table';
+  $('#flow-wrap').hidden = S.fv !== 'diagram'; $('#tree-wrap').hidden = S.fv !== 'table'; $('#tl-seg').hidden = S.fv !== 'diagram';
   $('#tree-sub').textContent = S.fv === 'diagram' ? t('flow.sub') : t('tree.sub');
+  // lensa scope (sketsa: Balik → Intracity / Domestik → Belum / Sudah). Filter Scope global mengunci lensa.
+  const lens = S.scope || S.tl;
+  ['', 'INTRACITY', 'DOMESTIK'].forEach(k => { const b = $('#tl-' + (k || 'all')); b.setAttribute('aria-pressed', lens === k); b.disabled = !!S.scope && k !== S.scope; });
+  const pool = id => (lens ? cnt[id].filter(r => r.scope === lens) : cnt[id]);
   const fam = id => { const path = pathOf(id); return path.includes('sudah') ? 'var(--data-ret)' : path.includes('belum') ? 'var(--data-pending)' : id === 'tidak' ? 'var(--data-none)' : 'var(--data-req)'; };
-  // setiap baris = satu tahap dipecah menjadi anak-anaknya (lebar = % dari tahap itu)
-  $('#flow').innerHTML = ['all', 'balik', 'sudah', 'belum', 'dlv'].map(pid => {
-    const par = cnt[pid], kids = NODES.filter(n => n.p === pid && cnt[n.id].length);
-    if (!par.length || !kids.length) return '';
-    const blocks = kids.map(n => {
-      const rr = cnt[n.id], w = pct(rr.length, par.length);
-      const sev = pathOf(n.id).includes('belum') ? sevBar(sevCounts(rr), { node: n.id }, false, sevVals(rr)) : '';
-      const tip = `${L(n.label)} — ${L(n.short)}: ${fmt(rr.length)} AWB · ${rp(sumV(rr), true)} (${fp(w)} ${t('flow.of', { x: nl(pid) })})`;
-      return `<button type="button" class="blk ${w < 14 ? 'small' : ''}" style="flex-grow:${rr.length};--bc:${fam(n.id)}" data-open="${spec({ node: n.id })}" data-tip="${esc(tip)}">
-        <span class="nm">${esc(L(n.label))}</span><span class="ct">${fmt(rr.length)}<small>${fp(w)}</small></span><span class="rv">${rp(sumV(rr))}</span>${sev}</button>`;
-    }).join('');
-    return `<div class="flow-row"><button type="button" class="flow-par" data-open="${spec({ node: pid })}" data-tip="${esc(L(NODES.find(n => n.id === pid).def))}">
-      <span class="k">${esc(t('flow.split'))}</span><b>${esc(nl(pid))}</b><small>${fmt(par.length)} · ${rp(sumV(par))}</small></button><div class="flow-bar">${blocks}</div></div>`;
-  }).join('');
+  const node = n => {
+    const rr = pool(n.id), par = n.p ? pool(n.p) : null, w = par ? pct(rr.length, par.length) : 100;
+    const nI = rr.filter(r => r.scope === 'INTRACITY').length;
+    const sev = pathOf(n.id).includes('belum') && rr.length ? sevBar(sevCounts(rr), { node: n.id, ...(lens ? { scope: lens } : {}) }, false, sevVals(rr)) : '';
+    const split = '';
+    const tip = `${L(n.label)} — ${L(n.short)}: ${fmt(rr.length)} AWB · ${rp(sumV(rr), true)}${par ? ` (${fp(w)} ${t('flow.of', { x: nl(n.p) })})` : ''}${lens ? ' · ' + t('sc.' + lens) : ` · ${t('sc.INTRACITY')} ${fmt(nI)} · ${t('sc.DOMESTIK')} ${fmt(rr.length - nI)}`}`;
+    return `<button type="button" class="pnode ${rr.length ? '' : 'zero'}" style="--bc:${fam(n.id)}" data-node="${n.id}" data-open="${spec({ node: n.id, ...(lens ? { scope: lens } : {}) })}" data-tip="${esc(tip)}">
+      <span class="pn-h"><span class="pn-l">${esc(L(n.label))}</span>${par ? `<span class="pn-p">${fp(w)}</span>` : ''}</span>
+      <span class="pn-n"><b class="ct">${fmt(rr.length)}</b><small>${rp(sumV(rr))}</small></span>
+      ${par ? `<span class="pn-bar"><span style="width:${w || 0}%"></span></span>` : ''}${split}${sev}</button>`;
+  };
+  const sub = pid => { const kids = NODES.filter(n => n.p === pid); return kids.length ? `<ul>${kids.map(k => `<li>${node(k)}${sub(k.id)}</li>`).join('')}</ul>` : ''; };
+  $('#flow').innerHTML = `<ul class="ptree"><li>${node(NODE.all)}${sub('all')}</li></ul>`;
+  $('#tree-legend').innerHTML = `<span class="lg-h">${t('lg.fam')}</span>${[['balik', 'var(--data-req)'], ['tidak', 'var(--data-none)'], ['belum', 'var(--data-pending)'], ['sudah', 'var(--data-ret)']].map(([id, c]) => `<span><i style="background:${c}"></i>${esc(nl(id))}</span>`).join('')}
+    <span class="lg-sep"></span><span class="lg-h">${t('lg.age')}</span>${SEV.map(x => `<span data-tip="${esc(`${L(x.label)}: ${L(x.short)}. ${sevRanges(x)}`)}"><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span class="muted">${t('lg.sla')}</span>`;
 }
 
 function renderSev() {
@@ -2202,6 +2263,7 @@ document.addEventListener('click', e => {
   if (tg.closest('#view-clear')) { try { localStorage.removeItem('pod-my-view'); } catch (e) { /* abaikan */ } render(); return toast(t('t.viewCleared')); }
   const xp = tg.closest('[data-xport]'); if (xp) return exportGroup(xp.dataset.xport);
   const fv = tg.closest('[data-fv]'); if (fv) { S.fv = fv.dataset.fv; return renderTree(); }
+  const tl = tg.closest('[data-tl]'); if (tl && !tl.disabled) { S.tl = tl.dataset.tl; return renderTree(); }
   const pv = tg.closest('[data-pv]'); if (pv) { S.pv = pv.dataset.pv; return renderPerf(); }
   const av = tg.closest('[data-av]'); if (av) { S.av = av.dataset.av; return renderAging(); }
   if (tg.closest('#totop')) { window.scrollTo({ top: 0, behavior: REDUCED.matches ? 'auto' : 'smooth' }); return; }
