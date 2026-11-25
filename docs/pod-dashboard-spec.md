@@ -112,6 +112,29 @@ Catatan: aplikasi Laravel saat ini masih memakai SLA per scope (5/10 hari kalend
 - Banner kondisi hanya menyebut alasan pemicu; latarnya mengikuti warna alasan utama (ungu bila penyebabnya POD kritis/ungu).
 - Tabel aging: **angka** diwarnai sesuai warna umur dominan di sel itu (bukan latar).
 
+### Master cabang dari coverage area (v5, 25 Nov 2026)
+
+Sumber: `coverage_area_20260123.xlsx` (90.202 area). File mentah **tidak** disimpan di repo; ringkasan per cabang
+dibangun dengan `python3 -I prototype/tools/build_branch_master.py <file.xlsx>` → `prototype/data/branch-master.json`.
+
+| Kolom sumber | Dipakai sebagai |
+|---|---|
+| 3 huruf awal `CityCode` | Kode cabang tujuan (461 cabang domestik) |
+| `Tier`: Tier 1 / Tier 2 / Remote Area | Branch level: **Branch / Sub Branch / Site** (892 / 88.867 / 210 area) |
+| `Office_Type` | Cabang, Satelit → **Internal**; Agen, Perwakilan → **Perwakilan** [ASUMSI untuk Satelit & Agen] |
+| `RegionName` | Region rinci dari baris kecamatan (SUMATERA, KALIMANTAN, JATIMBARA, JABATENG, DKI JAKARTA, SUMAPA, …) |
+
+Temuan kualitas data:
+- **Tier melekat pada area, bukan cabang.** 1 cabang bisa punya area Tier 1 dan Tier 2 (mis. Jakarta: 43 area T1 Cabang, 270 area T2 Agen). Filter "Branch level" berlaku pada area tujuan kiriman.
+- **Dua tingkat region bersarang**: baris kecamatan memakai region rinci, baris kelurahan memakai region induk (KALSTRA = Sumatera + Kalimantan; JABASRA = Jateng + Jatimbara + sebagian DKI). Perlu konfirmasi mana yang resmi untuk pelaporan.
+- Ejaan `Office_Type` tidak seragam (Cabang/CABANG, Perwakilan/perwakilan) → dinormalisasi.
+- Ada kolom tanpa judul (kolom ke-12) berisi angka pada 4 baris; diabaikan.
+- 233 baris INTERNATIONAL dikecualikan.
+
+### Mode presentasi
+Tombol **Present** membuka layar penuh, menampilkan satu bagian per layar (5 slide), navigasi ← → / bar bawah, Esc keluar.
+Angka tetap bisa diklik untuk membuka detail saat presentasi.
+
 ## 6. Kontrak data (integrasi produksi)
 
 Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB). Lihat
@@ -130,7 +153,7 @@ Dashboard hanya membaca satu tabel kanonik, `pod_shipments` (satu baris per AWB)
 - `pod_returned_at` wajib terisi bila status ∈ {STPOD, PODP, ARSIP}.
 - `dest_branch_*` = cabang/perwakilan yang bertanggung jawab mengembalikan POD.
 - `service_scope`: **[ASUMSI]** INTRACITY bila kota asal = kota tujuan dan dilayani cabang yang sama, selain itu DOMESTIK.
-- `dest_branch_type`: INTERNAL | AGENT (perwakilan); `dest_branch_level`: BRANCH | SUB | SITE (menggantikan tier kota).
+- `dest_area_code` (CityCode area tujuan) → join ke master coverage untuk `dest_branch_code` (3 huruf awal), `dest_level` (Tier), `dest_office_type` (Office_Type) dan `dest_region`.
 - `origin_branch_code`: cabang asal, untuk ditampilkan di detail.
 
 Driver yang didukung oleh ekspresi umur: SQLite (dev/test), SQL Server, MySQL/MariaDB, PostgreSQL
