@@ -10,7 +10,7 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (.secnav + #s-now (5 .kpi), #s-tree (.ptree + #tree-scope), #s-aging, #s-rank (.rank2); v16 ringkasan saja)",
+      "source": "prototype/pod-dashboard.html (.fdet filter, #s-now, #s-tree (papan status .sb-* + .ss-tab), #s-aging, #s-rank; v19)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/summary",
@@ -27,15 +27,17 @@
         "loading": false,
         "api_error": false,
         "mobile_390": true,
-        "first_visit": true
+        "first_visit": true,
+        "filter_collapsed_mobile": true,
+        "axe_wcag21aa_clean": true
       },
       "conformance": "pass",
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v18: pembersihan kode mati, tanpa perubahan visual",
+        "reason": "v19: review <1 menit; pohon diganti papan status (segmented bar + meter list); filter ringkas; a11y axe 0 pelanggaran",
         "conformance": "pass",
-        "e2e": "63/63"
+        "e2e": "69/69"
       }
     },
     "SCR-DSH-002": {

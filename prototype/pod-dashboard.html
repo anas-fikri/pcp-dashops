@@ -11,7 +11,7 @@
   --accent: #1e3a8a; --accent-strong: #172554; --on-accent: #ffffff; --accent-soft: #e0eaff;
   --success: #15803d; --success-soft: #dcfce7;
   --sev-hitam: #475569; --sev-oranye: #f59e0b; --sev-merah: #dc2626; --sev-ungu: #7c3aed;
-  --sev-oranye-ink: #b45309; --on-sev: #ffffff; --on-oranye: #1f2937;
+  --sev-oranye-ink: #b45309; --sev-merah-ink: #b91c1c; --on-sev: #ffffff; --on-oranye: #1f2937;
   --soft-hitam: #e2e8f0; --soft-oranye: #fef3c7; --soft-merah: #fee2e2; --soft-ungu: #ede9fe;
   --tip-bg: #0f172a; --tip-ink: #ffffff;
   --shadow: none;
@@ -36,7 +36,7 @@
   --accent: #93c5fd; --accent-strong: #bfdbfe; --on-accent: #0f172a; --accent-soft: #1e2d4a;
   --success: #4ade80; --success-soft: #14351f;
   --sev-hitam: #cbd5e1; --sev-oranye: #fbbf24; --sev-merah: #f87171; --sev-ungu: #a78bfa;
-  --sev-oranye-ink: #fbbf24; --on-sev: #0f172a; --on-oranye: #0f172a;
+  --sev-oranye-ink: #fbbf24; --sev-merah-ink: #f87171; --on-sev: #0f172a; --on-oranye: #0f172a;
   --soft-hitam: #1e293b; --soft-oranye: #3a2a0a; --soft-merah: #3f1d1d; --soft-ungu: #2e1f4d;
   --tip-bg: #f1f0ee; --tip-ink: #17181b;
   --shadow: none;
@@ -52,7 +52,7 @@
   --accent: #93c5fd; --accent-strong: #bfdbfe; --on-accent: #0f172a; --accent-soft: #1e2d4a;
   --success: #4ade80; --success-soft: #14351f;
   --sev-hitam: #cbd5e1; --sev-oranye: #fbbf24; --sev-merah: #f87171; --sev-ungu: #a78bfa;
-  --sev-oranye-ink: #fbbf24; --on-sev: #0f172a; --on-oranye: #0f172a;
+  --sev-oranye-ink: #fbbf24; --sev-merah-ink: #f87171; --on-sev: #0f172a; --on-oranye: #0f172a;
   --soft-hitam: #1e293b; --soft-oranye: #3a2a0a; --soft-merah: #3f1d1d; --soft-ungu: #2e1f4d;
   --tip-bg: #f1f0ee; --tip-ink: #17181b;
   --shadow: none;
@@ -109,7 +109,7 @@ button { font: inherit; color: inherit; }
 
 /* mention berwarna: teks yang menyebut warna ikut berlatar warna itu */
 .mention { display: inline-flex; align-items: center; gap: 6px; padding: 1px 9px; border-radius: var(--r-pill); font-weight: 700; }
-.m-ungu { background: var(--soft-ungu); color: var(--sev-ungu); } .m-merah { background: var(--soft-merah); color: var(--sev-merah); }
+.m-ungu { background: var(--soft-ungu); color: var(--sev-ungu); } .m-merah { background: var(--soft-merah); color: var(--sev-merah-ink); }
 .m-oranye { background: var(--soft-oranye); color: var(--sev-oranye-ink); } .m-hitam { background: var(--soft-hitam); color: var(--ink); }
 .m-ok { background: var(--success-soft); color: var(--success); }
 
@@ -160,7 +160,7 @@ button { font: inherit; color: inherit; }
 .status .reasons .go { text-decoration: none; display: inline-flex; }
 .status .mention { text-align: left; }
 .status .reasons .go:hover .mention { box-shadow: 0 0 0 1px currentColor; }
-.lvl-crit { --lvl: var(--sev-merah); --lvl-ink: var(--sev-merah); --lvl-on: var(--on-sev); }
+.lvl-crit { --lvl: var(--sev-merah); --lvl-ink: var(--sev-merah-ink); --lvl-on: var(--on-sev); }
 .lvl-warn { --lvl: var(--sev-oranye); --lvl-ink: var(--sev-oranye-ink); --lvl-on: var(--on-oranye); }
 .lvl-good { --lvl: var(--success); --lvl-ink: var(--success); --lvl-on: var(--card); }
 .focus { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13.5px; }
@@ -172,7 +172,6 @@ button { font: inherit; color: inherit; }
 .kpi .val { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .kpi .val b { font-size: 34px; font-weight: 800; letter-spacing: -.035em; font-variant-numeric: tabular-nums; line-height: 1.05; }
 .kpi .val span { font-size: 13px; font-weight: 700; padding: 1px 8px; border-radius: var(--r-pill); background: var(--soft); font-variant-numeric: tabular-nums; }
-.kpi .say { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 .kpi .kdot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; margin-right: 8px; flex: none; }
 .kpi:focus-visible, .fcard:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -183,7 +182,7 @@ button { font: inherit; color: inherit; }
 .sevbar > span:last-child { border-right: 0; }
 .sevbar > span:hover { filter: brightness(1.15); }
 .bg-hitam { background: var(--sev-hitam); } .bg-oranye { background: var(--sev-oranye); } .bg-merah { background: var(--sev-merah); } .bg-ungu { background: var(--sev-ungu); }
-.t-ungu { color: var(--sev-ungu); } .t-merah { color: var(--sev-merah); } .t-oranye { color: var(--sev-oranye-ink); } .t-hitam { color: var(--ink); } .t-ok { color: var(--success); }
+.t-ungu { color: var(--sev-ungu); } .t-merah { color: var(--sev-merah-ink); } .t-oranye { color: var(--sev-oranye-ink); } .t-hitam { color: var(--ink); } .t-ok { color: var(--success); }
 .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12); }
 .age { display: inline-block; min-width: 34px; text-align: center; border-radius: 6px; padding: 1px 7px; font-weight: 700; font-size: 12.5px; color: var(--on-sev); font-variant-numeric: tabular-nums; }
 .age.bg-oranye { color: var(--on-oranye); }
@@ -272,7 +271,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
   .kpi .val b { font-size: 24px; }
   .mstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .status .reasons { display: grid; justify-items: start; gap: 6px; } .status .reasons > .muted { display: none; }
-  .filters .field { flex: 1 1 140px; } .cascade { width: 100%; } .filters select { max-width: none; }
+  .filters .field { flex: 1 1 140px; } .filters select { max-width: none; }
   .filters select, .rangebtn { width: 100%; min-width: 0; }
   .dp-grid { grid-template-columns: repeat(7, minmax(30px, 1fr)); }
   .card { padding: 16px; }
@@ -284,8 +283,6 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
 .fcard:hover { border-color: var(--accent); }
 .fcard .k { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
 .fcard .meta { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
-/* ---------- v5: sticky filter bar (desktop) ---------- */
-.cascade { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding: 6px 10px 8px; border-radius: 12px; background: var(--soft); }
 .filters select { max-width: 230px; }
 @media (min-width: 900px) {
   .top { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 8px); z-index: 30; }
@@ -316,11 +313,6 @@ body.present th, body.present td { padding: 10px 12px; }
   transform: rotate(-90deg); transform-origin: 60px 60px; animation: ringIn 900ms var(--ease) both; transition: stroke-width var(--dur-fast); }
 .ring:hover .val { stroke-width: 14; }
 @keyframes ringIn { from { stroke-dashoffset: 289.03px; } }
-/* sparkline */
-.spark { width: 100%; height: 34px; display: block; overflow: visible; }
-.spark .area { opacity: .14; }
-.spark .end { stroke: var(--card); stroke-width: 2; }
-.donut { width: 168px; height: 168px; }
 /* diagram alur (icicle) */
 .flow { display: grid; gap: 10px; min-width: 720px; }
 /* peringkat */
@@ -374,7 +366,7 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .bl-bar { position: absolute; left: 0; top: 4px; bottom: 4px; border-radius: 2px; transform-origin: left center; animation: grow var(--dur-slow) var(--ease) both; }
 .bl-tgt { position: absolute; top: 1px; bottom: 1px; width: 3px; margin-left: -1px; background: var(--ink); border-radius: 1px; }
 .delta { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.delta.up-bad, .delta.down-bad { color: var(--sev-merah); } .delta.up-good, .delta.down-good { color: var(--success); } .delta.flat { color: var(--muted); }
+.delta.up-bad, .delta.down-bad { color: var(--sev-merah-ink); } .delta.up-good, .delta.down-good { color: var(--success); } .delta.flat { color: var(--muted); }
 /* sejak kunjungan terakhir */
 .since { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 13px; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 8px; }
 .since .k { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
@@ -387,6 +379,94 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v19: filter ringkas, papan status ---------- */
+.ag-v:hover { background: var(--hi); }
+.ss-tab { display: grid; grid-template-columns: minmax(150px, 1.2fr) repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.ss-c { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 7px 14px; border-top: 1px solid var(--line); font-size: 13px; min-width: 0; }
+.ss-c:nth-child(-n+3) { border-top: 0; }
+.ss-l { justify-content: flex-start; flex-direction: column; align-items: flex-start; gap: 0; }
+.ss-l small, .ss-h small { font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.ss-h { flex-direction: column; align-items: flex-end; gap: 0; background: var(--soft); }
+.ss-h.off, .ss-c.off { background: var(--soft); }
+.ss-c .nv { grid-auto-flow: column; align-items: baseline; gap: 8px; }
+.ss-c .nv b { font-size: 14px; }
+.ss-p { width: 48px; text-align: right; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sb-tot { justify-items: start; } .sb-tot .nv { justify-items: start; }
+@media (max-width: 860px) {
+  .ss-tab { grid-template-columns: minmax(92px, 1fr) repeat(2, minmax(0, 1fr)); }
+  .ss-c { padding: 7px 8px; flex-direction: column; align-items: flex-end; gap: 1px; }
+  .ss-l { align-items: flex-start; } .ss-h small { display: none; }
+  .ss-c .nv { grid-auto-flow: row; justify-items: end; } .ss-p { width: auto; font-size: 11.5px; }
+}
+
+.filter-card { padding: 12px 16px; }
+.fdet > summary { list-style: none; }
+.fdet > summary::-webkit-details-marker { display: none; }
+.fsum { display: none; cursor: pointer; align-items: center; gap: 8px; font-size: 13.5px; min-height: 36px; }
+.fsum::after { content: "▾"; margin-left: auto; color: var(--muted); }
+.fdet[open] .fsum::after { content: "▴"; }
+#fsum-txt { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.filters { display: grid; gap: 10px; }
+.fgrid { display: grid; grid-template-columns: auto auto repeat(2, minmax(150px, 1fr)) auto; grid-template-areas: "per bas cus sco sav" "reg typ lvl dst dst"; gap: 8px 14px; align-items: end; }
+.fgrid .f-period { grid-area: per; } .fgrid .f-basis { grid-area: bas; } .fgrid .f-cust { grid-area: cus; } .fgrid .f-scope { grid-area: sco; }
+.fgrid .f-reg { grid-area: reg; } .fgrid .f-btype { grid-area: typ; } .fgrid .f-lv { grid-area: lvl; } .fgrid .f-branch { grid-area: dst; }
+.fgrid .view-tools { grid-area: sav; justify-self: end; margin: 0; }
+.fgrid .field .lbl { font-size: 11.5px; }
+.filters select, .filters .rangebtn { height: 34px; }
+.filters .seg { height: 34px; } .filters .seg button { height: 26px; }
+#active-filters:empty { display: none; }
+.sb-split { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 8px 20px; align-items: center; }
+.sb-tot, .sb-leg, .sb-head, .sb-row { border: 0; background: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.sb-tot { display: grid; gap: 2px; padding: 6px 8px; border-radius: 8px; }
+.sb-tot .sb-nm { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.sb-tot .nv b { font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+.sb-bar { display: flex; gap: 2px; height: 16px; border-radius: 4px; overflow: hidden; background: var(--soft); }
+.sb-bar > span { cursor: pointer; min-width: 3px; }
+.sb-bar > span:hover { filter: brightness(1.12); }
+.sb-bar.thin { height: 10px; }
+.sb-legs { display: flex; flex-wrap: wrap; gap: 4px 22px; margin-top: 8px; }
+.sb-leg { display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; font-size: 13px; }
+.sb-leg i { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+.sb-leg .nv { flex-direction: row; align-items: baseline; gap: 6px; } .sb-leg .nv b { font-size: 15px; }
+.sb-step { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 8px 20px; align-items: center; margin: 14px 0 10px; }
+.sb-step > span { font-size: 12px; font-weight: 700; color: var(--muted); padding-left: 8px; }
+.sb-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sb-card { border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px 8px; align-self: start; }
+.sb-head { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 2px solid var(--bc); }
+.sb-head .sb-nm { margin-right: auto; font-size: 15px; font-weight: 800; }
+.sb-head .sb-nm small { display: block; font-size: 12px; font-weight: 500; color: var(--muted); }
+.sb-head .nv { flex-direction: row; align-items: baseline; gap: 8px; } .sb-head .nv b { font-size: 22px; font-weight: 800; }
+.sb-row { width: 100%; display: grid; grid-template-columns: minmax(120px, 1.1fr) minmax(70px, 1fr) minmax(84px, auto) 52px; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.sb-row:last-child { border-bottom: 0; }
+.sb-row.child .sb-nm { padding-left: 16px; color: var(--muted); position: relative; }
+.sb-row.child .sb-nm::before { content: ""; position: absolute; left: 4px; top: -2px; bottom: 50%; width: 7px; border-left: 2px solid var(--band-1); border-bottom: 2px solid var(--band-1); }
+.sb-row.zero { opacity: .55; }
+.sb-row .sb-nm { font-size: 13.5px; font-weight: 600; }
+.sb-row .nv { justify-items: end; text-align: right; }
+.sb-track { display: block; height: 8px; border-radius: 4px; background: var(--soft); overflow: hidden; }
+.sb-fill { display: flex; gap: 1px; height: 100%; }
+.sb-p { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+.sb-tot:hover, .sb-leg:hover, .sb-row:hover, .sb-head:hover { background: var(--hi); }
+.sb-row:hover, .sb-head:hover { box-shadow: -6px 0 0 var(--hi), 6px 0 0 var(--hi); }
+.sb-row.flash, .sb-head.flash, .sb-tot.flash, .sb-leg.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+.rank2 .rk-row { grid-template-columns: 26px minmax(0, 1.3fr) minmax(90px, 1fr) auto; grid-template-areas: "n nm bar v"; gap: 4px 14px; padding: 8px; }
+.rank2 .rk-v .nv { min-width: 64px; }
+.rk-bar small { display: block; font-size: 11.5px; color: var(--sev-ungu); font-weight: 700; margin-top: 3px; }
+@media (max-width: 1180px) {
+  .fgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "per per bas" "cus sco reg" "typ lvl dst" "sav sav sav"; }
+}
+@media (max-width: 860px) {
+  .fsum { display: flex; }
+  .fdet[open] .fsum { margin-bottom: 10px; }
+  .fgrid { grid-template-columns: 1fr 1fr; grid-template-areas: "per per" "bas bas" "cus sco" "reg typ" "lvl dst" "sav sav"; }
+  .fgrid .view-tools { justify-self: start; }
+  .sb-split, .sb-step { grid-template-columns: 1fr; }
+  .sb-cards { grid-template-columns: 1fr; }
+  .sb-row { grid-template-columns: minmax(0, 1fr) auto 46px; grid-template-areas: "nm v p" "bar bar bar"; gap: 4px 10px; }
+  .sb-row .sb-nm { grid-area: nm; } .sb-row .sb-track { grid-area: bar; } .sb-row .nv { grid-area: v; } .sb-row .sb-p { grid-area: p; }
+  .rank2 .rk-row { grid-template-columns: 26px minmax(0, 1fr) auto; grid-template-areas: "n nm v" ". bar bar"; }
+}
+
 /* ---------- v17: tren mingguan di detail "On time" ---------- */
 .wtrend { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 10px; min-width: 0; max-width: 100%; overflow: hidden; }
 .wt-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-bottom: 10px; font-size: 13px; }
@@ -405,19 +485,11 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .wt-x { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .wt-n { font-size: 11px; font-variant-numeric: tabular-nums; text-align: center; line-height: 1.25; }
 .wt-n small { display: block; color: var(--muted); }
-
-/* ---------- v16: ringkasan saja, tanpa pengalih ---------- */
-.pnode.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
 .ssum { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
 .ss-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
-.ss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.ss-col { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px 6px; }
-.ss-col.off { background: var(--soft); }
 .ss-h { display: flex; align-items: baseline; gap: 8px; padding-bottom: 6px; }
 .ss-h b { font-size: 14px; } .ss-h .muted { font-size: 12px; }
-.ss-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .ss-l small { display: block; font-size: 11.5px; color: var(--muted); }
-.ss-row .go .nv { flex-direction: row; align-items: baseline; gap: 8px; }
 .rank2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .rk-col h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
 .rk-list { list-style: none; margin: 0; padding: 0; }
@@ -429,7 +501,7 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .rk-v { grid-area: v; display: flex; align-items: center; gap: 8px; }
 .rk-bar { grid-area: bar; } .rk-bar .sevbar { height: 6px; }
 li:first-child > .rk-row { border-top: 0; }
-@media (max-width: 860px) { .ss-grid, .rank2 { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .rank2 { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .rk-v { flex-direction: column; align-items: flex-end; gap: 4px; } .rk-nm small { display: block; } }
 
 /* ---------- v15: KPI ringkas, analisis bertab, aging belum balik ---------- */
@@ -462,50 +534,18 @@ body.present .secnav { display: none; }
 .top { min-width: 0; }
 .slide { scroll-margin-top: 130px; }
 .ptree-wrap { min-width: 1060px; padding: 4px 2px 8px; }
-.ptree, .ptree ul { list-style: none; margin: 0; padding: 0; }
-.ptree li { display: flex; align-items: center; position: relative; }
-.ptree ul { display: flex; flex-direction: column; padding-left: 34px; position: relative; }
-.ptree ul::before { content: ""; position: absolute; left: 0; top: 50%; width: 17px; border-top: 2px solid var(--band-1); }
-.ptree ul > li { padding: 3px 0 3px 17px; }
-.ptree ul > li::before { content: ""; position: absolute; left: 0; top: 50%; width: 17px; border-top: 2px solid var(--band-1); }
-.ptree ul > li::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; border-left: 2px solid var(--band-1); }
-.ptree ul > li:first-child::after { top: 50%; } .ptree ul > li:last-child::after { bottom: 50%; } .ptree ul > li:only-child::after { display: none; }
-.pnode { width: 188px; flex: none; display: grid; gap: 3px; text-align: left; cursor: pointer; padding: 7px 11px 8px 13px; border-radius: 10px; border: 1px solid var(--line);
-  background: var(--card); box-shadow: inset 4px 0 0 var(--bc); color: var(--ink); font: inherit; transition: border-color var(--dur-fast), transform var(--dur-fast); }
-.pnode:hover { border-color: var(--bc); transform: translateY(-1px); }
-.pnode.zero { opacity: .55; }
-.pn-h { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
-.pn-l { font-size: 12.5px; font-weight: 700; color: var(--muted); }
-.pn-p { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.pn-n { display: flex; align-items: baseline; gap: 8px; }
-.pn-n b { font-size: 19px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
-.pn-n small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.pn-bar { height: 3px; border-radius: 2px; background: var(--soft); overflow: hidden; }
-.pn-bar > span { display: block; height: 100%; background: var(--bc); }
-.pnode .sevbar { height: 6px; margin-top: 2px; }
-.ptree > li > .pnode { width: 170px; }
 .legend-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; }
 .legend-strip i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
 .legend-strip small { color: var(--muted); margin-left: 2px; }
 .legend-strip .lg-h { font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: 10.5px; }
-.legend-strip .lg-sep { width: 1px; height: 16px; background: var(--line); }
 .seg button:disabled { opacity: .35; cursor: not-allowed; }
 @media (max-width: 860px) {
   .ptree-wrap { min-width: 0; }
-  .ptree li { display: block; }
-  .ptree ul { padding-left: 16px; margin-left: 10px; border-left: 2px solid var(--band-1); }
-  .ptree ul::before, .ptree ul > li::before, .ptree ul > li::after { display: none; }
-  .ptree ul > li { padding: 6px 0 0 0; }
-  .pnode, .ptree > li > .pnode { width: 100%; }
 }
 
 /* ---------- v13: filter rapi ---------- */
 .filter-card { padding: 16px 18px; }
 .filters { display: grid; gap: 14px; }
-.f-group { display: grid; gap: 8px; }
-.f-gh { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-.f-ghint { text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 12px; }
-.f-row { display: grid; grid-template-columns: auto auto minmax(200px, 1.4fr) minmax(150px, 1fr); gap: 12px 18px; align-items: end; }
 .filters .field { min-width: 0; }
 .filters select, .filters .rangebtn { height: 38px; padding: 0 10px; width: 100%; min-width: 0; max-width: none; border-color: var(--band-1); }
 .filters select:hover, .filters .rangebtn:hover { border-color: var(--muted); }
@@ -513,22 +553,11 @@ body.present .secnav { display: none; }
 .filters .seg button { height: 30px; }
 .period { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
 .period select, .period .rangebtn { width: auto; min-width: 150px; }
-.cascade { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 14px; padding: 12px 14px; border-radius: var(--r-lg); background: var(--soft); align-items: end; }
-.cascade .field { position: relative; }
-.cascade .field + .field::before { content: "›"; position: absolute; left: -11px; bottom: 9px; color: var(--muted); font-weight: 800; }
 .step { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 1px solid var(--band-1); font-size: 10px; font-weight: 800; color: var(--muted); margin-right: 6px; }
-.f-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 12px; min-height: 30px; }
-.f-foot .chips:empty::before { content: attr(data-empty); font-size: 12.5px; color: var(--muted); }
-.f-foot .view-tools { margin-left: auto; }
-@media (max-width: 1100px) {
-  .f-row { grid-template-columns: auto minmax(0, 1.4fr) minmax(0, 1fr); } .f-period { grid-column: 1 / -1; }
-  .cascade { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cascade .field:nth-child(3)::before { content: none; }
+@media (max-width: 1100px) { .f-period { grid-column: 1 / -1; }
 }
-@media (max-width: 640px) {
-  .f-row { grid-template-columns: 1fr 1fr; } .f-cust, .f-scope { grid-column: span 1; } .f-basis { grid-column: 1 / -1; }
+@media (max-width: 640px) { .f-cust, .f-scope { grid-column: span 1; } .f-basis { grid-column: 1 / -1; }
   .period { flex-wrap: wrap; } .period .seg { flex: 0 0 auto; } .period select, .period .rangebtn { flex: 1 1 140px; }
-  .cascade { grid-template-columns: 1fr; padding: 10px; } .cascade .field::before { content: none !important; }
-  .f-foot .view-tools { margin-left: 0; }
 }
 
 /* ---------- v12: lebih visual, scope, back to top ---------- */
@@ -543,7 +572,7 @@ body.present .totop { display: none; }
 .ag-col { display: grid; gap: 8px; min-width: 0; }
 .ag-plot { height: 240px; display: flex; align-items: flex-end; gap: 6px; padding: 0 4px; border-bottom: 2px solid var(--line); }
 .ag-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; min-width: 0; }
-.ag-v { text-align: center; font-size: 12px; line-height: 1.2; padding-bottom: 4px; font-variant-numeric: tabular-nums; }
+.ag-v { border: 0; background: none; font: inherit; color: var(--ink); cursor: pointer; border-radius: 6px; text-align: center; font-size: 12px; line-height: 1.2; padding-bottom: 4px; font-variant-numeric: tabular-nums; }
 .ag-v b { display: block; font-size: 14px; font-weight: 800; } .ag-v small { color: var(--muted); }
 .ag-stack { display: flex; flex-direction: column-reverse; border-radius: 4px 4px 0 0; overflow: hidden; transform-origin: bottom; animation: growY var(--dur-slow) var(--ease) both; min-height: 2px; }
 .ag-stack > span { display: block; cursor: pointer; min-height: 2px; }
@@ -579,10 +608,10 @@ body.present .totop { display: none; }
   </header>
 
   <section class="card filter-card" aria-label="Filters">
-    <div class="filters">
-      <div class="f-group f-ship" role="group" aria-labelledby="fg-ship">
-        <div class="f-gh" id="fg-ship" data-t="fg.ship"></div>
-        <div class="f-row">
+    <details class="fdet" id="fdet" open>
+      <summary class="fsum"><b data-t="f.title"></b><span id="fsum-txt"></span></summary>
+      <div class="filters">
+        <div class="fgrid">
           <div class="field f-period"><span class="lbl"><span data-t="f.period"></span><i class="info" tabindex="0" data-tt="f.period.tip">i</i></span>
             <div class="period">
               <span class="seg" role="group"><button type="button" data-pmode="preset" id="pm-preset" data-t="f.preset"></button><button type="button" data-pmode="range" id="pm-range" data-t="f.range"></button></span>
@@ -596,22 +625,15 @@ body.present .totop { display: none; }
           </div>
           <label class="field f-cust" for="f-cust"><span class="lbl"><span data-t="f.cust"></span><i class="info" tabindex="0" data-tt="f.cust.tip">i</i></span><select id="f-cust"></select></label>
           <label class="field f-scope" for="f-scope"><span class="lbl"><span data-t="f.scope"></span><i class="info" tabindex="0" data-tt="f.scope.tip">i</i></span><select id="f-scope"></select></label>
+          <label class="field f-reg" for="f-reg"><span class="lbl"><span data-t="f.reg"></span><i class="info" tabindex="0" data-tt="f.reg.tip">i</i></span><select id="f-reg"></select></label>
+          <label class="field f-btype" for="f-btype"><span class="lbl"><span data-t="f.type"></span><i class="info" tabindex="0" data-tt="f.type.tip">i</i></span><select id="f-btype"></select></label>
+          <label class="field f-lv" for="f-lv"><span class="lbl"><span data-t="f.level"></span><i class="info" tabindex="0" data-tt="f.level.tip">i</i></span><select id="f-lv"></select></label>
+          <label class="field f-branch" for="f-branch"><span class="lbl"><span data-t="f.branch"></span><i class="info" tabindex="0" data-tt="f.branch.tip">i</i></span><select id="f-branch"></select></label>
+          <span class="view-tools"><button type="button" class="btn sm" id="view-save" data-tt="view.save.tip"></button><button type="button" class="btn sm" id="view-clear" data-t="view.clear" data-tt="view.clear.tip" hidden></button></span>
         </div>
-      </div>
-      <div class="f-group f-dest" role="group" aria-labelledby="fg-dest">
-        <div class="f-gh" id="fg-dest"><span data-t="fg.dest"></span><span class="f-ghint" data-t="fg.dest.h"></span></div>
-        <div class="cascade">
-          <label class="field" for="f-reg"><span class="lbl"><span class="step">1</span><span data-t="f.reg"></span><i class="info" tabindex="0" data-tt="f.reg.tip">i</i></span><select id="f-reg"></select></label>
-          <label class="field" for="f-btype"><span class="lbl"><span class="step">2</span><span data-t="f.type"></span><i class="info" tabindex="0" data-tt="f.type.tip">i</i></span><select id="f-btype"></select></label>
-          <label class="field" for="f-lv"><span class="lbl"><span class="step">3</span><span data-t="f.level"></span><i class="info" tabindex="0" data-tt="f.level.tip">i</i></span><select id="f-lv"></select></label>
-          <label class="field" for="f-branch"><span class="lbl"><span class="step">4</span><span data-t="f.branch"></span><i class="info" tabindex="0" data-tt="f.branch.tip">i</i></span><select id="f-branch"></select></label>
-        </div>
-      </div>
-      <div class="f-foot">
         <div class="chips" id="active-filters"></div>
-        <span class="view-tools"><button type="button" class="btn sm" id="view-save" data-tt="view.save.tip"></button><button type="button" class="btn sm" id="view-clear" data-t="view.clear" data-tt="view.clear.tip" hidden></button></span>
       </div>
-    </div>
+    </details>
   </section>
 
   <section class="card slide now" id="s-now" aria-labelledby="now-title">
@@ -712,17 +734,14 @@ const T = {
   'k4': ['4 · Past SLA', '4 · Lewat SLA'], 
   'k5': ['5 · On time', '5 · Tepat Waktu'], 'k5.tip': ['Of the returned POD, the share that came back within the customer SLA. Click for the AWB list and the weekly trend.', 'Dari POD yang sudah kembali, porsi yang kembali sesuai SLA customer. Klik untuk daftar AWB dan tren mingguan.'],
   
-  
   'focus.none': ['No POD not returned for these filters.', 'Tidak ada tunggakan untuk filter ini.'],
-  'tree.title': ['POD Status Tree', 'Pohon Status POD'],
+  'tree.title': ['POD Status', 'Status POD'],
   'tree.tip': ['Follows the work process: shipment → must return → not yet / already back → latest status. Each row = AWB count at that step. Click a row for its AWB list.', 'Mengikuti proses kerja: kiriman → wajib balik → belum/sudah kembali → status terakhir. Setiap baris = jumlah AWB di tahap itu. Klik baris untuk daftar AWB.'],
-  
   'c.status': ['Status', 'Status'], 
   'c.count': ['Count', 'Jumlah'], 'c.parent': ['% of parent', '% induk'], 
   'c.ofRet': ['% of POD to return', '% POD Balik'], 
   'c.colour': ['Age colour', 'Warna umur'], 
   'sev.title': ['Age Colour of POD Not Returned', 'Warna Umur POD Belum Balik'],
-  
   
   'p.avg': ['Avg WD', 'Rata² HK'], 
   'p.ot': ['On time', 'Tepat waktu'], 
@@ -731,9 +750,7 @@ const T = {
   'g.sla': ['Customer SLA {n} WD', 'Customer SLA {n} HK'], 
   'aging.title': ['Aging per 5 Working Days', 'Aging per 5 Hari Kerja'],
   'aging.tip': ['Age of POD not returned yet, grouped per 5 working days (the sketch: "aging per 5 days × 6", plus >30 so nothing is lost). Age counts from the "Age from" date (Delivered or POS). Time to return of returned POD is under Analysis › Return Performance.', 'Umur POD yang belum balik, dikelompokkan per 5 hari kerja (sketsa: "aging per 5 hari × 6", ditambah >30 agar tidak ada yang hilang). Umur dihitung dari tanggal "Umur dihitung dari" (Delivered atau POS). Lama kembali POD yang sudah balik ada di Analisis › Kinerja Pengembalian.'],
-  
   'total': ['Total', 'Total'], 
-  
   'rank.title': ['Who Needs Follow-up', 'Siapa yang Perlu Ditindaklanjuti'],
   'rank.tip': ['Top 10 destination branches and customers by POD not returned. Click a row (or a colour block) for its AWB list.', '10 cabang tujuan dan customer dengan POD belum balik terbanyak. Klik baris (atau blok warna) untuk daftar AWB-nya.'],
   'rank.br': ['Destination branch', 'Cabang tujuan'],
@@ -741,7 +758,6 @@ const T = {
   'r.not': ['Not returned', 'Belum balik'], 
   'r.share': ['% of not returned', '% tunggakan'], 
   'r.rr': ['% returned', '% kembali'], 
-  
   'rules.title': ['Terms & calculation rules', 'Istilah & aturan perhitungan'],
   'rules.ww': ['Working days counted:', 'Hari kerja dihitung:'],
   'rules.ww.tip': ['Prototype assumption. Public holidays are not included yet.', 'Asumsi prototype. Libur nasional belum diperhitungkan.'],
@@ -809,7 +825,6 @@ const T = {
   'ru.stno': ['STPOD no.', 'No. STPOD'], 'ru.stno.d': ['Handover number. One STPOD covers every POD handed over together.', 'Nomor serah terima. Satu STPOD berisi semua POD yang diserahterimakan bersama.'],
   'ru.ppno': ['PODP no.', 'No. PODP'], 'ru.ppno.d': ['Receipt number for sending POD to the customer. One PODP holds many POD.', 'Nomor resi pengiriman POD ke customer. Satu PODP berisi banyak POD.'],
   'colourW': ['Colour {x}', 'Warna {x}'],
-  
   't.viewCleared': ['Saved view removed', 'Tampilan tersimpan dihapus'],
   't.viewSaved': ['View saved — the dashboard will open with these filters', 'Tampilan disimpan — dashboard akan terbuka dengan filter ini'],
   'view.clear.tip': ['Stop opening with the saved filters.', 'Berhenti membuka dengan filter tersimpan.'],
@@ -820,36 +835,31 @@ const T = {
   
   
   
-  
-  
-  
-  
   'bl.crit': ['Critical (purple)', 'Kritis (ungu)'],
   'bl.ot': ['On-time return', 'Tepat waktu'],
   'top': ['Back to top', 'Kembali ke atas'],
+  'ss.pct': ['% = share of {x}', '% = porsi dari {x}'],
+  'sb.step': ['{x} splits into', '{x} terbagi menjadi'],
+  'sb.bar': ['bar length = share of the line above; bar colour on Not returned = age colour', 'panjang batang = porsi dari baris di atasnya; warna batang pada Belum balik = warna umur'],
+  'f.title': ['Filters', 'Filter'],
   'wt.title': ['On-time return per week', 'Tepat waktu per minggu'],
   'wt.sub': ['Bar = % of returned POD back within SLA · line = target 80% · green = target met, orange = below. Click a week for its AWB.', 'Batang = % POD sudah balik yang kembali sesuai SLA · garis = target 80% · hijau = tercapai, oranye = di bawah. Klik minggu untuk AWB-nya.'],
   'wt.info': ['Weeks follow the POS date. Weeks with fewer than 10 returned POD are grey (too few to compare). Number under each bar = on time / returned and the on-time value.', 'Minggu mengikuti tanggal POS. Minggu dengan POD kembali kurang dari 10 berwarna abu (terlalu sedikit untuk dibandingkan). Angka di bawah batang = tepat waktu / sudah balik dan nilai tepat waktu.'],
   'wt.tip': ['Week of {d}: {n} of {s} returned on time ({p}) · {v}', 'Minggu {d}: {n} dari {s} kembali tepat waktu ({p}) · {v}'],
   'wt.few': ['too few to compare', 'terlalu sedikit'],
   'rk.of': ['of not returned', 'dari belum balik'], 'rk.tip': ['Open the AWB list not returned for {x}', 'Buka daftar AWB belum balik untuk {x}'],
-  
   'kl.ret': ['Returned', 'Sudah balik'], 'kl.not': ['Not returned', 'Belum balik'], 'kl.ot': ['On time', 'Tepat waktu'], 'kl.crit': ['Critical', 'Kritis'],
   'kx.all': ['{b} POD to return ({p}) · {n} no return', '{b} POD balik ({p}) · {n} tidak balik'],
   'kx.ret': ['{n} of {b} POD to return', '{n} dari {b} POD balik'],
   'kx.not': ['{p} of POD to return · {nd} parcels not delivered yet', '{p} dari POD balik · {nd} paket belum terkirim'],
   'kx.ot': ['{n} of {s} returned · target ≥ 80%', '{n} dari {s} yang sudah balik · target ≥ 80%'],
   'kx.crit': ['{n} of {b} not returned · limit < 15%', '{n} dari {b} yang belum balik · batas < 15%'],
-  'nav.now': ['Now', 'Kondisi'], 'nav.tree': ['Status tree', 'Pohon status'], 'nav.aging': ['Aging', 'Aging'], 'nav.rank': ['Follow-up', 'Tindak lanjut'],
-  'lg.fam': ['Status', 'Status'], 'lg.age': ['Age colour', 'Warna umur'], 'lg.sla': ['(days for SLA 6 WD; SLA 7 WD +1 day)', '(hari untuk SLA 6 HK; SLA 7 HK +1 hari)'],
-  'fg.ship': ['Shipments', 'Kiriman'],
-  'fg.dest': ['Destination', 'Tujuan'],
-  'fg.dest.h': ['Narrow step by step: each list only shows what fits the step before it.', 'Persempit bertahap: setiap daftar hanya berisi yang cocok dengan langkah sebelumnya.'],
-  'f.none': ['No extra filters · showing all customers, routes and destinations', 'Tanpa filter tambahan · menampilkan semua customer, rute, dan tujuan'],
+  'nav.now': ['Now', 'Kondisi'], 'nav.tree': ['Status', 'Status'], 'nav.aging': ['Aging', 'Aging'], 'nav.rank': ['Follow-up', 'Tindak lanjut'],
+  'lg.age': ['Age colour', 'Warna umur'], 'lg.sla': ['(days for SLA 6 WD; SLA 7 WD +1 day)', '(hari untuk SLA 6 HK; SLA 7 HK +1 hari)'],
+  
+  
   'scp.title': ['Intracity vs Domestic', 'Intracity vs Domestik'],
   'scp.tip': ['The sketch splits POD to return into Intracity and Domestic. Same rules and customer SLA; only the route differs. Click a number for its AWB list.', 'Sketsa memecah POD balik menjadi Intracity dan Domestik. Aturan dan SLA customer sama; yang beda hanya rutenya. Klik angka untuk daftar AWB-nya.'],
-  
-  
   
   
   'ag.sub.c': ['POD not returned yet, per age band. One bar per band, split by age colour (relative to each customer SLA). Click a block for its AWB list.', 'POD yang belum balik, per rentang umur. Satu batang per rentang, dipecah per warna umur (relatif terhadap SLA customer). Klik blok untuk daftar AWB.'],
@@ -858,20 +868,13 @@ const T = {
   'xp': ['Excel', 'Excel'],
   'flow.of': ['of {x}', 'dari {x}'],
   
-  
   'ring.crit.tip': ['Share of POD not returned that is already purple (≥ 4 WD past SLA).', 'Porsi POD belum balik yang sudah ungu (≥ 4 HK lewat SLA).'],
   
-  
-  'flow.sub': ['Same structure as the working sketch. Each box = AWB and Rp; % = share of the box it branches from. Click any box for its AWB list (oldest first).', 'Struktur sama dengan sketsa kerja. Setiap kotak = AWB dan Rp; % = porsi dari kotak induknya. Klik kotak mana pun untuk daftar AWB-nya (umur terlama di atas).'],
-  
+  'flow.sub': ['Same split as the working sketch, read top to bottom: all shipments → POD to return / no return → not returned / returned → latest status. Every row shows AWB and Rp; % = share of the line above. Click any row or bar for its AWB list (oldest first).', 'Pembagian sama dengan sketsa kerja, dibaca dari atas ke bawah: semua kiriman → POD balik / tidak balik → belum / sudah balik → status terakhir. Setiap baris berisi AWB dan Rp; % = porsi dari baris di atasnya. Klik baris atau batang mana pun untuk daftar AWB-nya (umur terlama di atas).'],
   'nav.rank': ['Follow-up', 'Tindak lanjut'],
   'nav.aging': ['Aging', 'Aging'],
-  
   'nav.now': ['Overview', 'Ringkasan'],
-  
   'sp.wk': ['POS week of {d}', 'Minggu POS {d}'],
-  
-  
   
   
   'tot.tip': ['Every AWB with a POS date in the period that matches the filters, split into POD to return and no return.', 'Semua AWB dengan tanggal POS di periode ini dan sesuai filter, dipecah menjadi POD balik dan tidak balik.'],
@@ -905,7 +908,6 @@ const T = {
   'col.val': ['Value', 'Nilai'], 'col.val.tip': ['Freight charge of the AWB (Rp).', 'Ongkos kirim AWB (Rp).'],
   'a.val': ['Value', 'Nilai'], 'a.kg': ['{k} kg chargeable weight', 'berat {k} kg'],
   'ru.val': ['Value (Rp)', 'Nilai (Rp)'], 'ru.val.d': ['Freight charge (ongkir) per AWB; simulated in this prototype. Short forms: K = thousand, M = million, B = billion. Hover a value for the full amount.', 'Ongkos kirim per AWB; simulasi di prototype ini. Singkatan: rb = ribu, jt = juta, M = miliar. Arahkan kursor untuk nilai lengkap.'],
-  
 };
 let LANG = 'en';
 const t = (k, v = {}) => { const e = T[k]; let s = e ? e[LANG === 'en' ? 0 : 1] : k; for (const [a, b] of Object.entries(v)) s = s.split('{' + a + '}').join(b); return s; };
@@ -1189,7 +1191,8 @@ function renderFilters() {
   if (S.lv) items.push(['lv', t('lv.' + S.lv)]);
   if (S.branch) items.push(['branch', t('sp.dest', { x: brLabel(S.branch) })]);
   $('#psum').textContent = items.map(x => x[1]).join(' · ');
-  $('#active-filters').dataset.empty = t('f.none');
+  const [fa, fb] = range();
+  $('#fsum-txt').textContent = [S.pmode === 'preset' ? t('f.lastN', { n: S.period }) : `${fd(fa)} – ${fd(fb)}`, ...items.map(x => x[1])].join(' · ') + (items.length ? '' : ' · ' + t('all'));
   $('#active-filters').innerHTML = items.map(([k, v]) => `<button type="button" class="chip on" data-clear="${k}" data-tip="${esc(t('rm'))}">${esc(v)} <span class="x" aria-hidden="true">×</span></button>`).join('')
     + (items.length ? `<button type="button" class="chip" data-clear="*">${t('reset')}</button>` : '');
   const [a, b] = range();
@@ -1332,42 +1335,47 @@ function renderTree() {
 }
 
 function renderScopeSum() {
+  // sketsa: POD balik dipecah Intracity / Domestik — satu tabel ringkas, dua kolom berdampingan
   const SC = ['INTRACITY', 'DOMESTIK'];
   const rows = [['all', { node: 'all' }, null], ['balik', { node: 'balik' }, 'all'], ['sudah', { node: 'sudah' }, 'balik'], ['belum', { node: 'belum' }, 'balik'], ['ot', { node: 'sudah', ot: true }, 'sudah']];
   const pick = (id, sc) => { const pool = F.filter(r => r.scope === sc); return id === 'ot' ? pool.filter(r => r.grp === 'S' && !r.over) : pool.filter(NODE[id].t); };
   const lbl = id => (id === 'ot' ? t('kl.ot') : id === 'all' ? t('tot.title') : nl(id));
-  const col = sc => {
-    const off = S.scope && S.scope !== sc;
-    const body = rows.map(([id, sp, par]) => {
-      const rr = pick(id, sc), pr = par ? pick(par, sc) : null;
-      return `<div class="ss-row"><span class="ss-l">${esc(lbl(id))}${pr ? `<small>${fp(pct(rr.length, pr.length))} ${t('flow.of', { x: lbl(par) })}</small>` : ''}</span>
-        ${off ? '<span class="muted">–</span>' : go({ ...sp, scope: sc }, nv(rr.length, sumV(rr)))}</div>`;
-    }).join('');
-    return `<div class="ss-col${off ? ' off' : ''}"><div class="ss-h"><b>${t('sc.' + sc)}</b><span class="muted">${t(sc === 'INTRACITY' ? 'g.intra' : 'g.dom')}</span></div>${body}</div>`;
-  };
-  $('#tree-scope').innerHTML = `<div class="ss-title">${t('scp.title')}${info(t('scp.tip'))}</div><div class="ss-grid">${SC.map(col).join('')}</div>`;
+  const head = `<span class="ss-c ss-l"></span>${SC.map(sc => `<span class="ss-c ss-h${S.scope && S.scope !== sc ? ' off' : ''}"><b>${t('sc.' + sc)}</b><small>${t(sc === 'INTRACITY' ? 'g.intra' : 'g.dom')}</small></span>`).join('')}`;
+  const body = rows.map(([id, sp, par]) => `<span class="ss-c ss-l">${esc(lbl(id))}${par ? `<small>${t('ss.pct', { x: lbl(par) })}</small>` : ''}</span>` + SC.map(sc => {
+    const rr = pick(id, sc), pr = par ? pick(par, sc) : null;
+    if (S.scope && S.scope !== sc) return `<span class="ss-c off" data-sc="${sc}" data-id="${id}"><span class="muted">–</span></span>`;
+    return `<span class="ss-c" data-sc="${sc}" data-id="${id}">${go({ ...sp, scope: sc }, nv(rr.length, sumV(rr)))}${pr ? `<span class="ss-p">${fp(pct(rr.length, pr.length))}</span>` : ''}</span>`;
+  }).join('')).join('');
+  $('#tree-scope').innerHTML = `<div class="ss-title">${t('scp.title')}${info(t('scp.tip'))}</div><div class="ss-tab">${head}${body}</div>`;
 }
 
 function renderFlow(cnt) {
-  // lensa scope (sketsa: Balik → Intracity / Domestik → Belum / Sudah). Filter Scope global mengunci lensa.
-  const lens = '';
-  const pool = id => (lens ? cnt[id].filter(r => r.scope === lens) : cnt[id]);
-  const fam = id => { const path = pathOf(id); return path.includes('sudah') ? 'var(--data-ret)' : path.includes('belum') ? 'var(--data-pending)' : id === 'tidak' ? 'var(--data-none)' : 'var(--data-req)'; };
-  const node = n => {
-    const rr = pool(n.id), par = n.p ? pool(n.p) : null, w = par ? pct(rr.length, par.length) : 100;
-    const nI = rr.filter(r => r.scope === 'INTRACITY').length;
-    const sev = pathOf(n.id).includes('belum') && rr.length ? sevBar(sevCounts(rr), { node: n.id, ...(lens ? { scope: lens } : {}) }, false, sevVals(rr)) : '';
-    const split = '';
-    const tip = `${L(n.label)} — ${L(n.short)}: ${fmt(rr.length)} AWB · ${rp(sumV(rr), true)}${par ? ` (${fp(w)} ${t('flow.of', { x: nl(n.p) })})` : ''}${lens ? ' · ' + t('sc.' + lens) : ` · ${t('sc.INTRACITY')} ${fmt(nI)} · ${t('sc.DOMESTIK')} ${fmt(rr.length - nI)}`}`;
-    return `<button type="button" class="pnode ${rr.length ? '' : 'zero'}" style="--bc:${fam(n.id)}" data-node="${n.id}" data-n="${rr.length}" data-v="${sumV(rr)}" data-open="${spec({ node: n.id, ...(lens ? { scope: lens } : {}) })}" data-tip="${esc(tip)}">
-      <span class="pn-h"><span class="pn-l">${esc(L(n.label))}</span>${par ? `<span class="pn-p">${fp(w)}</span>` : ''}</span>
-      <span class="pn-n"><b class="ct">${fmt(rr.length)}</b><small>${rp(sumV(rr))}</small></span>
-      ${par ? `<span class="pn-bar"><span style="width:${w || 0}%"></span></span>` : ''}${split}${sev}</button>`;
+  // Papan status, struktur sama dengan sketsa: Semua → POD balik | Tidak balik → Belum balik | Sudah balik → status.
+  const N = id => cnt[id].length, V = id => sumV(cnt[id]);
+  const tip = (id, par) => `${nl(id)} — ${L(NODE[id].short)}: ${fmt(N(id))} AWB · ${rp(V(id), true)}${par ? ` (${fp(pct(N(id), N(par)))} ${t('flow.of', { x: nl(par) })})` : ''}`;
+  const at = (id, par) => `data-node="${id}" data-n="${N(id)}" data-v="${V(id)}" data-open="${spec({ node: id })}" data-tip="${esc(tip(id, par))}"`;
+  const seg = (id, par, col) => (N(id) ? `<span style="flex:${N(id)} 0 0;background:${col}" data-open="${spec({ node: id })}" data-tip="${esc(tip(id, par))}"></span>` : '');
+  const leg = (id, par, col) => `<button type="button" class="sb-leg" ${at(id, par)}><i style="background:${col}"></i><span class="sb-nm">${esc(nl(id))}</span>${nv(N(id), V(id))}<span class="sb-p">${fp(pct(N(id), N(par)))}</span></button>`;
+  const head = (id, par, col) => `<button type="button" class="sb-head" style="--bc:${col}" ${at(id, par)}><span class="sb-nm">${esc(nl(id))}<small>${fp(pct(N(id), N(par)))} ${t('flow.of', { x: nl(par) })}</small></span>${nv(N(id), V(id))}</button>`;
+  const row = (id, par, sub) => {
+    const rr = cnt[id], w = pct(rr.length, N(par));
+    const fill = pathOf(id).includes('belum')
+      ? `<span class="sb-fill" style="width:${w || 0}%">${SEV.map(x => { const k = rr.filter(r => r.sev === x.k); return k.length ? `<span class="bg-${x.k}" style="flex:${k.length} 0 0" data-tip="${esc(`${nl(id)} · ${L(x.label)}: ${fmt(k.length)} AWB · ${rp(sumV(k), true)}`)}"></span>` : ''; }).join('')}</span>`
+      : `<span class="sb-fill" style="width:${w || 0}%;background:var(--data-ret)"></span>`;
+    return `<button type="button" class="sb-row${sub ? ' child' : ''}${rr.length ? '' : ' zero'}" ${at(id, par)}><span class="sb-nm">${esc(nl(id))}</span><span class="sb-track">${fill}</span>${nv(rr.length, sumV(rr))}<span class="sb-p">${fp(w)}</span></button>`;
   };
-  const sub = pid => { const kids = NODES.filter(n => n.p === pid); return kids.length ? `<ul>${kids.map(k => `<li>${node(k)}${sub(k.id)}</li>`).join('')}</ul>` : ''; };
-  $('#flow').innerHTML = `<ul class="ptree"><li>${node(NODE.all)}${sub('all')}</li></ul>`;
-  $('#tree-legend').innerHTML = `<span class="lg-h">${t('lg.fam')}</span>${[['balik', 'var(--data-req)'], ['tidak', 'var(--data-none)'], ['belum', 'var(--data-pending)'], ['sudah', 'var(--data-ret)']].map(([id, c]) => `<span><i style="background:${c}"></i>${esc(nl(id))}</span>`).join('')}
-    <span class="lg-sep"></span><span class="lg-h">${t('lg.age')}</span>${SEV.map(x => `<span data-tip="${esc(`${L(x.label)}: ${L(x.short)}. ${sevRanges(x)}`)}"><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span class="muted">${t('lg.sla')}</span>`;
+  $('#flow').innerHTML = `
+    <div class="sb-split">
+      <button type="button" class="sb-tot" ${at('all')}><span class="sb-nm">${esc(nl('all'))}</span>${nv(N('all'), V('all'))}</button>
+      <div class="sb-main"><div class="sb-bar">${seg('balik', 'all', 'var(--data-req)')}${seg('tidak', 'all', 'var(--data-none)')}</div>
+        <div class="sb-legs">${leg('balik', 'all', 'var(--data-req)')}${leg('tidak', 'all', 'var(--data-none)')}</div></div>
+    </div>
+    <div class="sb-step"><span>${esc(t('sb.step', { x: nl('balik') }))}</span><div class="sb-bar thin">${seg('belum', 'balik', 'var(--data-pending)')}${seg('sudah', 'balik', 'var(--data-ret)')}</div></div>
+    <div class="sb-cards">
+      <div class="sb-card">${head('belum', 'balik', 'var(--data-pending)')}${row('ND', 'belum')}${row('dlv', 'belum')}${['MDP', 'PODC', 'REDOC', 'UPLOAD'].map(id => row(id, 'dlv', true)).join('')}</div>
+      <div class="sb-card">${head('sudah', 'balik', 'var(--data-ret)')}${['STPOD', 'PODP', 'ARSIP'].map(id => row(id, 'sudah')).join('')}</div>
+    </div>`;
+  $('#tree-legend').innerHTML = `<span class="lg-h">${t('lg.age')}</span>${SEV.map(x => `<span data-tip="${esc(`${L(x.label)}: ${L(x.short)}. ${sevRanges(x)}`)}"><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span class="muted">${t('lg.sla')}</span><span class="muted">· ${t('sb.bar')}</span>`;
 }
 
 const OT_BANDS = [[0, 60, 1], [60, 80, 2], [80, 100, 3]];
@@ -1380,7 +1388,7 @@ function agingChart() {
   const html = cols.map(({ b, nb }) => {
     const segs = SEV.map(x => ({ x, rows: nb.filter(r => r.sev === x.k) })).filter(o => o.rows.length).map(o =>
       `<span class="bg-${o.x.k}" style="flex:${m(o.rows)} 0 0" data-open="${spec({ node: 'belum', bk: b.i, sev: o.x.k })}" data-tip="${esc(`${nl('belum')} · ${b.label} ${U()} · ${L(o.x.label)}: ${fmt(o.rows.length)} AWB · ${rp(sumV(o.rows), true)}`)}"></span>`).join('');
-    return `<div class="ag-col"><div class="ag-plot"><div class="ag-bar"><span class="ag-v">${lab(nb)}</span><div class="ag-stack" style="height:${(m(nb) / max) * 100}%">${segs}</div></div></div>
+    return `<div class="ag-col"><div class="ag-plot"><div class="ag-bar"><button type="button" class="ag-v" data-open="${spec({ node: 'belum', bk: b.i })}" data-tip="${esc(`${nl('belum')} · ${b.label} ${U()}: ${fmt(nb.length)} AWB · ${rp(sumV(nb), true)}`)}">${lab(nb)}</button><div class="ag-stack" style="height:${(m(nb) / max) * 100}%">${segs}</div></div></div>
       <div class="ag-x">${b.label} ${U()}<small>${fp(pct(nb.length, B.length))}</small></div></div>`;
   }).join('');
   $('#aging-viz').innerHTML = `<div class="ag-chart">${html}</div><div class="ag-legend"><span><b>${t('ag.not')}:</b></span>${SEV.map(x => `<span><i class="bg-${x.k}"></i>${esc(L(x.label))} <small>${rangeTxt(x, 6)}</small></span>`).join('')}<span>${t('lg.sla')}</span></div>`;
@@ -1396,8 +1404,8 @@ function renderRank() {
     const sub = key === 'br' ? BR[x.id].reg : `SLA ${CUST[x.id].sla} ${U()}`;
     return `<li><button type="button" class="rk-row" data-k="${key}" data-open="${spec(sp)}" data-n="${x.rows.length}" data-tip="${esc(t('rk.tip', { x: nameOf(key, x.id) }))}">
       <span class="rk">${i + 1}</span><span class="rk-nm"><b>${esc(nameOf(key, x.id))}</b><small>${esc(sub)} · ${fp(pct(x.rows.length, c.belum))} ${t('rk.of')}</small></span>
-      <span class="rk-v">${nv(x.rows.length, sumV(x.rows))}${sc.ungu ? mention('ungu', esc(t('fo.crit', { n: fmt(sc.ungu) }))) : ''}</span>
-      <span class="rk-bar">${sevBar(sc, sp, false, sevVals(x.rows))}</span></button></li>`;
+      <span class="rk-bar">${sevBar(sc, sp, false, sevVals(x.rows)).replace(/ data-open="[^"]*"/g, '')}<small>${sc.ungu ? esc(t('fo.crit', { n: fmt(sc.ungu) })) : '&nbsp;'}</small></span>
+      <span class="rk-v">${nv(x.rows.length, sumV(x.rows))}</span></button></li>`;
   };
   const none = `<li class="muted">${t('focus.none')}</li>`;
   $('#rk-br').innerHTML = top('br').map((x, i) => li('br', x, i)).join('') || none;
@@ -1624,7 +1632,7 @@ function applyToDashboard() {
   if (sp.scope) S.scope = sp.scope;
   const target = sp.node || 'all';
   closeModal(); render();
-  const row = document.querySelector(`#flow .pnode[data-node="${target}"]`);
+  const row = document.querySelector(`#flow [data-node="${target}"]`);
   if (row) { row.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'center' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 2200); }
   toast(t('t.applied'));
 }
@@ -1812,6 +1820,7 @@ document.addEventListener('keydown', e => {
 
 /* ================= init ================= */
 loadView(); buildCalendar(S.ww); computeAges(); applyStatic(); render();
+if (window.matchMedia && !matchMedia('(min-width: 861px)').matches) $('#fdet').open = false; // HP: filter dilipat
 addEventListener('scroll', () => { $('#totop').hidden = scrollY < 600; if (scrollY < 120) document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === 's-now')); }, { passive: true });
 document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === 's-now'));
 if (window.claude) window.claude.use('downloads').then(d => { if (!d) { const b = $('#export-all'); b.disabled = true; b.dataset.tip = t('t.na'); } });

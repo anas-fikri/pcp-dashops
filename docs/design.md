@@ -154,3 +154,12 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 
 ## v18 — komponen yang dipensiunkan (kode sudah dihapus dari prototype)
 Tidak dipakai lagi dan **jangan diimplementasikan** di Laravel: app shell/sidebar (`.shell`, `.side`), cincin (`.ring`), bullet graph mandiri (`.bullet`), total terpisah (`.totals`, `.split-*`), panel Focus (`.focus`, `.fcard`), strip sejak kunjungan terakhir (`.since`), sparkline (`.spark`), donut warna umur (`.donut`), diagram alur baris (`.flow-row`, `.blk`), heatmap aging (`.hm`), tabel pohon, tab peringkat/analisis (`.tabs`, `.atabs`), kartu Intracity vs Domestik besar (`.scp-*`), baris kinerja (`.pv-*`), grafik tren Chart.js. Pengalih tampilan (`.seg` di luar filter/header) tidak dipakai di halaman ringkasan.
+
+## v19 — papan status & filter ringkas
+| Komponen | Kelas | Aturan |
+|---|---|---|
+| Papan status | `.sb-split` (total + `.sb-bar` + `.sb-leg`), `.sb-step` (bar tipis), `.sb-cards > .sb-card > .sb-head + .sb-row(.child)` | Bentuk dataviz: segmented bar untuk 2 bagian, meter list untuk banyak bagian. Setiap baris = tombol ke daftar AWB; batang = porsi dari baris induk; batang Belum balik berwarna umur (segmen hanya tooltip, klik = seluruh baris) |
+| Intracity vs Domestik | `.ss-tab > .ss-c[data-sc][data-id]` | Satu tabel dua kolom; kolom yang tersaring filter Scope tampil "–" |
+| Filter | `.fdet > .fgrid` | 2 baris di desktop; dilipat di ≤860px dengan ringkasan; `#active-filters` disembunyikan bila kosong |
+| Teks merah | `--sev-merah-ink` | Angka/teks merah memakai token ini (kontras ≥ 4,5:1); blok & garis tetap `--sev-merah` |
+Pohon kiri→kanan (`.ptree`, `.pnode`) **dipensiunkan**.

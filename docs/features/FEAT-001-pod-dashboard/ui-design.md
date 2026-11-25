@@ -59,6 +59,14 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 
 **v18 — pembersihan kode (25 Nov 2026).** Tanpa perubahan tampilan atau perilaku. Dihapus: 22 fungsi/konstanta JS yang tidak terpanggil (ESLint `no-unused-vars` + espree, berulang sampai stabil), 10 event handler untuk kontrol yang sudah tidak ada, cabang export trend/scope/sev/perf, state lama (`fv, tl, at, pv, av, am, metric, rsort, rank, rankAll`), 185 selector CSS tanpa pemakai, 125 kunci teks EN/ID tanpa rujukan. Export "Tindak lanjut" kini berisi dua sheet (cabang tujuan & customer) sesuai yang tampil. File 255.737 → 203.170 byte (2.329 → 1.819 baris). Verifikasi: ESLint bersih; e2e 63/63; screenshot sebelum/sesudah identik piksel per piksel (halaman, modal, detail AWB, kalender, tooltip, presentasi, bahasa Indonesia; terang & gelap); ukuran 61 elemen identik di 390px & 1440px.
 
+**v19 — review keterbacaan < 1 menit + pengganti pohon (25 Nov 2026).** Skill: design-critique, dataviz (pemilihan bentuk), accessibility-review (axe-core 4.10, WCAG 2.1 AA).
+- **Temuan:** (1) filter memakan ±40% layar laptop 1366×768 sehingga KPI terpotong; di HP angka pertama di 1.469px. (2) Pohon kiri→kanan: 14 kotak + garis penghubung, mata melompat ke banyak arah, ±1.200px. (3) Tindak lanjut 3 tingkat per baris. (4) Kontras teks merah 4,26:1 / 3,95:1 < 4,5:1; aging tidak bisa dibuka dengan keyboard.
+- **Papan status (pengganti pohon)** — bentuk dari dataviz: *segmented bar* untuk pembagian dua bagian, *meter list* (nama · batang sejajar · AWB + Rp · %) untuk banyak bagian. Urutan tetap sketsa, dibaca atas→bawah: Semua kiriman → POD balik | Tidak balik → (bar) Belum balik | Sudah balik → dua kartu: Belum balik (Belum terkirim, Delivered › Masih di pelanggan, PODC, Redoc, Upload; batang berwarna umur) dan Sudah balik (STPOD, PODP, Arsip). Ringkasan Intracity vs Domestik jadi satu tabel dua kolom.
+- **Filter ringkas:** 2 baris tanpa judul grup/nomor langkah; chip filter hanya tampil bila ada; di HP dilipat ("Filter · Last 90 days · All").
+- **Tindak lanjut:** satu baris per item (no · nama · warna umur + jumlah kritis · AWB + Rp).
+- **Aksesibilitas:** token teks merah `--sev-merah-ink` (#b91c1c terang); label jumlah aging = tombol (keyboard). axe-core: 0 pelanggaran di 6 kondisi.
+- **Hasil:** KPI mulai 479 px (sebelumnya 619); banner + 5 KPI muat di layar laptop 1366×768; HP: KPI di 751 px (sebelumnya 1.469); tinggi desktop 3.608 → 3.060 px. E2E 69/69.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.
