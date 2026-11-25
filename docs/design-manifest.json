@@ -33,9 +33,9 @@
       "status": "specified",
       "reverified": {
         "date": "2026-11-25",
-        "reason": "v16: ringkasan saja tanpa pengalih; AWB+Rp bersamaan; detail hanya di modal",
+        "reason": "v17: tren mingguan dipindah ke detail KPI On time",
         "conformance": "pass",
-        "e2e": "59/59 (suite v16)"
+        "e2e": "63/63 (suite v16+)"
       }
     },
     "SCR-DSH-002": {
@@ -53,7 +53,8 @@
         "document_filter": true,
         "paging": true,
         "loading": false,
-        "api_error": false
+        "api_error": false,
+        "weekly_trend_on_time": true
       },
       "conformance": "pass",
       "status": "specified"

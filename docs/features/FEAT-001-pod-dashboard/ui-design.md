@@ -51,6 +51,12 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 - Export per kelompok: now · flow · aging · rank. Presentasi 4 slide. Tinggi desktop ±3.600 px.
 - E2E ditulis ulang (59/59): tidak ada pengalih di ringkasan; setiap angka ringkasan memuat Rp; pohon 14 kotak AWB & Rp = modal; induk = jumlah anak; KPI/Intracity-Domestik/aging/tindak lanjut = modal & konsisten dengan pohon; modal, filter, export, ID, presentasi, keyboard, HP.
 
+**v17 — tren mingguan di detail KPI "On time" (25 Nov 2026).**
+- Tren tidak tampil di halaman ringkasan; muncul hanya saat KPI **On time** diklik (modal `{node:'sudah', ot:true}`), di bawah statistik modal.
+- Batang per minggu POS = % POD sudah balik yang kembali sesuai SLA; garis = target 80%; hijau = tercapai, oranye = di bawah target (warna status, sama dengan banner), abu = < 10 POD kembali (terlalu sedikit).
+- Di bawah batang: tepat waktu / sudah balik + nilai Rp. Klik minggu → daftar AWB minggu itu (chip "POS week of …", bisa dilepas). Di HP grafik bisa digeser dan langsung menampilkan minggu terbaru.
+- E2E 63/63: jumlah tepat waktu semua minggu = KPI; klik minggu = jumlah modal; tren tidak ada di halaman maupun di detail lain.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

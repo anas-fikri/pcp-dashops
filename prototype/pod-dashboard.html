@@ -519,6 +519,25 @@ h2 { font-size: 17px; letter-spacing: -.015em; }
 .card-head .tools-r { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .view-tools { display: inline-flex; gap: 6px; align-items: center; margin-left: auto; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* ---------- v17: tren mingguan di detail "On time" ---------- */
+.wtrend { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 10px; min-width: 0; max-width: 100%; overflow: hidden; }
+.wt-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-bottom: 10px; font-size: 13px; }
+.wt-h .muted { font-size: 12px; }
+.wt-scroll { overflow-x: auto; }
+.wt-grid { display: grid; gap: 6px; min-width: 0; }
+.wt-col { display: grid; gap: 4px; justify-items: center; border: 0; background: none; font: inherit; color: var(--ink); cursor: pointer; padding: 4px 2px; border-radius: 8px; }
+.wt-col:hover, .wt-col.on { background: var(--hi); }
+.wt-col.on { outline: 2px solid var(--accent); }
+.wt-v { font-size: 12.5px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.wt-plot { position: relative; width: 100%; max-width: 34px; height: 110px; background: var(--soft); border-radius: 4px; overflow: hidden; }
+.wt-bar { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sev-oranye); border-radius: 4px 4px 0 0; }
+.wt-col.hit .wt-bar { background: var(--success); }
+.wt-col.few .wt-bar { background: var(--data-none); }
+.wt-tgt { position: absolute; left: -2px; right: -2px; bottom: 80%; border-top: 2px solid var(--ink); }
+.wt-x { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.wt-n { font-size: 11px; font-variant-numeric: tabular-nums; text-align: center; line-height: 1.25; }
+.wt-n small { display: block; color: var(--muted); }
+
 /* ---------- v16: ringkasan saja, tanpa pengalih ---------- */
 .pnode.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
 .ssum { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
@@ -859,7 +878,7 @@ const T = {
   'k3': ['3 · Not returned', '3 · Belum Balik'], 'k3.crit': ['{n} critical · {v}', '{n} kritis · {v}'], 'k3.say': ['{nd} parcels not yet delivered ({v}).', '{nd} paket belum terkirim ({v}).'],
   'k4': ['4 · Past SLA', '4 · Lewat SLA'], 'k4.tip': ['Delivered, POD not back yet, and its age (from the "Age from" date) is over the customer SLA (6/7 WD).', 'Sudah delivered, POD belum kembali, dan umurnya (dari tanggal "Umur dihitung dari") melebihi SLA customer (6/7 HK).'],
   'k4.say': ['Late, out of {n} delivered POD not yet back ({v}).', 'Terlambat dari {n} POD delivered yang belum kembali ({v}).'],
-  'k5': ['5 · On time', '5 · Tepat Waktu'], 'k5.tip': ['Of the returned POD, the share that came back within the customer SLA.', 'Dari POD yang sudah kembali, porsi yang kembali sesuai SLA customer.'],
+  'k5': ['5 · On time', '5 · Tepat Waktu'], 'k5.tip': ['Of the returned POD, the share that came back within the customer SLA. Click for the AWB list and the weekly trend.', 'Dari POD yang sudah kembali, porsi yang kembali sesuai SLA customer. Klik untuk daftar AWB dan tren mingguan.'],
   'k5.say': ['Returned within SLA. Average {d} WD.', 'Kembali sesuai SLA. Rata-rata {d} HK.'],
   'seeAwb': ['See AWB ›', 'Lihat AWB ›'],
   'focus': ['Focus', 'Fokus'],
@@ -1000,6 +1019,11 @@ const T = {
   'bl.ret': ['Returned', 'Sudah balik'],
   'top': ['Back to top', 'Kembali ke atas'],
   'nav.ana': ['Analysis', 'Analisis'],
+  'wt.title': ['On-time return per week', 'Tepat waktu per minggu'],
+  'wt.sub': ['Bar = % of returned POD back within SLA · line = target 80% · green = target met, orange = below. Click a week for its AWB.', 'Batang = % POD sudah balik yang kembali sesuai SLA · garis = target 80% · hijau = tercapai, oranye = di bawah. Klik minggu untuk AWB-nya.'],
+  'wt.info': ['Weeks follow the POS date. Weeks with fewer than 10 returned POD are grey (too few to compare). Number under each bar = on time / returned and the on-time value.', 'Minggu mengikuti tanggal POS. Minggu dengan POD kembali kurang dari 10 berwarna abu (terlalu sedikit untuk dibandingkan). Angka di bawah batang = tepat waktu / sudah balik dan nilai tepat waktu.'],
+  'wt.tip': ['Week of {d}: {n} of {s} returned on time ({p}) · {v}', 'Minggu {d}: {n} dari {s} kembali tepat waktu ({p}) · {v}'],
+  'wt.few': ['too few to compare', 'terlalu sedikit'],
   'rk.of': ['of not returned', 'dari belum balik'], 'rk.tip': ['Open the AWB list not returned for {x}', 'Buka daftar AWB belum balik untuk {x}'],
   'ana.title': ['Analysis', 'Analisis'],
   'ana.tip': ['Supporting views: compare routes, groups, age colours and weeks. The numbers follow the same filters as the rest of the page.', 'Tampilan pendukung: bandingkan rute, grup, warna umur, dan minggu. Angkanya mengikuti filter yang sama dengan seluruh halaman.'],
@@ -1972,6 +1996,7 @@ function renderModal(focus) {
       <div class="mstat"><div class="lbl">${t('m.val')}${info(t('m.val.tip'))}</div><div class="val" data-tip="${esc(rp(vRows, true))}">${rp(vRows)}</div><div class="hint">${['tidak', 'all'].includes(node.id) ? '&nbsp;' : esc(t('m.valOf', { p: fp(pct(vRows, vBalik)) }))}</div></div>
       <div class="mstat"><div class="lbl">${t('sc.INTRACITY')} · ${t('sc.DOMESTIK')}</div><div class="val">${fmt(nI)} · ${fmt(rows.length - nI)}</div><div class="hint">${rp(sumV(rows.filter(r => r.scope === 'INTRACITY')))} · ${rp(sumV(rows.filter(r => r.scope !== 'INTRACITY')))} · ${fp(pct(nI, rows.length))}</div></div>
     </div>
+    ${sp.ot ? otTrend(sp) : ''}
     ${ageRows.length ? `<div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${isRet ? t('m.colRet') : t('m.colAge')}</div>${sevBar(sc, sp, true, sevVals(rows))}
       <div class="chips" style="margin-top:8px">${SEV.map(x => `<button type="button" class="chip ${sp.sev === x.k ? 'on' : ''}" data-msev="${x.k}" data-tip="${esc(L(x.def) + ' ' + sevRanges(x))}"><span class="dot bg-${x.k}"></span>${L(x.label)} · ${L(x.short)} <b class="t-${x.k}">${fmt(sc[x.k])}</b> <span class="muted">${rp(sumV(rows.filter(r => r.sev === x.k)))} · ${fp(pct(sc[x.k], ageRows.length))}</span></button>`).join('')}</div></div>` : ''}
     ${rows.length ? `<div><div class="muted" style="font-size:12.5px;margin-bottom:6px">${t('m.contrib')}</div><div class="why">${why.join('')}</div></div>` : ''}
@@ -1993,7 +2018,25 @@ function renderModal(focus) {
     <div class="pager"><span class="muted">${t('m.page', { a: M.page + 1, b: pages, n: fmt(list.length), v: rp(sumV(list)) })}</span>
       <button type="button" class="btn" data-mpage="-1" ${M.page ? '' : 'disabled'}>${t('prev')}</button>
       <button type="button" class="btn" data-mpage="1" ${M.page < pages - 1 ? '' : 'disabled'}>${t('next')}</button></div>`;
+  const wsc = $('#dialog .wt-scroll'); if (wsc) wsc.scrollLeft = wsc.scrollWidth; // minggu terbaru langsung terlihat
   if (focus) $('#dlg-close').focus();
+}
+
+function otTrend(sp) {
+  const base = { ...sp, node: 'sudah' }; delete base.ot; delete base.wk; delete base.sev; delete base.bk; delete base.over;
+  const m = new Map();
+  pool(base).forEach(r => { const w = weekOf(r.pos); let o = m.get(w); if (!o) m.set(w, o = { w, s: 0, ot: 0, v: 0 }); o.s++; if (!r.over) { o.ot++; o.v += r.val; } });
+  const W = [...m.values()].sort((a, b) => a.w - b.w);
+  if (!W.length) return '';
+  const cols = W.map(x => {
+    const p = x.s >= MIN_OT ? pct(x.ot, x.s) : null, on = sp.wk === x.w;
+    return `<button type="button" class="wt-col${on ? ' on' : ''}${p == null ? ' few' : p >= 80 ? ' hit' : ''}" data-wk="${x.w}" data-n="${x.ot}" data-mrefine='${esc(JSON.stringify({ wk: x.w }))}'
+      data-tip="${esc(t('wt.tip', { d: fd(x.w), n: fmt(x.ot), s: fmt(x.s), v: rp(x.v, true), p: p == null ? t('wt.few') : fp(p) }))}">
+      <span class="wt-v">${p == null ? '–' : fp(p)}</span><span class="wt-plot"><span class="wt-bar" style="height:${p || 0}%"></span><span class="wt-tgt"></span></span>
+      <span class="wt-x">${fd(x.w)}</span><span class="wt-n">${fmt(x.ot)}/${fmt(x.s)}<small>${rp(x.v)}</small></span></button>`;
+  }).join('');
+  return `<div class="wtrend"><div class="wt-h"><b>${t('wt.title')}</b>${info(t('wt.info'))}<span class="muted">${t('wt.sub')}</span></div>
+    <div class="wt-scroll"><div class="wt-grid" style="grid-template-columns:repeat(${W.length},minmax(62px,1fr))">${cols}</div></div></div>`;
 }
 
 function renderAwb(focus) {

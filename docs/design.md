@@ -146,3 +146,8 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 - **Setiap jumlah AWB tampil bersama Rp** di tempat yang sama (komponen `.nv` atau label count + Rp).
 - **Detail = modal.** Semua angka/kotak/baris ringkasan adalah tombol yang membuka daftar AWB dengan jumlah yang sama.
 - Komponen baru: `.ssum` (Intracity vs Domestik di bawah pohon), `.rank2 > .rk-list > .rk-row` (10 teratas cabang tujuan & customer).
+
+## v17 — tren di detail
+| Komponen | Kelas | Aturan |
+|---|---|---|
+| Tren mingguan tepat waktu | `.wtrend > .wt-scroll > .wt-grid > .wt-col` | Hanya di modal KPI On time; batang `--success` bila ≥ target, `--sev-oranye` bila di bawah (status), `--data-none` bila < 10 POD; garis target `--ink` 2px; setiap kolom = tombol filter minggu |
