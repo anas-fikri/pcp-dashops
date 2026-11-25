@@ -123,17 +123,18 @@ button { font: inherit; color: inherit; }
 
 /* kondisi saat ini */
 .now { display: grid; gap: 14px; }
-.status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 12px 16px; border-radius: 14px; border: 1px solid transparent; }
-.status .ic { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; flex: none; }
-.status .what { font-size: 16px; font-weight: 800; }
+/* Banner: latar netral; garis kiri, ikon & judul = warna LEVEL status; setiap alasan = pil dengan warnanya sendiri */
+.status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 12px 16px; border-radius: 14px;
+  background: var(--soft); border: 1px solid var(--line); border-left: 5px solid var(--lvl); }
+.status .ic { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; flex: none; background: var(--lvl); color: var(--lvl-on); }
+.status .what { font-size: 16px; font-weight: 800; color: var(--lvl-ink); }
 .status .reasons { font-size: 14px; display: inline-flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
 .status .reasons .go { text-decoration: none; display: inline-flex; }
+.status .mention { text-align: left; }
 .status .reasons .go:hover .mention { box-shadow: 0 0 0 1px currentColor; }
-.s-ok { background: var(--success-soft); } .s-ok .ic { background: var(--success); color: var(--card); }
-.s-oranye { background: var(--soft-oranye); } .s-oranye .ic { background: var(--sev-oranye); color: var(--on-oranye); }
-.s-merah { background: var(--soft-merah); } .s-merah .ic { background: var(--sev-merah); color: var(--on-sev); }
-.s-ungu { background: var(--soft-ungu); border-color: var(--sev-ungu); }
-.s-ungu .m-ungu { background: var(--sev-ungu); color: var(--on-sev); } .s-ungu .ic { background: var(--sev-ungu); color: var(--on-sev); } .s-ungu .what { color: var(--sev-ungu); }
+.lvl-crit { --lvl: var(--sev-merah); --lvl-ink: var(--sev-merah); --lvl-on: var(--on-sev); }
+.lvl-warn { --lvl: var(--sev-oranye); --lvl-ink: var(--sev-oranye-ink); --lvl-on: var(--on-oranye); }
+.lvl-good { --lvl: var(--success); --lvl-ink: var(--success); --lvl-on: var(--card); }
 .focus { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 13.5px; }
 .focus .k { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
@@ -259,6 +260,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpi .val b { font-size: 24px; }
   .mstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .status .reasons { display: grid; justify-items: start; gap: 6px; } .status .reasons > .muted { display: none; }
   .filters .field { flex: 1 1 140px; } .filters .arrow { display: none; }
   .filters select, .rangebtn { width: 100%; min-width: 0; }
   .dp-grid { grid-template-columns: repeat(7, minmax(30px, 1fr)); }
@@ -407,10 +409,10 @@ const T = {
   'now.tip': ['Read left to right: how many POD must come back, how many have, how many have not, how many are late, and how punctual. Click any box for its AWB list.', 'Baca dari kiri ke kanan: berapa POD wajib kembali, berapa yang sudah, berapa yang belum, berapa yang terlambat, dan seberapa tepat waktu. Klik kotak mana pun untuk daftar AWB-nya.'],
   'now.meta': ['Working days {w} · SLA per customer (6/7 WD)', 'Hari kerja {w} · SLA sesuai customer (6/7 HK)'],
   'h.crit': ['Action needed', 'Perlu tindakan'], 'h.warn': ['Watch', 'Waspada'], 'h.good': ['Good', 'Baik'],
-  'h.ungu': ['{p} of outstanding POD are critical (purple)', '{p} POD belum balik sudah kritis (ungu)'],
-  'h.ot': ['on-time return {p}', 'ketepatan waktu {p}'],
+  'h.ungu': ['{p} of outstanding POD are critical (purple) · limit < 15%', '{p} POD belum balik sudah kritis (ungu) · batas < 15%'],
+  'h.ot': ['on-time return {p} · target ≥ 80%', 'ketepatan waktu {p} · target ≥ 80%'],
   'h.and': ['and', 'dan'],
-  'h.rule': ['Action needed: ≥30% of outstanding POD purple OR on-time < 60%. Watch: ≥15% purple OR on-time < 80%. Otherwise Good. The banner takes the colour of the main reason.', 'Perlu tindakan: ≥30% POD belum balik ungu ATAU tepat waktu < 60%. Waspada: ≥15% ungu ATAU tepat waktu < 80%. Selain itu Baik. Warna banner mengikuti penyebab utamanya.'],
+  'h.rule': ['Action needed (red): ≥30% of outstanding POD purple OR on-time < 60%. Watch (orange): ≥15% purple OR on-time < 80%. Otherwise Good (green). Each reason keeps its own colour.', 'Perlu tindakan (merah): ≥30% POD belum balik ungu ATAU tepat waktu < 60%. Waspada (oranye): ≥15% ungu ATAU tepat waktu < 80%. Selain itu Baik (hijau). Setiap alasan memakai warnanya sendiri.'],
   'k1': ['1 · POD to return', '1 · POD Balik'], 'k1.say': ['Physical POD that must come back, out of {n} shipments.', 'POD fisik yang wajib kembali, dari {n} kiriman.'],
   'k2': ['2 · Returned', '2 · Sudah Balik'], 'k2.say': ['Back with us, out of {n} required.', 'Sudah kembali, dari {n} yang wajib.'],
   'k3': ['3 · Not returned', '3 · Belum Balik'], 'k3.crit': ['{n} critical', '{n} kritis'], 'k3.say': ['{nd} parcels not yet delivered.', '{nd} paket belum terkirim.'],
@@ -775,20 +777,20 @@ function health(c) {
   // dibandingkan dengan angka yang tampil (1 desimal) supaya teks dan status tidak bertentangan
   const pu = r1(pct(c.ungu, c.belum) || 0), pt = r1(pct(c.ontime, c.sudah) ?? 100);
   const uL = pu >= 30 ? 2 : pu >= 15 ? 1 : 0, tL = pt < 60 ? 2 : pt < 80 ? 1 : 0, lvl = Math.max(uL, tL);
+  // pil yang menyebut ungu SELALU ungu; pil ketepatan waktu berwarna sesuai ambangnya
   const reasons = [
     { lvl: uL, cls: 'ungu', sp: { node: 'belum', sev: 'ungu' }, txt: t('h.ungu', { p: fp(pu) }) },
-    { lvl: tL, cls: tL === 2 ? 'merah' : 'oranye', sp: { node: 'sudah' }, txt: t('h.ot', { p: fp(pt) }) },
+    { lvl: tL, cls: tL === 2 ? 'merah' : tL === 1 ? 'oranye' : 'ok', sp: { node: 'sudah' }, txt: t('h.ot', { p: fp(pt) }) },
   ];
-  // hanya alasan yang memicu status; urut dari yang paling berat, ungu lebih dulu bila seri
-  let shown = reasons.filter(r => r.lvl > 0).sort((a, b) => b.lvl - a.lvl);
-  if (!shown.length) shown = reasons.map(r => ({ ...r, cls: 'ok' }));
-  return { lvl, driver: lvl ? shown[0].cls : 'ok', shown, word: t(lvl === 2 ? 'h.crit' : lvl === 1 ? 'h.warn' : 'h.good') };
+  let shown = reasons.filter(r => r.lvl > 0).sort((a, b) => b.lvl - a.lvl);  // hanya pemicu, terberat dulu
+  if (!shown.length) shown = reasons;
+  return { lvl, shown, word: t(lvl === 2 ? 'h.crit' : lvl === 1 ? 'h.warn' : 'h.good') };
 }
 
 function renderNow() {
   const c = core(F), sc = sevCounts(c.belumRows), h = health(c);
-  $('#status').className = 'status s-' + h.driver;
-  $('#status').innerHTML = `<span class="ic" aria-hidden="true">${h.lvl === 2 ? '!' : h.lvl === 1 ? '~' : '✓'}</span><span class="what">${esc(h.word)}</span>
+  $('#status').className = 'status ' + ['lvl-good', 'lvl-warn', 'lvl-crit'][h.lvl];
+  $('#status').innerHTML = `<span class="ic" aria-hidden="true">${h.lvl ? '!' : '✓'}</span><span class="what">${esc(h.word)}</span>
     <span class="reasons">${h.shown.map(r => go(r.sp, mention(r.cls, esc(r.txt)))).join(`<span class="muted">${t('h.and')}</span>`)}</span>${info(t('h.rule'))}`;
   const tot = SEV.reduce((s, x) => s + sc[x.k], 0) || 1;
   const sevMini = `<div class="meter">${SEV.map(x => `<span class="bg-${x.k}" style="width:${(sc[x.k] / tot) * 100}%"></span>`).join('')}</div>`;
