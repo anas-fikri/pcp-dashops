@@ -4,10 +4,19 @@ Strategi semua layar: **C — code-native spec**. Prototype `prototype/pod-dashb
 komposisi memakai komponen di `docs/design.md`. Tidak ada design tool yang terhubung (katalog AnimatedWebs terblokir network policy sesi ini).
 
 ## SCR-DSH-001 · Dashboard ringkasan
-- **Komposisi:** header sticky (judul, ringkasan filter, EN/ID, Present, Export) → kartu filter (POS date preset/rentang, Age from, Customer, Scope, blok bertingkat Region › Internal/Perwakilan › Level › Cabang tujuan) → *Kondisi POD Saat Ini* (strip total, banner status, 5 KPI, Focus now) → Tren mingguan → Alur status → Warna umur + Kinerja → Aging (AWB|Rp, Per 5 HK|Per warna) → Siapa ditindaklanjuti (tab, AWB|Rp) → Istilah & aturan.
-- **Kontrak:** `/api/pod/summary`, `/trend`, `/status-tree`, `/aging`, `/performance`, `/ranking`, `/options`.
-- **Interaksi & efek:** count-up angka, kartu masuk berurutan, bar tumbuh, angkat + sorotan kursor pada KPI/Focus, denyut ikon Action needed, sorotan tertaut baris status ↔ aging, tooltip grafik dengan jumlah + Rp, klik minggu/angka/segmen → modal.
-- **States:** default ✓ · filter tanpa data ✓ (pesan "No outstanding POD…", tren "No POD to return") · lib grafik gagal ✓ (pesan, angka lain tetap) · reduced motion ✓ · loading API ✗ *gap — prototype tanpa jaringan; tambahkan skeleton saat porting (T9)* · error API ✗ *gap — tambahkan banner error + retry (T9)*.
+**Re-verifikasi v10 (redesign visual besar, 25 Nov 2026).**
+- **Kerangka:** app shell — sidebar navigasi (6 bagian, penanda bagian aktif via IntersectionObserver; disembunyikan ≤ 1180px & saat presentasi) + konten dengan band header sticky dan kartu filter.
+- **Bento grid 12 kolom:**
+  - *Ringkasan* — panel hero (span 8): banner status, total + bar balik/tidak balik, **3 cincin** (Returned, On time, Critical) | **Focus now** (span 4) | **5 KPI + sparkline 12 minggu POS** (span 12).
+  - *Tren mingguan* — Chart.js stacked % + garis on-time.
+  - *Alur status* — **diagram rincian per tahap** (default; setiap baris memecah satu tahap, lebar = % dari tahap) dengan toggle **Diagram | Tabel**.
+  - *Warna & kinerja* — **donut warna umur** (span 5, segmen bisa diklik) | kinerja pengembalian (span 7).
+  - *Aging* — heatmap angka berwarna (AWB | Rp, Per 5 HK | Per warna).
+  - *Tindak lanjut* — peringkat dengan lencana urutan 1–3.
+- **Kontrak:** `/api/pod/summary`, `/trend`, `/status-tree`, `/aging`, `/performance`, `/ranking`, `/options` (sparkline memakai `/trend`).
+- **Interaksi & efek:** cincin terisi, bar/blok tumbuh, count-up, angkat + sorotan kursor, denyut ikon kritis, sorotan tertaut, klik di setiap angka/blok/segmen/cincin/minggu → modal.
+- **States:** default ✓ · tanpa data ✓ · lib grafik gagal ✓ · reduced motion ✓ · HP 390px tanpa geser ✓ · loading API ✗ *gap (T9)* · error API ✗ *gap (T9)*.
+- **Kesesuaian:** komponen baru (app shell, cincin, sparkline, donut, diagram alur) memakai token yang ada; tidak ada warna baru → tidak ada eskalasi ke sistem desain.
 
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.

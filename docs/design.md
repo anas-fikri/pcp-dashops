@@ -61,6 +61,11 @@ design_provenance:
 | Komponen | Kelas | Variants / states | Aturan |
 |---|---|---|---|
 | Band header | `.top` | default, sticky (desktop), presentasi | Gradasi `--hero-*` + kilau; tombol putih/outline putih; teks putih ≥ 4.5:1 |
+| App shell | `.shell > .side + .wrap` | bagian aktif, ≤1180px sidebar disembunyikan | Navigasi ke 6 bagian; aksen hanya untuk penanda aktif |
+| Cincin indikator | `.ring` | hover (tebal), animasi isi | Warna = fungsi (Returned `--data-ret`, On time `--success`, Critical `--sev-ungu`); persentase + jumlah·Rp |
+| Sparkline | `.spark` | ≥2 titik; titik on-time disembunyikan bila < 10 | Area 14% + garis 2px + titik akhir; tooltip "awal → akhir" |
+| Donut warna umur | `.donut` | hover segmen menebal | Jarak 3px antar segmen; tengah = jumlah + Rp belum balik |
+| Diagram alur | `.flow-row > .flow-par + .flow-bar > .blk` | blok sempit (<14%) ringkas | Setiap baris = satu tahap; lebar blok = % dari tahap; keluarga warna data |
 | Strip total | `.totals` | default, hover legend, kosong (0 AWB) | Total AWB + Rp → bar 2 segmen (POD balik / tidak balik), tiap segmen bisa diklik |
 | Banner status | `.status.lvl-good/warn/crit` | 3 level | Latar netral; garis kiri, ikon, judul = warna level; alasan = pil masing-masing; crit berdenyut |
 | Kotak KPI | `.kpi` | default, hover (angkat + sorotan kursor), focus-visible, active | Titik warna = kategori data/status; angka count-up; selalu ada baris Rp |

@@ -357,6 +357,94 @@ body.present .status .what { font-size: 20px; } body.present .status .reasons { 
 body.present .fcard .nm { font-size: 20px; }
 body.present th, body.present td { padding: 10px 12px; }
 @media (max-width: 900px) { .focus-grid { grid-template-columns: 1fr; } }
+/* ---------- v10: app shell + bento ---------- */
+.shell { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+.side { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: calc(20px + env(safe-area-inset-top, 0px)) 14px 20px max(14px, env(safe-area-inset-left, 0px));
+  display: flex; flex-direction: column; gap: 4px; background: var(--card); border-right: 1px solid var(--line); }
+.side .brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 18px; font-weight: 800; font-size: 15px; letter-spacing: -.01em; }
+.side .brand i { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--hero-b), var(--hero-c)); display: inline-block; flex: none; }
+.side .cap { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 12px 4px; }
+.side a { display: flex; gap: 11px; align-items: center; padding: 9px 12px; border-radius: 10px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: 13.5px;
+  transition: background var(--dur-fast), color var(--dur-fast); position: relative; }
+.side a svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.side a:hover { background: var(--soft); color: var(--ink); text-decoration: none; }
+.side a.on { background: var(--accent-soft); color: var(--accent); }
+.side a.on::before { content: ""; position: absolute; left: -14px; top: 8px; bottom: 8px; width: 4px; border-radius: 0 4px 4px 0; background: var(--accent); }
+.side .foot { margin-top: auto; padding: 12px 10px 0; font-size: 12px; color: var(--muted); }
+.slide { scroll-margin-top: 96px; }
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-4 { grid-column: span 4; }
+/* hero */
+.hero { display: grid; gap: 14px; align-content: start; }
+.hero-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 28px; align-items: center; }
+.hero-body > * { min-width: 0; }
+.hero .totals { grid-template-columns: 1fr; border: 0; padding: 0; gap: 12px; }
+.hero .split-legend { flex-direction: column; gap: 2px; }
+.hero .split-legend button { justify-content: flex-start; flex-wrap: nowrap; white-space: nowrap; }
+.rings { display: grid; grid-template-columns: repeat(3, 116px); gap: 14px; }
+.ring { border: 0; background: none; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: 4px; position: relative; text-align: center; }
+.ring svg { width: 116px; height: 116px; }
+.ring .trk { fill: none; stroke: var(--soft); stroke-width: 11; }
+.ring .val { fill: none; stroke-width: 11; stroke-linecap: round; stroke-dasharray: 289.03; stroke-dashoffset: calc(289.03px * (1 - var(--p) / 100));
+  transform: rotate(-90deg); transform-origin: 60px 60px; animation: ringIn 900ms var(--ease) both; transition: stroke-width var(--dur-fast); }
+.ring:hover .val { stroke-width: 14; }
+@keyframes ringIn { from { stroke-dashoffset: 289.03px; } }
+.ring .rc { position: absolute; top: 0; left: 0; width: 116px; height: 116px; display: grid; place-content: center; line-height: 1.1; }
+.ring .rc b { font-size: 20px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.ring .rc small { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.ring .rs { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.focus.span-4 { align-content: start; }
+.focus.span-4 .focus-grid { grid-template-columns: 1fr; }
+/* sparkline */
+.spark { width: 100%; height: 34px; display: block; overflow: visible; }
+.spark .area { opacity: .14; }
+.spark .ln { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.spark .end { stroke: var(--card); stroke-width: 2; }
+/* donut warna umur */
+.donut-wrap { display: grid; grid-template-columns: 1fr; gap: 14px; justify-items: center; }
+.donut-wrap .legend { width: 100%; }
+.donut-box { position: relative; width: 168px; height: 168px; }
+.donut { width: 168px; height: 168px; }
+.donut .dseg { cursor: pointer; transition: stroke-width var(--dur-fast); }
+.donut .dseg:hover { stroke-width: 26; }
+.donut-c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; line-height: 1.15; }
+.donut-c b { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+.donut-c small { font-size: 11.5px; color: var(--muted); }
+.donut-wrap .legend { margin-top: 0; }
+/* diagram alur (icicle) */
+.flow { display: grid; gap: 10px; min-width: 720px; }
+.flow-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 14px; align-items: stretch; }
+.flow-par { border: 0; background: none; text-align: left; cursor: pointer; padding: 6px 0; display: grid; align-content: center; gap: 2px; border-right: 2px solid var(--line); padding-right: 12px; position: relative; }
+.flow-par::after { content: "›"; position: absolute; right: -9px; top: 50%; transform: translateY(-50%); background: var(--card); color: var(--muted); font-weight: 800; padding: 0 2px; }
+.flow-par .k { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.flow-par b { font-size: 14px; }
+.flow-par small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.flow-bar { display: flex; gap: 4px; min-height: 76px; }
+.blk { position: relative; flex: 1 1 0; min-width: 0; border: 0; border-radius: 10px; cursor: pointer; text-align: left; padding: 8px 10px 12px; overflow: hidden;
+  background: color-mix(in srgb, var(--bc) 20%, var(--card)); box-shadow: inset 4px 0 0 var(--bc); color: var(--ink); line-height: 1.25;
+  display: flex; flex-direction: column; gap: 2px; transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast), background var(--dur-fast);
+  animation: grow var(--dur-slow) var(--ease) both; transform-origin: left center; }
+.blk:hover { background: color-mix(in srgb, var(--bc) 32%, var(--card)); box-shadow: inset 4px 0 0 var(--bc), var(--lift); transform: translateY(-2px); z-index: 2; }
+.blk .nm { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.blk .ct { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.blk .ct small { font-size: 11.5px; font-weight: 700; color: var(--muted); margin-left: 5px; }
+.blk .rv { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.blk .sevbar { position: absolute; left: 10px; right: 10px; bottom: 5px; height: 4px; min-width: 0; animation: none; }
+.blk.small .rv { display: none; } .blk.small .ct small { display: block; margin: 0; }
+.flow-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+/* peringkat */
+.rk { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--soft); color: var(--muted); font-size: 11.5px; font-weight: 800; margin-right: 8px; vertical-align: middle; }
+tr:nth-child(1) .rk { background: var(--accent); color: var(--on-accent); }
+tr:nth-child(2) .rk, tr:nth-child(3) .rk { background: var(--accent-soft); color: var(--accent); }
+@media (max-width: 1180px) {
+  .shell { grid-template-columns: 1fr; } .side { display: none; }
+  .bento > * { grid-column: span 12; }
+  .hero-body { grid-template-columns: 1fr; } .rings { justify-content: start; }
+}
+@media (max-width: 640px) { .rings { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .ring svg, .ring .rc { width: 96px; height: 96px; } .ring .rc b { font-size: 16px; } .ring .rc small { font-size: 9.5px; } .ring .rs { font-size: 11px; }
+  .hero .split-legend button { flex-wrap: wrap; white-space: normal; } .donut-wrap { grid-template-columns: 1fr; justify-items: center; } }
+body.present .side { display: none; } body.present .shell { grid-template-columns: 1fr; }
+
 /* ---------- v8: efek & interaksi ---------- */
 @keyframes rise { from { transform: translateY(12px); } }
 @keyframes grow { from { transform: scaleX(0); } }
@@ -391,6 +479,18 @@ tr.linked td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 </style>
 
+<div class="shell">
+  <nav class="side" aria-label="Sections">
+    <div class="brand"><i aria-hidden="true"></i><span data-t="title"></span></div>
+    <div class="cap" data-t="nav.cap"></div>
+    <a href="#s-now" data-nav="s-now"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3zM13 21h8V11h-8zM13 3v6h8V3zM3 21h8v-6H3z"/></svg><span data-t="nav.now"></span></a>
+    <a href="#s-trend" data-nav="s-trend"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span data-t="nav.trend"></span></a>
+    <a href="#s-tree" data-nav="s-tree"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg><span data-t="nav.flow"></span></a>
+    <a href="#s-mid" data-nav="s-mid"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 4"/></svg><span data-t="nav.mid"></span></a>
+    <a href="#s-aging" data-nav="s-aging"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg><span data-t="nav.aging"></span></a>
+    <a href="#s-rank" data-nav="s-rank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span data-t="nav.rank"></span></a>
+    <div class="foot" data-t="sim.tip"></div>
+  </nav>
 <div class="wrap">
   <header class="top">
     <h1 data-t="title"></h1>
@@ -434,12 +534,14 @@ tr.linked td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
     </div>
   </section>
 
-  <section class="card now slide" id="s-now" aria-labelledby="now-title">
-    <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="muted" id="now-meta" style="font-size:12.5px"></span></div>
-    <div class="totals" id="totals"></div>
-    <div class="status" id="status" aria-live="polite"></div>
-    <div class="kpis" id="kpis"></div>
-    <div class="focus" id="focus"></div>
+  <section class="bento slide" id="s-now" aria-labelledby="now-title">
+    <div class="card hero now span-8">
+      <div class="card-head"><h2 id="now-title"><span data-t="now.title"></span><i class="info" tabindex="0" data-tt="now.tip">i</i></h2><span class="muted" id="now-meta" style="font-size:12.5px"></span></div>
+      <div class="status" id="status" aria-live="polite"></div>
+      <div class="hero-body"><div class="totals" id="totals"></div><div class="rings" id="rings"></div></div>
+    </div>
+    <div class="focus span-4" id="focus"></div>
+    <div class="kpis span-12" id="kpis"></div>
   </section>
 
   <section class="card slide" id="s-trend">
@@ -449,18 +551,20 @@ tr.linked td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   </section>
 
   <section class="card slide" id="s-tree">
-    <div class="card-head"><h2><span data-t="tree.title"></span><i class="info" tabindex="0" data-tt="tree.tip">i</i></h2><span class="muted" style="font-size:12.5px" data-t="tree.hint"></span></div>
-    <p class="sub" data-t="tree.sub"></p>
-    <div class="tw"><table id="tree"></table></div>
+    <div class="card-head"><h2><span data-t="tree.title"></span><i class="info" tabindex="0" data-tt="tree.tip">i</i></h2>
+      <span class="seg" role="group"><button type="button" data-fv="diagram" id="fv-diagram" data-t="fv.d"></button><button type="button" data-fv="table" id="fv-table" data-t="fv.t"></button></span></div>
+    <p class="sub" id="tree-sub"></p>
+    <div class="tw" id="flow-wrap"><div class="flow" id="flow"></div></div>
+    <div class="tw" id="tree-wrap"><table id="tree"></table></div>
   </section>
 
-  <div class="grid-2 slide" id="s-mid">
-    <section class="card">
+  <div class="bento slide" id="s-mid">
+    <section class="card span-5">
       <div class="card-head"><h2><span data-t="sev.title"></span><i class="info" tabindex="0" data-tt="sev.tip">i</i></h2></div>
       <p class="sub" id="sev-sub"></p>
       <div id="sev-panel"></div>
     </section>
-    <section class="card">
+    <section class="card span-7">
       <div class="card-head"><h2><span data-t="perf.title"></span><i class="info" tabindex="0" data-tt="perf.tip">i</i></h2></div>
       <p class="sub" data-t="perf.sub"></p>
       <div class="tw"><table id="perf"></table></div>
@@ -506,6 +610,7 @@ tr.linked td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   </details>
 
   <footer data-t="footer"></footer>
+</div>
 </div>
 
 <div class="modal" id="modal" hidden>
@@ -678,6 +783,27 @@ const T = {
   'ru.stno': ['STPOD no.', 'No. STPOD'], 'ru.stno.d': ['Handover number. One STPOD covers every POD handed over together.', 'Nomor serah terima. Satu STPOD berisi semua POD yang diserahterimakan bersama.'],
   'ru.ppno': ['PODP no.', 'No. PODP'], 'ru.ppno.d': ['Receipt number for sending POD to the customer. One PODP holds many POD.', 'Nomor resi pengiriman POD ke customer. Satu PODP berisi banyak POD.'],
   'colourW': ['Colour {x}', 'Warna {x}'],
+  'flow.of': ['of {x}', 'dari {x}'],
+  'flow.split': ['Split of', 'Rincian'],
+  'c.ofAll': ['of all shipments', 'dari semua kiriman'],
+  'donut.c': ['not returned', 'belum balik'],
+  'spark.tip': ['Last {n} POS weeks: {a} → {b}', '{n} minggu POS terakhir: {a} → {b}'],
+  'ring.crit.tip': ['Share of outstanding POD already purple (≥ 4 WD past SLA).', 'Porsi POD belum balik yang sudah ungu (≥ 4 HK lewat SLA).'],
+  'ring.ot.tip': ['Share of returned POD that came back within the customer SLA.', 'Porsi POD yang kembali sesuai SLA customer.'],
+  'ring.ret.tip': ['Share of POD to return that is back.', 'Porsi POD balik yang sudah kembali.'],
+  'ring.crit': ['Critical', 'Kritis'],
+  'ring.ot': ['On time', 'Tepat waktu'],
+  'ring.ret': ['Returned', 'Sudah balik'],
+  'flow.sub': ['Each row splits one step into its parts; block width = share of that step (same as % of parent). Click a block for its AWB.', 'Setiap baris memecah satu tahap menjadi bagiannya; lebar blok = porsi dari tahap itu (sama dengan % induk). Klik blok untuk AWB-nya.'],
+  'fv.t': ['Table', 'Tabel'],
+  'fv.d': ['Diagram', 'Diagram'],
+  'nav.rank': ['Follow-up', 'Tindak lanjut'],
+  'nav.aging': ['Aging', 'Aging'],
+  'nav.mid': ['Colour & performance', 'Warna & kinerja'],
+  'nav.flow': ['Status flow', 'Alur status'],
+  'nav.trend': ['Weekly trend', 'Tren mingguan'],
+  'nav.now': ['Overview', 'Ringkasan'],
+  'nav.cap': ['Sections', 'Bagian'],
   'tr.few': ['On-time not shown: fewer than {n} POD returned yet.', 'Tepat waktu tidak ditampilkan: POD yang kembali belum mencapai {n}.'],
   'sp.wk': ['POS week of {d}', 'Minggu POS {d}'],
   'tr.empty': ['No POD to return in this period.', 'Tidak ada POD balik pada periode ini.'],
@@ -900,7 +1026,7 @@ function computeAges() {
 }
 
 /* ================= state ================= */
-const S = { basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
+const S = { fv: 'diagram', basis: 'dlv', metric: 'n', rsort: 'n', pmode: 'preset', period: 90, from: TODAY - 29, to: TODAY, cust: '', scope: '', reg: '', btype: '', lv: '', branch: '', ww: 'ms', am: 'bucket', rank: 'br', rankAll: false };
 try { const saved = JSON.parse(localStorage.getItem('pod-proto-v3') || '{}'); ['ww', 'am', 'rank', 'basis'].forEach(k => { if (saved[k]) S[k] = saved[k]; }); if (saved.lang) LANG = saved.lang; } catch (e) { /* abaikan */ }
 const remember = () => { try { localStorage.setItem('pod-proto-v3', JSON.stringify({ ww: S.ww, am: S.am, rank: S.rank, basis: S.basis, lang: LANG })); } catch (e) { /* abaikan */ } };
 const range = () => (S.pmode === 'preset' ? [TODAY - S.period + 1, TODAY] : [S.from, S.to]);
@@ -1028,20 +1154,59 @@ function renderNow() {
   $('#status').innerHTML = `<span class="ic" aria-hidden="true">${h.lvl ? '!' : '✓'}</span><span class="what">${esc(h.word)}</span>
     <span class="reasons">${h.shown.map(r => go(r.sp, mention(r.cls, esc(r.txt)))).join(`<span class="muted">${t('h.and')}</span>`)}<span class="muted">·</span>${go({ node: 'belum' }, mention('hitam', esc(t('h.hold', { v: rp(c.vBelum) }))), '', t('h.hold.tip') + ' ' + rp(c.vBelum, true))}</span>${info(t('h.rule'))}`;
   const tot = SEV.reduce((s, x) => s + sc[x.k], 0) || 1;
+  const wk = weekly(F);
   const sevMini = `<div class="meter">${SEV.map(x => `<span class="bg-${x.k}" style="width:${(sc[x.k] / tot) * 100}%"></span>`).join('')}</div>`;
   const tile = (sp, color, lbl, hint, big, badge, say, bar, money, cnt) => `<button type="button" class="kpi" data-open="${spec(sp)}">
     <span class="lbl"><span class="kdot" style="background:${color}"></span>${lbl}${info(hint)}</span>
     <span class="val"><b data-count="${cnt[0] ?? ''}" data-fmt="${cnt[1]}" data-key="kpi-${sp.node}-${cnt[1]}-${lbl.slice(0, 1)}">${big}</b>${badge ? `<span>${badge}</span>` : ''}</span>${money}${bar}<span class="say">${say}</span></button>`;
   const money = (k, v, cls = '') => `<span class="money ${cls}" data-tip="${esc(t('v.tip') + ' ' + rp(v, true))}">${t(k)} <b>${rp(v)}</b></span>`;
   $('#kpis').innerHTML = [
-    tile({ node: 'balik' }, 'var(--data-req)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--data-req)'), money('k1.v', c.vBalik), [c.balik, 'n']),
-    tile({ node: 'sudah' }, 'var(--data-ret)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--data-ret)'), money('k2.v', c.vSudah), [pct(c.sudah, c.balik), 'p']),
-    tile({ node: 'belum' }, 'var(--data-pending)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini, money('k3.v', c.vBelum, 'hold'), [c.belum, 'n']),
-    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)'), money('k4.v', c.vOverD), [c.overD, 'n']),
-    tile({ node: 'sudah' }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })), meter(pct(c.ontime, c.sudah), 'var(--success)'), money('k5.v', c.vOntime), [pct(c.ontime, c.sudah), 'p']),
+    tile({ node: 'balik' }, 'var(--data-req)', t('k1'), L(NODE.balik.def), fmt(c.balik), fp(pct(c.balik, c.all)), esc(t('k1.say', { n: fmt(c.all), v: rp(c.vAll) })), meter(pct(c.balik, c.all), 'var(--data-req)') + spark(wk.map(w => w.n), 'var(--data-req)', 'n'), money('k1.v', c.vBalik), [c.balik, 'n']),
+    tile({ node: 'sudah' }, 'var(--data-ret)', t('k2'), L(NODE.sudah.def), fp(pct(c.sudah, c.balik)), fmt(c.sudah), esc(t('k2.say', { n: fmt(c.balik), v: rp(c.vBalik) })), meter(pct(c.sudah, c.balik), 'var(--data-ret)') + spark(wk.map(w => pct(w.s, w.n)), 'var(--data-ret)', 'p'), money('k2.v', c.vSudah), [pct(c.sudah, c.balik), 'p']),
+    tile({ node: 'belum' }, 'var(--data-pending)', t('k3'), L(NODE.belum.def), fmt(c.belum), fp(pct(c.belum, c.balik)), `${mention('ungu', esc(t('k3.crit', { n: fmt(c.ungu), v: rp(c.vUngu) })))} ${esc(t('k3.say', { nd: fmt(c.nd), v: rp(sumV(c.belumRows.filter(r => r.grp === 'N'))) }))}`, sevMini + spark(wk.map(w => w.b), 'var(--data-pending)', 'n'), money('k3.v', c.vBelum, 'hold'), [c.belum, 'n']),
+    tile({ node: 'dlv', over: true }, 'var(--sev-merah)', t('k4'), t('k4.tip'), fmt(c.overD), fp(pct(c.overD, c.dlv)), esc(t('k4.say', { n: fmt(c.dlv), v: rp(sumV(c.belumRows.filter(r => r.grp === 'D'))) })), meter(pct(c.overD, c.dlv), 'var(--sev-merah)') + spark(wk.map(w => w.od), 'var(--sev-merah)', 'n'), money('k4.v', c.vOverD), [c.overD, 'n']),
+    tile({ node: 'sudah' }, 'var(--success)', t('k5'), t('k5.tip'), fp(pct(c.ontime, c.sudah)), fmt(c.ontime), esc(t('k5.say', { d: fday(c.avgLead) })), meter(pct(c.ontime, c.sudah), 'var(--success)') + spark(wk.map(w => (w.s >= 10 ? pct(w.ot, w.s) : null)), 'var(--success)', 'p'), money('k5.v', c.vOntime), [pct(c.ontime, c.sudah), 'p']),
   ].join('');
   renderTotals(c);
+  renderRings(c);
   renderFocus(c);
+}
+
+function ringHtml(sp, p, col, lbl, tip, sub) {
+  return `<button type="button" class="ring" data-open="${spec(sp)}" data-tip="${esc(tip)}">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="46"/><circle class="val" cx="60" cy="60" r="46" style="stroke:${col};--p:${Math.max(0, Math.min(100, p || 0))}"/></svg>
+    <span class="rc"><b>${fp(p)}</b><small>${esc(lbl)}</small></span><span class="rs">${sub}</span></button>`;
+}
+function renderRings(c) {
+  $('#rings').innerHTML = [
+    ringHtml({ node: 'sudah' }, pct(c.sudah, c.balik), 'var(--data-ret)', t('ring.ret'), t('ring.ret.tip'), `${fmt(c.sudah)} · ${rp(c.vSudah)}`),
+    ringHtml({ node: 'sudah' }, pct(c.ontime, c.sudah), 'var(--success)', t('ring.ot'), t('ring.ot.tip'), `${fmt(c.ontime)} · ${rp(c.vOntime)}`),
+    ringHtml({ node: 'belum', sev: 'ungu' }, pct(c.ungu, c.belum), 'var(--sev-ungu)', t('ring.crit'), t('ring.crit.tip'), `${fmt(c.ungu)} · ${rp(c.vUngu)}`),
+  ].join('');
+}
+function weekly(rows) {
+  const m = new Map();
+  rows.forEach(r => {
+    if (!r.req) return;
+    const w = weekOf(r.pos);
+    let o = m.get(w);
+    if (!o) m.set(w, o = { w, n: 0, s: 0, b: 0, ot: 0, od: 0 });
+    o.n++;
+    if (r.grp === 'S') { o.s++; if (!r.over) o.ot++; } else { o.b++; if (r.grp === 'D' && r.over) o.od++; }
+  });
+  return [...m.values()].sort((a, b) => a.w - b.w).slice(-12);
+}
+function spark(vals, col, kind) {
+  const pts = vals.map((v, i) => [i, v]).filter(x => x[1] != null && isFinite(x[1]));
+  if (pts.length < 2) return '';
+  const W = 120, H = 34, n = vals.length - 1, ys = pts.map(x => x[1]), max = Math.max(...ys), min = Math.min(...ys);
+  const X = i => (i / n) * W, Y = v => H - 3 - ((v - min) / (max - min || 1)) * (H - 8);
+  const line = pts.map((x, i) => `${i ? 'L' : 'M'}${X(x[0]).toFixed(1)},${Y(x[1]).toFixed(1)}`).join('');
+  const area = `${line}L${X(pts[pts.length - 1][0]).toFixed(1)},${H}L${X(pts[0][0]).toFixed(1)},${H}Z`;
+  const last = pts[pts.length - 1], f = v => (kind === 'p' ? fp(v) : fmt(v));
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(t('spark.tip', { n: vals.length, a: f(pts[0][1]), b: f(last[1]) }))}" data-tip="${esc(t('spark.tip', { n: vals.length, a: f(pts[0][1]), b: f(last[1]) }))}">
+    <path class="area" d="${area}" fill="${col}"/><path class="ln" d="${line}" stroke="${col}" vector-effect="non-scaling-stroke"/>
+    <circle class="end" cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.5" fill="${col}" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 function renderTotals(c) {
@@ -1109,6 +1274,14 @@ document.addEventListener('mouseover', e => {
   linked = id;
   if (id) document.querySelectorAll(`tr[data-link="${id}"]`).forEach(r => r.classList.add('linked'));
 });
+
+// navigasi samping: tandai bagian yang sedang terlihat
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => {
+    es.forEach(en => { if (en.isIntersecting) document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav === en.target.id)); });
+  }, { rootMargin: '-35% 0px -60% 0px' });
+  document.querySelectorAll('.slide').forEach(el => io.observe(el));
+}
 
 /* ================= tren mingguan (Chart.js) ================= */
 let trendChart = null;
@@ -1212,16 +1385,48 @@ function renderTree() {
       <td class="l">${n.d >= 2 ? sevBar(sevCounts(rows), { node: n.id }, false, sevVals(rows)) : ''}</td></tr>`;
   }
   $('#tree').innerHTML = h + '</tbody>';
+  renderFlow(cnt);
+}
+
+function renderFlow(cnt) {
+  $('#fv-diagram').setAttribute('aria-pressed', S.fv === 'diagram'); $('#fv-table').setAttribute('aria-pressed', S.fv === 'table');
+  $('#flow-wrap').hidden = S.fv !== 'diagram'; $('#tree-wrap').hidden = S.fv !== 'table';
+  $('#tree-sub').textContent = S.fv === 'diagram' ? t('flow.sub') : t('tree.sub');
+  const fam = id => { const path = pathOf(id); return path.includes('sudah') ? 'var(--data-ret)' : path.includes('belum') ? 'var(--data-pending)' : id === 'tidak' ? 'var(--data-none)' : 'var(--data-req)'; };
+  // setiap baris = satu tahap dipecah menjadi anak-anaknya (lebar = % dari tahap itu)
+  $('#flow').innerHTML = ['all', 'balik', 'sudah', 'belum', 'dlv'].map(pid => {
+    const par = cnt[pid], kids = NODES.filter(n => n.p === pid && cnt[n.id].length);
+    if (!par.length || !kids.length) return '';
+    const blocks = kids.map(n => {
+      const rr = cnt[n.id], w = pct(rr.length, par.length);
+      const sev = pathOf(n.id).includes('belum') ? sevBar(sevCounts(rr), { node: n.id }, false, sevVals(rr)) : '';
+      const tip = `${L(n.label)} — ${L(n.short)}: ${fmt(rr.length)} AWB · ${rp(sumV(rr), true)} (${fp(w)} ${t('flow.of', { x: nl(pid) })})`;
+      return `<button type="button" class="blk ${w < 14 ? 'small' : ''}" style="flex-grow:${rr.length};--bc:${fam(n.id)}" data-open="${spec({ node: n.id })}" data-tip="${esc(tip)}">
+        <span class="nm">${esc(L(n.label))}</span><span class="ct">${fmt(rr.length)}<small>${fp(w)}</small></span><span class="rv">${rp(sumV(rr))}</span>${sev}</button>`;
+    }).join('');
+    return `<div class="flow-row"><button type="button" class="flow-par" data-open="${spec({ node: pid })}" data-tip="${esc(L(NODES.find(n => n.id === pid).def))}">
+      <span class="k">${esc(t('flow.split'))}</span><b>${esc(nl(pid))}</b><small>${fmt(par.length)} · ${rp(sumV(par))}</small></button><div class="flow-bar">${blocks}</div></div>`;
+  }).join('');
 }
 
 function renderSev() {
   const c = core(F), sc = sevCounts(c.belumRows);
   const scv = Object.fromEntries(SEV.map(x => [x.k, sumV(c.belumRows.filter(r => r.sev === x.k))]));
   $('#sev-sub').textContent = t('sev.sub', { n: fmt(c.belum) });
-  $('#sev-panel').innerHTML = sevBar(sc, { node: 'belum' }, true, scv) + '<div class="legend">' + SEV.map(x => `
+  const C = 2 * Math.PI * 58, tot = SEV.reduce((a, x) => a + sc[x.k], 0) || 1;
+  let acc = 0;
+  const segs = SEV.filter(x => sc[x.k]).map(x => {
+    const len = (sc[x.k] / tot) * C, gap = Math.min(3, len / 3);
+    const seg = `<circle class="dseg" cx="84" cy="84" r="58" fill="none" stroke="var(--sev-${x.k})" stroke-width="20" stroke-dasharray="${(len - gap).toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90 84 84)"
+      data-open="${spec({ node: 'belum', sev: x.k })}" data-tip="${esc(t('sevbar.tip', { x: L(x.label), s: L(x.short), n: fmt(sc[x.k]), v: rp(scv[x.k], true), p: fp(pct(sc[x.k], tot)) }))}"/>`;
+    acc += len;
+    return seg;
+  }).join('');
+  $('#sev-panel').innerHTML = `<div class="donut-wrap"><div class="donut-box"><svg class="donut" viewBox="0 0 168 168" role="img" aria-label="${esc(t('sev.title'))}"><circle cx="84" cy="84" r="58" fill="none" stroke="var(--soft)" stroke-width="20"/>${segs}</svg>
+    <div class="donut-c"><b>${fmt(c.belum)}</b><small>${esc(t('donut.c'))}</small><small>${rp(c.vBelum)}</small></div></div>` + '<div class="legend">' + SEV.map(x => `
     <button type="button" data-open="${spec({ node: 'belum', sev: x.k })}" data-tip="${esc(L(x.def) + ' ' + sevRanges(x) + '.')}">
       <span class="dot bg-${x.k}"></span><span><b class="t-${x.k}">${L(x.label)}</b> · ${L(x.short)}<span class="desc">${sevRanges(x)} · ${esc(t('sev.v', { v: rp(scv[x.k]) }))}</span></span>
-      <span class="n t-${x.k}">${nv(sc[x.k], scv[x.k])}</span><span class="p">${fp(pct(sc[x.k], c.belum))}</span></button>`).join('') + '</div>';
+      <span class="n t-${x.k}">${nv(sc[x.k], scv[x.k])}</span><span class="p">${fp(pct(sc[x.k], c.belum))}</span></button>`).join('') + '</div></div>';
 }
 
 function renderPerf() {
@@ -1288,7 +1493,7 @@ function renderRank() {
     const sub = key === 'br' ? BR[x.id].reg : key === 'cust' ? `SLA ${CUST[x.id].sla} ${U()}` : key === 'reg' ? t('r.regdesc', { n: fmt(new Set(F.filter(r => r.reg === x.id).map(r => r.br)).size) }) : t('r.lvdesc');
     const fk = key === 'br' ? 'branch' : key;
     const otp = pct(x.c.ontime, x.c.sudah);
-    h += `<tr><td class="name l"><button type="button" class="go" data-filter="${fk}" data-val="${esc(x.id)}" data-tip="${esc(t('r.filterTo', { x: nm }))}">${esc(nm)}</button><span class="desc">${esc(sub)}</span></td>
+    h += `<tr><td class="name l"><span class="rk">${show.indexOf(x) + 1}</span><button type="button" class="go" data-filter="${fk}" data-val="${esc(x.id)}" data-tip="${esc(t('r.filterTo', { x: nm }))}">${esc(nm)}</button><span class="desc">${esc(sub)}</span></td>
       <td>${x.c.belum ? go({ node: 'belum', [key]: x.id }, byV
         ? `<span class="nv"><b data-tip="${esc(rp(x.c.vBelum, true))}">${rp(x.c.vBelum)}</b><small>${fmt(x.c.belum)} AWB</small></span>` : nv(x.c.belum, x.c.vBelum)) : 0}</td><td>${fp(pct(byV ? x.c.vBelum : x.c.belum, totalBelum))}</td>
       <td class="bar l">${sevBar(x.sc, { node: 'belum', [key]: x.id }, false, sevVals(x.c.belumRows))}</td>
@@ -1627,6 +1832,8 @@ document.addEventListener('click', e => {
   const c = tg.closest('[data-clear]'); if (c) { if (c.dataset.clear === '*') ['cust', 'scope', 'reg', 'btype', 'lv', 'branch'].forEach(k => { S[k] = ''; }); else S[c.dataset.clear] = ''; return render(); }
   const ww = tg.closest('[data-ww]'); if (ww) { S.ww = ww.dataset.ww; remember(); buildCalendar(S.ww); computeAges(); return render(); }
   const am = tg.closest('[data-am]'); if (am) { S.am = am.dataset.am; remember(); return renderAging(); }
+  const fv = tg.closest('[data-fv]'); if (fv) { S.fv = fv.dataset.fv; return renderTree(); }
+  const nav = tg.closest('[data-nav]'); if (nav) { e.preventDefault(); const el = document.getElementById(nav.dataset.nav); if (el) el.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'start' }); return; }
   const bs = tg.closest('[data-basis]'); if (bs) { S.basis = bs.dataset.basis; remember(); computeAges(); return render(); }
   const mt = tg.closest('[data-metric]'); if (mt) { S.metric = mt.dataset.metric; return renderAging(); }
   const rs = tg.closest('[data-rsort]'); if (rs) { S.rsort = rs.dataset.rsort; return renderRank(); }
