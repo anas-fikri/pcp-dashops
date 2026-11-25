@@ -57,6 +57,8 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 - Di bawah batang: tepat waktu / sudah balik + nilai Rp. Klik minggu → daftar AWB minggu itu (chip "POS week of …", bisa dilepas). Di HP grafik bisa digeser dan langsung menampilkan minggu terbaru.
 - E2E 63/63: jumlah tepat waktu semua minggu = KPI; klik minggu = jumlah modal; tren tidak ada di halaman maupun di detail lain.
 
+**v18 — pembersihan kode (25 Nov 2026).** Tanpa perubahan tampilan atau perilaku. Dihapus: 22 fungsi/konstanta JS yang tidak terpanggil (ESLint `no-unused-vars` + espree, berulang sampai stabil), 10 event handler untuk kontrol yang sudah tidak ada, cabang export trend/scope/sev/perf, state lama (`fv, tl, at, pv, av, am, metric, rsort, rank, rankAll`), 185 selector CSS tanpa pemakai, 125 kunci teks EN/ID tanpa rujukan. Export "Tindak lanjut" kini berisi dua sheet (cabang tujuan & customer) sesuai yang tampil. File 255.737 → 203.170 byte (2.329 → 1.819 baris). Verifikasi: ESLint bersih; e2e 63/63; screenshot sebelum/sesudah identik piksel per piksel (halaman, modal, detail AWB, kalender, tooltip, presentasi, bahasa Indonesia; terang & gelap); ukuran 61 elemen identik di 390px & 1440px.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

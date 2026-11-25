@@ -151,3 +151,6 @@ Token: `docs/tokens.json` · Prototype referensi: `prototype/pod-dashboard.html`
 | Komponen | Kelas | Aturan |
 |---|---|---|
 | Tren mingguan tepat waktu | `.wtrend > .wt-scroll > .wt-grid > .wt-col` | Hanya di modal KPI On time; batang `--success` bila ≥ target, `--sev-oranye` bila di bawah (status), `--data-none` bila < 10 POD; garis target `--ink` 2px; setiap kolom = tombol filter minggu |
+
+## v18 — komponen yang dipensiunkan (kode sudah dihapus dari prototype)
+Tidak dipakai lagi dan **jangan diimplementasikan** di Laravel: app shell/sidebar (`.shell`, `.side`), cincin (`.ring`), bullet graph mandiri (`.bullet`), total terpisah (`.totals`, `.split-*`), panel Focus (`.focus`, `.fcard`), strip sejak kunjungan terakhir (`.since`), sparkline (`.spark`), donut warna umur (`.donut`), diagram alur baris (`.flow-row`, `.blk`), heatmap aging (`.hm`), tabel pohon, tab peringkat/analisis (`.tabs`, `.atabs`), kartu Intracity vs Domestik besar (`.scp-*`), baris kinerja (`.pv-*`), grafik tren Chart.js. Pengalih tampilan (`.seg` di luar filter/header) tidak dipakai di halaman ringkasan.
