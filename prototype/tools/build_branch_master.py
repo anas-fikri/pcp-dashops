@@ -16,10 +16,13 @@ Aturan pemetaan (lihat docs/pod-dashboard-spec.md):
     - Office_Type dinormalisasi: Cabang, Agen, Perwakilan, Satelit.
       Grup: Cabang & Satelit -> INTERNAL; Agen & Perwakilan -> AGENT (Perwakilan).
     - Region INTERNATIONAL dikecualikan (bukan tujuan POD domestik).
-    - Region: file memakai dua tingkat yang bersarang. Baris kecamatan (CityCode <= 10 karakter)
-      memakai region rinci (SUMATERA, KALIMANTAN, JATIMBARA, JABATENG, DKI JAKARTA, SUMAPA, ...),
-      baris kelurahan memakai region induk (KALSTRA, JABASRA, SUMAPA). Dipakai region rinci;
-      bila tidak ada, region induk.
+    - HANYA baris kecamatan (CityCode <= 10 karakter) yang dipakai untuk tier, office, region dan nama.
+      Baris kelurahan (12 karakter, ~83 rb baris) selalu bernilai default "Tier 2 / Agen" dan memakai
+      region induk (KALSTRA, JABASRA, SUMAPA, DKI JAKARTA) - bila ikut dihitung, cabang utama seperti
+      Bandung/Denpasar akan tampak punya ratusan area Sub Branch/Agen. Kelurahan hanya dipakai sebagai
+      cadangan bila sebuah kode tidak punya baris kecamatan sama sekali.
+    - Region rinci = region terbanyak di baris kecamatan; region induk ("g") = region terbanyak di baris
+      kelurahan (kelompok wilayah). Kode dengan region campuran dilaporkan di output.
 File mentah tidak disimpan di repo; hanya ringkasan per cabang.
 """
 import collections
@@ -47,11 +50,13 @@ def main(path: str) -> None:
     head = [c for c in next(ws.iter_rows(max_row=1, values_only=True))]
     idx = {name: head.index(name) for name in ["CityCode", "RegionName", "DistrictName", "Tier", "Office_Type"]}
 
-    areas = collections.defaultdict(lambda: collections.Counter())          # code -> Counter(level)
-    office = collections.defaultdict(lambda: collections.Counter())         # (code, level) -> Counter(office)
+    # kec = baris kecamatan (sumber utama), kel = baris kelurahan (cadangan)
+    areas = {k: collections.defaultdict(collections.Counter) for k in ("kec", "kel")}      # code -> Counter(level)
+    office = {k: collections.defaultdict(collections.Counter) for k in ("kec", "kel")}     # (code, level) -> Counter(office)
     region = collections.defaultdict(collections.Counter)        # region rinci (baris kecamatan)
     region_parent = collections.defaultdict(collections.Counter)  # region induk (baris kelurahan)
     names = collections.defaultdict(collections.Counter)
+    names_kel = collections.defaultdict(collections.Counter)  # cadangan nama: kecamatan terbanyak di baris kelurahan
     skipped = collections.Counter()
 
     for r in ws.iter_rows(min_row=2, values_only=True):
@@ -66,25 +71,34 @@ def main(path: str) -> None:
             skipped["unknown_tier_or_office"] += 1
             continue
         code, lv = code_full[:3].upper(), TIER[tier]
-        areas[code][lv] += 1
-        office[(code, lv)][off] += 1
-        (region if len(code_full) <= 10 else region_parent)[code][reg] += 1
+        src = "kec" if len(code_full) <= 10 else "kel"
+        areas[src][code][lv] += 1
+        office[src][(code, lv)][off] += 1
+        (region if src == "kec" else region_parent)[code][reg] += 1
         dist = str(r[idx["DistrictName"]] or "")
-        if len(code_full) <= 10 and dist:
+        if src == "kel" and dist:
+            names_kel[code][dist.split(",")[0].strip()] += 1
+        if src == "kec" and dist:
             parts = [x.strip() for x in dist.split(",")]
             # baris kota utama ("JAKARTA" atau "MEDAN, MEDAN") diberi bobot besar agar jadi nama cabang
             names[code][parts[-1]] += 100000 if len(parts) == 1 else 1000 if parts[0] == parts[-1] else 1
 
-    master = []
-    for code in sorted(areas):
-        lv = areas[code]
-        name = names[code].most_common(1)[0][0] if names[code] else code
+    master, mixed_region, fallback = [], [], []
+    for code in sorted(set(areas["kec"]) | set(areas["kel"])):
+        src = "kec" if areas["kec"][code] else "kel"
+        if src == "kel":
+            fallback.append(code)
+        lv = areas[src][code]
+        name = (names[code] or names_kel[code]).most_common(1)[0][0] if (names[code] or names_kel[code]) else code
+        if len(region[code]) > 1:
+            mixed_region.append(f"{code} {dict(region[code])}")
         master.append({
             "c": code,
             "n": title(name),
             "r": (region[code] or region_parent[code]).most_common(1)[0][0],
+            "g": (region_parent[code] or region[code]).most_common(1)[0][0],
             "a": [lv.get("BRANCH", 0), lv.get("SUB", 0), lv.get("SITE", 0)],
-            "o": [office[(code, l)].most_common(1)[0][0] if office[(code, l)] else "" for l in ("BRANCH", "SUB", "SITE")],
+            "o": [office[src][(code, l)].most_common(1)[0][0] if office[src][(code, l)] else "" for l in ("BRANCH", "SUB", "SITE")],
         })
 
     out_dir = ROOT / "data"
@@ -107,6 +121,10 @@ def main(path: str) -> None:
             lv_tot[l] += m["a"][i]
     print(f"{len(master)} cabang · area per level {dict(lv_tot)} · dilewati {dict(skipped)}")
     print("region:", dict(collections.Counter(m["r"] for m in master)))
+    print("region induk -> rinci:", dict(collections.Counter(f'{m["g"]} > {m["r"]}' for m in master)))
+    print("kode tanpa baris kecamatan (pakai kelurahan):", fallback or "-")
+    print("kode dengan region campuran (dipakai terbanyak):", mixed_region or "-")
+    print("pola level per kode:", dict(collections.Counter("+".join(l for l, n in zip(("BRANCH", "SUB", "SITE"), m["a"]) if n) for m in master)))
 
 
 if __name__ == "__main__":

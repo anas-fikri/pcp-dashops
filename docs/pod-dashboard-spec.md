@@ -120,13 +120,18 @@ dibangun dengan `python3 -I prototype/tools/build_branch_master.py <file.xlsx>` 
 | Kolom sumber | Dipakai sebagai |
 |---|---|
 | 3 huruf awal `CityCode` | Kode cabang tujuan (461 cabang domestik) |
-| `Tier`: Tier 1 / Tier 2 / Remote Area | Branch level: **Branch / Sub Branch / Site** (892 / 88.867 / 210 area) |
+| `Tier`: Tier 1 / Tier 2 / Remote Area (= `Tipe tujuan` KOTA UTAMA / KOTA LANJUTAN) | Branch level: **Branch (kota utama) / Sub Branch (kota lanjutan) / Site (remote area)** — 892 / 6.475 / 210 area kecamatan |
 | `Office_Type` | Cabang, Satelit → **Internal**; Agen, Perwakilan → **Perwakilan** [ASUMSI untuk Satelit & Agen] |
 | `RegionName` | Region rinci dari baris kecamatan (SUMATERA, KALIMANTAN, JATIMBARA, JABATENG, DKI JAKARTA, SUMAPA, …) |
 
 Temuan kualitas data:
-- **Tier melekat pada area, bukan cabang.** 1 cabang bisa punya area Tier 1 dan Tier 2 (mis. Jakarta: 43 area T1 Cabang, 270 area T2 Agen). Filter "Branch level" berlaku pada area tujuan kiriman.
-- **Dua tingkat region bersarang**: baris kecamatan memakai region rinci, baris kelurahan memakai region induk (KALSTRA = Sumatera + Kalimantan; JABASRA = Jateng + Jatimbara + sebagian DKI). Perlu konfirmasi mana yang resmi untuk pelaporan.
+- **Koreksi v13 — hanya baris kecamatan yang dipakai.** 82.774 baris kelurahan (CityCode 12 karakter) selalu bernilai default `Tier 2 / Agen` dan memakai region induk. Versi sebelumnya ikut menghitungnya sehingga, misalnya, Bandung tampak punya 431 area Sub Branch/Agen (seharusnya 66 area Branch/Cabang saja) dan ~18% kiriman ke cabang utama salah tercatat sebagai Sub Branch/Perwakilan. Kelurahan hanya dipakai bila kode tidak punya baris kecamatan (BHR, ERT, MHU, PND → nama diambil dari kecamatan terbanyak; perlu nama resmi).
+- **Tier melekat pada area, bukan cabang.** Pola per kode: 333 hanya Sub Branch, 42 hanya Branch, 50 Sub+Site, 23 Branch+Sub, 9 Branch+Sub+Site, 4 Branch+Site (mis. Jakarta: 43 area T1 Cabang + 3 area T2 Agen; Semarang: 17 T1 Cabang + 20 T2 Agen). Filter "Branch level" berlaku pada area tujuan kiriman.
+- **Office tidak mengikuti tier:** Remote Area kebanyakan dilayani Cabang (161 vs 49 Agen); 127 area Tier 2 dilayani Cabang (mis. Bogor, Depok).
+- **Region campuran** pada 10 kode (AGM, BLG, BOG, BYL, NNX, PSN, SRI, SXK, TDP, TGO) → dipakai region terbanyak.
+- **Region rinci vs induk:** DKI JAKARTA mencakup Banten (Cilegon, Serang, Pandeglang, Lebak); JABASRA dan KALSTRA muncul juga sebagai region rinci untuk 9 dan 3 kode (Cirebon, Indramayu, Kuningan, Bogor, Tangerang, …; Pesawaran, BHR, MHU).
+- **Dua tingkat region bersarang**: baris kecamatan memakai region rinci, baris kelurahan memakai region induk (KALSTRA = Sumatera + Kalimantan; JABASRA = Jateng + Jatimbara + DKI/Banten). Master kini menyimpan keduanya (`r` rinci, `g` induk). Perlu konfirmasi mana yang resmi untuk pelaporan.
+- **Simulasi:** asal kiriman domestik = cabang yang punya area Branch dengan kantor internal (bukan lagi 6 hub); dicek otomatis: 12.000 AWB, 0 pelanggaran level/kantor/region/scope terhadap master.
 - Ejaan `Office_Type` tidak seragam (Cabang/CABANG, Perwakilan/perwakilan) → dinormalisasi.
 - Ada kolom tanpa judul (kolom ke-12) berisi angka pada 4 baris; diabaikan.
 - 233 baris INTERNATIONAL dikecualikan.
