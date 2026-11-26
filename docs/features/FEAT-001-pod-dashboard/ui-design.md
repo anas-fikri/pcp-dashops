@@ -98,8 +98,10 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 | 8 | Teks rentang tanggal terlipat 3 baris; "1 days" | Filter berantakan | Format ringkas "4–26 Okt · 23 hari", satu baris, "1 hari" |
 | 9 | Google Fonts dimuat padahal tidak dipakai | Permintaan jaringan sia-sia (lambat di jaringan kantor/cabang) | Dihapus; huruf sistem |
 | 10 | Area sentuh lingkaran peta 23 px, label rute 19–20 px | Sulit diketuk di HP | ≥ 24 px (WCAG 2.5.8). Sisa < 24 px hanya tautan di dalam kalimat (dikecualikan 2.5.8) |
+| 11 | Tooltip peta hanya teks panjang ("Jawa Timur: 81 AWB · Rp … — Hitam 40, Oranye 12, …") | Harus membaca kalimat untuk tahu seberapa parah | Kartu visual: angka besar, batang warna umur relatif ke provinsi terbanyak, jumlah per warna, 3 cabang teratas dengan batang mini |
+| 12 | Label rute "Intracity1,919" tanpa spasi; judul kolom Excel "% % of parent" | Tampak tidak rapi | Diperbaiki |
 
-*Verifikasi:* E2E v21 **78/78** (57 cek v20 + 21 cek baru, a.l. tepat waktu + terlambat = jumlah, klik legenda = angkanya, tabel ≤ 8 kolom tanpa geser samping di 1440 px & HP, AWB sudah balik tanpa "Critical", tren tanpa oranye, tooltip Present, rentang "1 day" satu baris, Excel warna kosong untuk sudah balik). axe-core WCAG 2.1 AA: 0 pelanggaran (6 kondisi). ESLint: 0 peringatan. Token: 52 nilai cocok.
+*Verifikasi:* E2E v21 **80/80** (+2 cek tooltip peta); sebelumnya **78/78** (57 cek v20 + 21 cek baru, a.l. tepat waktu + terlambat = jumlah, klik legenda = angkanya, tabel ≤ 8 kolom tanpa geser samping di 1440 px & HP, AWB sudah balik tanpa "Critical", tren tanpa oranye, tooltip Present, rentang "1 day" satu baris, Excel warna kosong untuk sudah balik). axe-core WCAG 2.1 AA: 0 pelanggaran (6 kondisi). ESLint: 0 peringatan. Token: 52 nilai cocok.
 
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.

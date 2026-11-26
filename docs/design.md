@@ -206,3 +206,5 @@ Dipensiunkan: papan status v19 (`.sb-*`, `.ss-*`), band header biru, navigasi ba
 | Penyumbang | `details.mwhy` | terbuka di desktop, terlipat di HP |
 | Tabel | `table.mtable` | 8 kolom, header `.th-b` = tombol urut; HP: satu blok per AWB, kolom tanggal `.c-dt` disembunyikan |
 Dipensiunkan: `.sevbar`, `info()` di detail (ikon (i)), kolom Asal/Scope/SLA/Ref terpisah.
+
+**Tooltip peta (kartu visual).** Lingkaran, wilayah provinsi, dan baris "Provinsi dengan belum balik terbanyak" memakai `data-tipp` → `.tip.rich` (latar `--card`, bukan tooltip gelap, agar warna umur tampil sama seperti di halaman): nama + peringkat `#n / total`, angka AWB besar + Rp, batang warna umur yang panjangnya relatif ke provinsi terbanyak (sisa = trek `--soft`), jumlah per 4 warna (posisi tetap; 0 dibuat pudar), 3 cabang tujuan teratas dengan batang mini. Kartu provinsi didahulukan atas tooltip segmen di dalamnya.

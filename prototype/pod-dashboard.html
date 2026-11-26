@@ -656,6 +656,27 @@ footer { color: var(--muted); font-size: 12px; padding-top: 10px; }
   .m-apply { margin-left: 0; }
   .dialog { padding: 16px; }
 }
+
+/* ---------- v21: tooltip peta visual ---------- */
+.tip.rich { width: 280px; max-width: calc(100vw - 16px); background: var(--card); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(15, 23, 42, .18); padding: 12px 14px; display: grid; gap: 8px; }
+.tp-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.tp-h b { font-size: 14px; }
+.tp-rk { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tp-n { color: var(--muted); }
+.tp-n b { font-size: 22px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tp-n span { margin-left: 6px; color: var(--ink); }
+.tp-bar { height: 14px; background: var(--soft); border-radius: 2px; display: flex; }
+.tp-bar .agestack, .tp-mini .agestack { height: 100%; }
+.tp-sev { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tp-sev span { display: inline-flex; align-items: center; gap: 5px; }
+.tp-sev span.z { opacity: .35; }
+.tp-sev i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; }
+.tp-bl { color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+.tp-br { display: grid; grid-template-columns: minmax(0, 1fr) 72px auto; gap: 4px 8px; align-items: center; }
+.tp-bn { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tp-mini { height: 8px; display: flex; }
+.tp-br b { text-align: right; font-variant-numeric: tabular-nums; }
+.tp-go, .tp-z { color: var(--muted); }
 </style>
 
 <div class="wrap">
@@ -898,7 +919,7 @@ const T = {
   'map.top': ['Provinces with most not returned', 'Provinsi dengan belum balik terbanyak'],
   'map.none': ['Location not mapped yet: {n} AWB · {v}', 'Lokasi belum terpetakan: {n} AWB · {v}'],
   'map.unk': ['Location not mapped', 'Lokasi belum terpetakan'],
-  'map.zero': ['no POD not returned', 'tidak ada POD belum balik'],
+  'map.zero': ['no POD not returned', 'tidak ada POD belum balik'], 'map.click': ['Click for the AWB list', 'Klik untuk daftar AWB'],
   'col.prov': ['Province', 'Provinsi'],
   'v.act': ['Needs action:', 'Perlu tindakan:'], 'v.ok': ['On track:', 'Sesuai target:'],
   'v.ot': ['on time {p} (target 80%)', 'tepat waktu {p} (target 80%)'],
@@ -1275,21 +1296,36 @@ function pie(cx, cy, rad, rows) {
     a0 = a1; return `<path d="${d}" class="bgf-${o.x.k}"/>`;
   }).join('');
 }
+const MAP = { by: new Map(), list: [], max: 1, ver: 0 };
+// tooltip peta = kartu visual: dibaca dari bentuk & warna, teks hanya nama dan angka
+function provTip(p) {
+  const o = MAP.by.get(p), name = p === '?' ? t('map.unk') : p;
+  if (!o) return `<div class="tp-h"><b>${esc(name)}</b></div><div class="tp-z">${esc(t('map.zero'))}</div>`;
+  const n = o.rows.length, rank = MAP.list.indexOf(o) + 1, brs = groupCount(o.rows, 'br').slice(0, 3);
+  return `<div class="tp-h"><b>${esc(name)}</b>${rank ? `<span class="tp-rk">#${rank} / ${MAP.list.length}</span>` : ''}</div>
+    <div class="tp-n"><b>${fmt(n)}</b> AWB <span>${rp(sumV(o.rows))}</span></div>
+    <div class="tp-bar"><span class="agestack" style="width:${Math.max(2, (n / MAP.max) * 100)}%">${ageSegs(o.rows)}</span></div>
+    <div class="tp-sev">${SEV.map(x => { const k = o.rows.filter(r => r.sev === x.k).length; return `<span class="${k ? '' : 'z'}"><i class="bg-${x.k}"></i>${fmt(k)}</span>`; }).join('')}</div>
+    <div class="tp-bl">${esc(t('m.topBr'))}</div>
+    <div class="tp-br">${brs.map(([b, k]) => `<span class="tp-bn">${esc(BR[b].name)}</span><span class="tp-mini"><span class="agestack" style="width:${(k / brs[0][1]) * 100}%">${ageSegs(o.rows.filter(r => r.br === b))}</span></span><b>${fmt(k)}</b>`).join('')}</div>
+    <div class="tp-go">${esc(t('map.click'))}</div>`;
+}
 function renderMap() {
   const by = provGroups(), unk = by.get('?');
   const list = [...by.values()].filter(o => o.p !== '?' && o.k).sort((a, b) => b.rows.length - a.rows.length || a.p.localeCompare(b.p));
   const max = list.length ? list[0].rows.length : 1;
+  MAP.by = by; MAP.list = list; MAP.max = max; MAP.ver++;
   const box = $('#map'), wpx = box.clientWidth || 900, sc = Math.max(.35, wpx / GEO.w);
   const fs = Math.min(34, 11.5 / sc), lh = fs * 1.15, bs = Math.min(1.9, 1 / Math.max(sc, .5));   // HP: huruf & lingkaran diperbesar          // huruf tetap terbaca saat peta mengecil
   const tipOf = o => `${o.p}: ${fmt(o.rows.length)} AWB · ${rp(sumV(o.rows), true)} — ${AGE(o.rows).map(x => `${L(x.x.label)} ${fmt(x.rows.length)}`).join(', ')}`;
-  const land = GEO.prov.map(pv => { const o = by.get(pv.n); return `<path class="pv" d="${pv.d}"${o ? ` data-open="${spec({ node: 'belum', prov: pv.n })}"` : ''} data-tip="${esc(o ? tipOf(o) : `${pv.n}: ${t('map.zero')}`)}"/>`; }).join('');
+  const land = GEO.prov.map(pv => { const o = by.get(pv.n); return `<path class="pv" d="${pv.d}"${o ? ` data-open="${spec({ node: 'belum', prov: pv.n })}"` : ''} data-tip="${esc(o ? tipOf(o) : `${pv.n}: ${t('map.zero')}`)}" data-tipp="${esc(pv.n)}"/>`; }).join('');
   const placed = [], dots = [], labels = [];
   const hit = (b) => placed.some(q => b.x < q.x + q.w && b.x + b.w > q.x && b.y < q.y + q.h && b.y + b.h > q.y);
   const P = o => [(o.sx / o.k - GEO.lon0) * GEO.k, (GEO.lat0 - o.sy / o.k) * GEO.k];
   list.forEach(o => { const [x, y] = P(o), rad = (3.5 + 15 * Math.sqrt(o.rows.length / max)) * bs; o.x = x; o.y = y; o.r = rad; placed.push({ x: x - rad, y: y - rad, w: rad * 2, h: rad * 2 }); });
   const maxLab = wpx < 700 ? 6 : 99;
   list.forEach((o, i) => {
-    dots.push(`<g class="mb" role="button" tabindex="0" aria-label="${esc(tipOf(o))}" data-prov="${esc(o.p)}" data-n="${o.rows.length}" data-open="${spec({ node: 'belum', prov: o.p })}" data-tip="${esc(tipOf(o))}"><circle class="hit" cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="${Math.max(o.r, 12.5 / Math.min(1, sc)).toFixed(1)}"/>${pie(o.x, o.y, o.r, o.rows)}</g>`);
+    dots.push(`<g class="mb" role="button" tabindex="0" aria-label="${esc(tipOf(o))}" data-prov="${esc(o.p)}" data-n="${o.rows.length}" data-open="${spec({ node: 'belum', prov: o.p })}" data-tip="${esc(tipOf(o))}" data-tipp="${esc(o.p)}"><circle class="hit" cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="${Math.max(o.r, 12.5 / Math.min(1, sc)).toFixed(1)}"/>${pie(o.x, o.y, o.r, o.rows)}</g>`);
     if (i >= maxLab) return;
     const n = fmt(o.rows.length), v = rp(sumV(o.rows)), w = Math.max(n.length * fs * .62, v.length * fs * .5) + 4, h = lh * 2;
     const opts = [[o.x + o.r + 3, o.y - h / 2], [o.x - o.r - 3 - w, o.y - h / 2], [o.x - w / 2, o.y - o.r - h - 2], [o.x - w / 2, o.y + o.r + 2]];
@@ -1303,7 +1339,7 @@ function renderMap() {
   });
   box.innerHTML = `<svg class="map" viewBox="0 0 ${GEO.w} ${GEO.h}" role="group" aria-label="${esc(t('map.title'))}">${land}${dots.join('')}${labels.join('')}</svg>`;
   const top = list.slice(0, 8), tmax = top.length ? top[0].rows.length : 1;
-  $('#map-list').innerHTML = top.map(o => `<li><button type="button" class="rk-row mp-row" data-prov="${esc(o.p)}" data-n="${o.rows.length}" data-open="${spec({ node: 'belum', prov: o.p })}" data-tip="${esc(tipOf(o))}">
+  $('#map-list').innerHTML = top.map(o => `<li><button type="button" class="rk-row mp-row" data-prov="${esc(o.p)}" data-n="${o.rows.length}" data-open="${spec({ node: 'belum', prov: o.p })}" data-tip="${esc(tipOf(o))}" data-tipp="${esc(o.p)}">
       <span class="rk-l"><b>${esc(o.p)}</b></span><span class="rk-t"><span class="hb-fill agestack" style="width:${(o.rows.length / tmax) * 100}%">${ageSegs(o.rows)}</span></span>${amt(o.rows.length, sumV(o.rows))}</button></li>`).join('') || `<li class="muted">${t('focus.none')}</li>`;
   $('#map-note').innerHTML = unk ? go({ node: 'belum', prov: '?' }, esc(t('map.none', { n: fmt(unk.rows.length), v: rp(sumV(unk.rows)) }))) : '';
 }
@@ -1850,12 +1886,16 @@ function exportModal() {
 /* ================= hint & toast ================= */
 const tip = $('#tip');
 let pinned = null;
-function showTip(el, x, y) { tip.textContent = el.dataset.tip; tip.hidden = false; const w = tip.offsetWidth, h = tip.offsetHeight;
+function showTip(el, x, y) {
+  const pk = el.dataset.tipp;
+  if (pk != null) { const key = pk + '|' + MAP.ver + '|' + LANG; if (tip.dataset.k !== key) { tip.innerHTML = provTip(pk); tip.dataset.k = key; } tip.classList.add('rich'); }
+  else { tip.textContent = el.dataset.tip; tip.dataset.k = ''; tip.classList.remove('rich'); }
+  tip.hidden = false; const w = tip.offsetWidth, h = tip.offsetHeight;
   tip.style.left = Math.min(window.innerWidth - w - 8, Math.max(8, x + 12)) + 'px'; tip.style.top = (y + 18 + h > window.innerHeight ? Math.max(8, y - h - 10) : y + 18) + 'px'; }
 function hideTip() { tip.hidden = true; pinned = null; }
 document.addEventListener('scroll', hideTip, { passive: true, capture: true });
-document.addEventListener('pointermove', e => { if (e.pointerType === 'touch' || pinned) return; const el = e.target.closest && e.target.closest('[data-tip]'); if (el && el.dataset.tip) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-document.addEventListener('focusin', e => { const el = e.target.closest && e.target.closest('[data-tip]'); if (el && el.dataset.tip) { const b = el.getBoundingClientRect(); showTip(el, b.left, b.bottom - 10); } else if (!pinned) tip.hidden = true; });
+document.addEventListener('pointermove', e => { if (e.pointerType === 'touch' || pinned) return; const el = e.target.closest && (e.target.closest('[data-tipp]') || e.target.closest('[data-tip]')); if (el && el.dataset.tip) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
+document.addEventListener('focusin', e => { const el = e.target.closest && (e.target.closest('[data-tipp]') || e.target.closest('[data-tip]')); if (el && el.dataset.tip) { const b = el.getBoundingClientRect(); showTip(el, b.left, b.bottom - 10); } else if (!pinned) tip.hidden = true; });
 let toastT;
 function toast(msg) { const el = $('#toast'); el.textContent = msg; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2600); }
 
