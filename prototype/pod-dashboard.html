@@ -597,7 +597,7 @@ footer { color: var(--muted); font-size: 12px; padding-top: 10px; }
   .top { top: 0; background: var(--bg); }
 }
 /* target sentuh >= 24px (WCAG 2.5.8) untuk tautan rute */
-.sc-l .go, .sc-v .go { display: inline-block; min-height: 24px; padding: 2px 0; box-sizing: border-box; }
+.sc-l .go, .sc-v .go { min-height: 24px; padding-block: 2px; box-sizing: border-box; } .sc-v .go { display: inline-block; }
 /* ---------- v21: detail datar, selaras halaman ---------- */
 .modal { backdrop-filter: none; -webkit-backdrop-filter: none; }
 .dialog { border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,.25); gap: 16px; }
@@ -1768,7 +1768,7 @@ async function saveWorkbook(wb, filename) {
 }
 // laporan "Performance POD" persis sketsa: baris = status, kolom = jumlah, Rp, Intracity, Domestik, aging per 5 HK, warna umur
 function perfMatrix() {
-  const head = [t('c.status'), 'AWB', 'Rp', '% ' + t('c.parent'), t('sc.INTRACITY') + ' (AWB)', t('sc.INTRACITY') + ' (Rp)', t('sc.DOMESTIK') + ' (AWB)', t('sc.DOMESTIK') + ' (Rp)',
+  const head = [t('c.status'), 'AWB', 'Rp', t('c.parent'), t('sc.INTRACITY') + ' (AWB)', t('sc.INTRACITY') + ' (Rp)', t('sc.DOMESTIK') + ' (AWB)', t('sc.DOMESTIK') + ' (Rp)',
     ...BUCKETS.map(b => `${b.label} ${U()}`), ...SEV.map(x => L(x.label))];
   return [head, ...NODES.map(n => {
     const rr = F.filter(n.t), pr = n.p ? F.filter(NODE[n.p].t).length : null, I = rr.filter(r => r.scope === 'INTRACITY'), D = rr.filter(r => r.scope !== 'INTRACITY');
