@@ -163,3 +163,31 @@ Tidak dipakai lagi dan **jangan diimplementasikan** di Laravel: app shell/sideba
 | Filter | `.fdet > .fgrid` | 2 baris di desktop; dilipat di ≤860px dengan ringkasan; `#active-filters` disembunyikan bila kosong |
 | Teks merah | `--sev-merah-ink` | Angka/teks merah memakai token ini (kontras ≥ 4,5:1); blok & garis tetap `--sev-merah` |
 Pohon kiri→kanan (`.ptree`, `.pnode`) **dipensiunkan**.
+
+## v20 — bahasa visual tunggal & peta (26 Nov 2026)
+**Aturan inti**
+- Panjang batang = jumlah AWB. Warna hanya punya satu arti:
+
+| Warna (token) | Arti | Dipakai di |
+|---|---|---|
+| `--data-none` abu | Tidak balik | batang semua kiriman, legenda |
+| `--data-ret` biru | Sudah balik | batang, status dokumen, rute |
+| `--sev-hitam/oranye/merah/ungu` | Umur POD belum balik (relatif SLA) | batang, pie peta, kolom umur, tindak lanjut |
+| `--success` hijau | Target tercapai | angka & batang Tepat waktu bila ≥ 80% |
+| `--ink` (aksen) | Elemen interaktif | tombol utama, pilihan aktif, fokus |
+
+- Biru **tidak** dipakai untuk UI. Merah/oranye **tidak** dipakai untuk status target (di bawah target = tinta netral + teks).
+- Tanpa ornamen: tanpa bayangan, gradasi (kecuali contoh warna legenda), animasi, count-up, ikon (i); istilah = garis titik-titik + tooltip.
+- Teks angka memakai tinta; teks merah memakai `--sev-merah-ink`.
+
+**Komponen**
+| Komponen | Kelas | Catatan |
+|---|---|---|
+| Peta sebaran | `#map svg.map > path.pv + g.mb + text.ml` | Proyeksi ekuirektangular 1000×376; data `GEO` dari `tools/build_geo.py`; lingkaran = pie umur; `g.mb` role=button + tabindex |
+| Kondisi | `.verdict` + `.kpis > .kpi` (`.k-l`, `.k-v`, `.trk`, `.k-c`) | 4 angka, tanpa kartu |
+| Batang semua kiriman | `.fb` (`.fb-all`, `.fb-brace`, `.fb-bar`, `.fb-legs`) | kurung = POD balik |
+| Batang status | `.fd > .fd-col > .hb(.child)` | skala per kolom |
+| Rute | `.scs > .sc` | 100% POD balik: biru + umur |
+| Tindak lanjut | `.rank2 .rk-row` | panjang relatif ke teratas |
+| Legenda | `#legend` | satu untuk seluruh halaman |
+Dipensiunkan: papan status v19 (`.sb-*`, `.ss-*`), band header biru, navigasi bagian, panel Focus, filter Scope.

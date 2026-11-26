@@ -67,6 +67,21 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 - **Aksesibilitas:** token teks merah `--sev-merah-ink` (#b91c1c terang); label jumlah aging = tombol (keyboard). axe-core: 0 pelanggaran di 6 kondisi.
 - **Hasil:** KPI mulai 479 px (sebelumnya 619); banner + 5 KPI muat di layar laptop 1366×768; HP: KPI di 751 px (sebelumnya 1.469); tinggi desktop 3.608 → 3.060 px. E2E 69/69.
 
+**v20 — analisis ulang dari sketsa + redesign visual (26 Nov 2026).**
+
+*Analisis kebutuhan (sketsa):* catatan menggambarkan satu laporan "Output: excel performance POD" — baris = pohon status (POD → Tidak balik / Balik → Intracity/Domestik → Belum balik [Not yet delivered, Delivered → masih di pelanggan, PODC, Redoc, Upload] / Sudah balik [STPOD, PODP, Arsip]), "Aging per 5 hari × 6", warna tanggal 1–3 hitam / 4–5 oranye / 6–8 merah / ≥10 ungu, filter customer / PCP-perwakilan / tier kota. Target pengguna: simpel, < 1 menit, warna = fungsi, tidak terlihat buatan AI, halaman hanya ringkasan tetapi setiap angka membawa detail & bisa diekspor; utamakan visualisasi; tambah peta sebaran di paling atas.
+
+*Keputusan:*
+- **Satu bahasa visual** untuk seluruh halaman: panjang batang = jumlah AWB; warna = fungsi (abu = tidak balik, biru = sudah balik, hitam/oranye/merah/ungu = umur POD belum balik, hijau = target tercapai). UI interaktif memakai tinta netral (biru tidak dipakai untuk tombol). Satu legenda untuk seluruh halaman.
+- **Urutan:** 1 Sebaran (peta) · 2 Kondisi (1 kalimat + 4 angka) · 3 Alur POD (satu batang semua kiriman dengan kurung "POD balik", rincian status sebagai batang horizontal, Intracity/Domestik sebagai batang 100%) · 4 Umur per 5 HK (kolom bertumpuk warna umur) · 5 Tindak lanjut (dua grafik batang 10 teratas).
+- **Peta sebaran:** batas 34 provinsi (BAKOSURTANAL) netral; satu lingkaran per provinsi cabang tujuan (ukuran = AWB belum balik, isi = pie warna umur), angka AWB + Rp di samping dengan penempatan anti-tumpang-tindih; daftar 8 provinsi teratas di kanan; cabang tanpa lokasi ditampilkan sebagai "Lokasi belum terpetakan". Total lingkaran + belum terpetakan = Belum balik.
+- **Anti "AI look":** tanpa band warna di header, tanpa kartu melayang/bayangan/gradasi/animasi/count-up/sorotan kursor, tanpa ikon (i) (istilah bergaris titik-titik + tooltip), judul kalimat biasa, huruf sistem, angka tabular.
+- **Export:** setiap kelompok (peta, kondisi, alur, umur, tindak lanjut) berisi ringkasannya + sheet "Detail AWB"; "Unduh Excel" diawali sheet "Performance POD" = laporan sketsa (14 status × AWB, Rp, %, Intracity, Domestik, 7 rentang umur, 4 warna).
+- **Filter:** satu baris (Scope dihapus karena Intracity/Domestik sudah selalu tampil); urutan sketsa: customer → internal/perwakilan → level → region → cabang tujuan.
+- **Mode gelap:** "tidak balik" #4b5563 (dari #334155, kontras 1,78 → 2,44), palet umur gelap tervalidasi (validate_palette: CVD & normal-vision lulus).
+
+*Verifikasi:* E2E v20 57/57 (termasuk: tidak ada warna di luar token fungsi, tanpa ornamen, peta = modal & = belum balik, label peta tidak tumpang-tindih, setiap export berisi "Detail AWB", sheet pertama = laporan sketsa dengan total = layar). axe-core WCAG 2.1 AA: 0 pelanggaran (6 kondisi). Tinggi desktop 2.529 px (peta + daftar muat di layar 1366×768).
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

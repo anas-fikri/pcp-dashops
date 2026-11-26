@@ -136,6 +136,12 @@ Temuan kualitas data:
 - Ada kolom tanpa judul (kolom ke-12) berisi angka pada 4 baris; diabaikan.
 - 233 baris INTERNATIONAL dikecualikan.
 
+### Peta sebaran (v20, 26 Nov 2026)
+Lokasi cabang tujuan dibangun dengan `python3 -I prototype/tools/build_geo.py <coverage.xlsx> <IDN_adm_2_kabkota.json> <indonesia-prov.geojson>` (jalankan setelah `build_branch_master.py`). Hasil: `p` (provinsi), `ll` (lon, lat), `q` (cara cocok) per cabang di `branch-master.json`, dan peta provinsi tersederhanakan (±62 KB) di penanda `/*MAP_START*/…/*MAP_END*/`.
+- Sumber: batas provinsi "Peta Dasar BAKOSURTANAL 1:250.000" (github.com/ans-4175/peta-indonesia-geojson); titik kabupaten/kota turunan GADM (github.com/rifani/geojson-political-indonesia) — **lisensi GADM non-komersial: untuk produksi ganti dengan data resmi BIG**. File mentah tidak disimpan di repo.
+- Penempatan: kabupaten dari DistrictName coverage (343 cabang) → nama cabang (5) → kecocokan kata dibatasi region bisnis (65) → provinsi = poligon yang memuat titik. **48 cabang (±2,4% volume) belum terpetakan** (mis. Sangatta, Konawe, Duri — kabupaten pemekaran baru) dan ditampilkan apa adanya sebagai "Lokasi belum terpetakan".
+- Untuk Laravel: tambahkan kolom `province`, `lat`, `lon` di master cabang (sumber BIG/BPS), endpoint `/api/pod/map` mengembalikan belum balik per provinsi (+ warna umur, Rp).
+
 ### Mode presentasi
 Tombol **Present** membuka layar penuh, menampilkan satu bagian per layar (5 slide), navigasi ← → / bar bawah, Esc keluar.
 Angka tetap bisa diklik untuk membuka detail saat presentasi.

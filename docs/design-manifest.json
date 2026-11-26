@@ -10,13 +10,14 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (.fdet filter, #s-now, #s-tree (papan status .sb-* + .ss-tab), #s-aging, #s-rank; v19)",
+      "source": "prototype/pod-dashboard.html (#s-map peta, #s-now, #s-tree alur, #s-aging, #s-rank; v20)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/summary",
         "/api/pod/status-tree",
         "/api/pod/aging",
         "/api/pod/ranking",
+        "/api/pod/map",
         "/api/pod/options"
       ],
       "states": {
@@ -29,15 +30,17 @@
         "mobile_390": true,
         "first_visit": true,
         "filter_collapsed_mobile": true,
-        "axe_wcag21aa_clean": true
+        "axe_wcag21aa_clean": true,
+        "map_unlocated_branches": true,
+        "dark_mode_validated": true
       },
       "conformance": "pass",
       "status": "specified",
       "reverified": {
-        "date": "2026-11-25",
-        "reason": "v19: review <1 menit; pohon diganti papan status (segmented bar + meter list); filter ringkas; a11y axe 0 pelanggaran",
+        "date": "2026-11-26",
+        "reason": "v20: analisis ulang dari sketsa; satu bahasa visual (batang = AWB, warna = fungsi); peta sebaran di atas; tanpa ornamen AI; export membawa Detail AWB",
         "conformance": "pass",
-        "e2e": "69/69"
+        "e2e": "57/57 (suite v20)"
       }
     },
     "SCR-DSH-002": {
