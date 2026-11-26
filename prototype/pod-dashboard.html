@@ -466,8 +466,8 @@ h3 { font-size: 12px; font-weight: 700; color: var(--muted); margin: 0 0 8px; }
 .btn, .seg { border-radius: 6px; } .seg button { border-radius: 4px; } .btn { padding: 7px 14px; }
 .term { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; cursor: help; }
 .filter-card { background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 12px 0 14px; box-shadow: none; }
-.fgrid { grid-template-columns: max-content repeat(5, minmax(104px, 1fr)) max-content max-content; grid-template-areas: "per cus typ lvl reg dst bas sav"; gap: 8px 10px; }
-.fgrid .f-period .period select { width: 132px; min-width: 0; }
+.fgrid { grid-template-columns: max-content repeat(3, minmax(96px, 1fr)) repeat(2, minmax(122px, 1fr)) max-content max-content; grid-template-areas: "per cus typ lvl reg dst bas sav"; gap: 8px 10px; }
+.fgrid .f-period .period select { width: auto; min-width: 132px; }
 .fgrid .f-period .rangebtn { width: auto; min-width: 132px; white-space: nowrap; }
 .k-v { flex-wrap: wrap; } .k-v .kv { white-space: nowrap; }
 .fgrid .f-period { grid-area: per; } .fgrid .f-cust { grid-area: cus; } .fgrid .f-btype { grid-area: typ; } .fgrid .f-lv { grid-area: lvl; }
@@ -784,7 +784,7 @@ const T = {
   'export.tip': ['Download Excel with summary, aging, per branch, per customer and the AWB list for the active filters.', 'Unduh Excel berisi ringkasan, aging, per cabang, per customer, dan daftar AWB sesuai filter aktif.'],
   'f.period': ['POS date', 'Tanggal POS'],
   'f.period.tip': ['Date the transaction was recorded (POS). Both the preset and the date range filter on this date.', 'Tanggal transaksi dicatat (POS). Preset dan rentang tanggal sama-sama menyaring berdasarkan tanggal ini.'],
-  'f.preset': ['Preset', 'Periode'], 'f.range': ['Date range', 'Rentang tanggal'],
+  'f.preset': ['Preset', 'Periode'], 'f.range': ['Date range', 'Rentang'],
   'f.lastN': ['Last {n} days', '{n} hari terakhir'],
   'f.cust': ['Customer', 'Customer'],
   'f.cust.tip': ['The shipper. Each customer has a POD return SLA of 6 or 7 working days.', 'Pengirim. Setiap customer punya SLA POD kembali 6 atau 7 hari kerja.'],
