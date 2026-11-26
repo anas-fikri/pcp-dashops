@@ -10,7 +10,7 @@
       "name": "Dashboard ringkasan",
       "feature": "FEAT-001",
       "strategy": "C-code-native",
-      "source": "prototype/pod-dashboard.html (#s-map peta, #s-now, #s-tree alur, #s-aging, #s-rank; v20)",
+      "source": "prototype/pod-dashboard.html (#s-map peta, #s-now, #s-tree alur, #s-aging, #s-rank; detail #dialog; v21)",
       "spec": "docs/features/FEAT-001-pod-dashboard/ui-design.md#scr-dsh-001--dashboard-ringkasan",
       "contracts": [
         "/api/pod/summary",
@@ -32,15 +32,19 @@
         "filter_collapsed_mobile": true,
         "axe_wcag21aa_clean": true,
         "map_unlocated_branches": true,
-        "dark_mode_validated": true
+        "dark_mode_validated": true,
+        "returned_uses_ontime_not_age_colour": true,
+        "detail_table_no_horizontal_scroll": true,
+        "sticky_header_opaque": true
       },
       "conformance": "pass",
       "status": "specified",
       "reverified": {
         "date": "2026-11-26",
-        "reason": "v20: analisis ulang dari sketsa; satu bahasa visual (batang = AWB, warna = fungsi); peta sebaran di atas; tanpa ornamen AI; export membawa Detail AWB",
+        "reason": "v21: review fungsi & kerapian — warna umur khusus POD belum balik, di bawah target = berongga, detail datar 8 kolom, header lengket buram, tooltip, rentang tanggal",
         "conformance": "pass",
-        "e2e": "57/57 (suite v20)"
+        "e2e": "78/78 (suite v21)",
+        "a11y": "axe-core WCAG 2.1 AA 0 pelanggaran (6 kondisi)"
       }
     },
     "SCR-DSH-002": {

@@ -82,6 +82,25 @@ Masukan pengguna: masih terlalu rumit, terlalu banyak yang harus diklik; AWB dan
 
 *Verifikasi:* E2E v20 57/57 (termasuk: tidak ada warna di luar token fungsi, tanpa ornamen, peta = modal & = belum balik, label peta tidak tumpang-tindih, setiap export berisi "Detail AWB", sheet pertama = laporan sketsa dengan total = layar). axe-core WCAG 2.1 AA: 0 pelanggaran (6 kondisi). Tinggi desktop 2.529 px (peta + daftar muat di layar 1366×768).
 
+**v21 — review fungsi & kerapian untuk diajukan sebagai prototype (26 Nov 2026).**
+
+*Metode:* uji otomatis Playwright di setiap kondisi (halaman, detail tiap titik alur, detail AWB, tren tepat waktu, pemilih tanggal, presentasi, HP 390 px, mode gelap) + potret layar per kondisi + axe-core WCAG 2.1 AA + ESLint. Setiap temuan dinilai dari satu pertanyaan: apakah perbaikannya langsung memudahkan pengguna?
+
+| # | Temuan | Dampak ke pengguna | Perbaikan |
+|---|---|---|---|
+| 1 | Header lengket di desktop transparan (sejak v20) | Saat menggulir, judul & tombol bertumpuk dengan isi → sulit dibaca | Header memakai latar halaman, menempel di atas |
+| 2 | POD **sudah balik** diberi warna umur ("Ungu · Kritis, eskalasi") di detail & AWB | Salah tafsir: dokumen yang sudah kembali tampak perlu eskalasi | Warna umur khusus POD belum balik; sudah balik = **tepat waktu vs terlambat**. Saringan warna di "POD balik" hanya menghitung yang belum balik. Kolom "Warna umur" di Excel kosong untuk yang sudah balik |
+| 3 | "Di bawah target"/"terlambat" memakai abu tua `--muted` = warna "Hitam · aman"; tren mingguan memakai oranye | Satu warna dua arti | Di bawah target/terlambat = **batang berongga bergaris tinta** (KPI Tepat waktu, tren mingguan, detail). Legenda halaman menambah "Target tepat waktu ≥ 80%: tercapai / di bawah" |
+| 4 | Porsi di detail Tepat waktu selalu 100% (penyebut ikut tersaring) | Angka menyesatkan | Porsi & jejak (breadcrumb) dihitung tanpa saringan baris; klik jejak = naik ke langkah induk tanpa saringan baris |
+| 5 | Tabel detail 13 kolom, kolom Delivered dst. tersembunyi di 1440 px; HP harus geser samping | Data penting tidak terlihat | 8 kolom (AWB+customer, tujuan+asal·rute, status+dokumen, POS, Delivered, Kembali, umur+SLA, nilai); HP = satu blok per AWB tanpa geser samping; header = tombol urut (bisa keyboard) |
+| 6 | Detail bergaya lama: kartu abu, 5 angka (2 berulang), ikon (i), "Drill:", batang warna 90 px | Tidak selaras halaman, lambat dipindai | Datar: 4 angka dengan garis pemisah (Porsi, Nilai, Umur, Intracity·Domestik), istilah bergaris titik, "Rincian", satu batang sebaran selebar penuh + legenda yang bisa diklik; "Penyumbang terbesar" bisa dilipat (terlipat di HP) |
+| 7 | Tooltip tombol Present tertinggal di layar presentasi; tooltip tidak hilang saat digulir | Mengganggu saat presentasi | Tooltip ditutup saat klik apa pun, saat menggulir, dan saat masuk presentasi; istilah bergaris titik bisa diketuk di layar sentuh |
+| 8 | Teks rentang tanggal terlipat 3 baris; "1 days" | Filter berantakan | Format ringkas "4–26 Okt · 23 hari", satu baris, "1 hari" |
+| 9 | Google Fonts dimuat padahal tidak dipakai | Permintaan jaringan sia-sia (lambat di jaringan kantor/cabang) | Dihapus; huruf sistem |
+| 10 | Area sentuh lingkaran peta 23 px, label rute 19–20 px | Sulit diketuk di HP | ≥ 24 px (WCAG 2.5.8). Sisa < 24 px hanya tautan di dalam kalimat (dikecualikan 2.5.8) |
+
+*Verifikasi:* E2E v21 **78/78** (57 cek v20 + 21 cek baru, a.l. tepat waktu + terlambat = jumlah, klik legenda = angkanya, tabel ≤ 8 kolom tanpa geser samping di 1440 px & HP, AWB sudah balik tanpa "Critical", tren tanpa oranye, tooltip Present, rentang "1 day" satu baris, Excel warna kosong untuk sudah balik). axe-core WCAG 2.1 AA: 0 pelanggaran (6 kondisi). ESLint: 0 peringatan. Token: 52 nilai cocok.
+
 ## SCR-DSH-002 · Daftar AWB (modal)
 - **Komposisi:** breadcrumb (jumlah + Rp per level), chip saringan aktif, chip rinci, "Lihat posisinya di dashboard", 5 statistik, batang & chip warna, penyumbang terbesar, cari, export, tabel 13 kolom (urut), paging.
 - **Kontrak:** `/api/pod/awb`. **States:** default ✓, cari kosong ✓, dokumen PODP/STPOD ✓, paging ✓, loading/error ✗ *gap (T9)*.

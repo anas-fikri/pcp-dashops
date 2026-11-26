@@ -191,3 +191,18 @@ Pohon kiri→kanan (`.ptree`, `.pnode`) **dipensiunkan**.
 | Tindak lanjut | `.rank2 .rk-row` | panjang relatif ke teratas |
 | Legenda | `#legend` | satu untuk seluruh halaman |
 Dipensiunkan: papan status v19 (`.sb-*`, `.ss-*`), band header biru, navigasi bagian, panel Focus, filter Scope.
+
+## v21 — penegasan aturan warna & detail (26 Nov 2026)
+- **Warna umur (hitam/oranye/merah/ungu) hanya untuk POD belum balik.** POD sudah balik dinilai *tepat waktu* vs *terlambat*, tidak pernah diberi warna umur (layar maupun kolom "Warna umur" di Excel).
+- **Target:** tercapai = `--success` (isi hijau); di bawah target / terlambat = **berongga** (`.bg-late`: latar `--card`, garis 1,5 px `--ink`). Abu tua tidak dipakai karena `--muted` (#475569) = `--sev-hitam`; abu muda milik "tidak balik". Sampel terlalu kecil = `--line`.
+- **Header lengket** (≥ 900 px) wajib berlatar `--bg`.
+- **Tooltip** ditutup saat klik, gulir, dan masuk presentasi; `.term` bisa diketuk (layar sentuh).
+
+| Komponen detail | Kelas | Catatan |
+|---|---|---|
+| Baris saringan + rincian | `.mbar-row` | chip saringan aktif (hapus ×), "Rincian" anak titik, "Lihat di dashboard" di kanan |
+| Angka detail | `.mstats > .mstat[data-k]` | 4 angka datar dipisah garis: share, val, age, scope |
+| Batang sebaran | `.mdist > .mbar + .mleg` | segmen = AWB; legenda = tombol saring (`data-msev` / `data-mset`) |
+| Penyumbang | `details.mwhy` | terbuka di desktop, terlipat di HP |
+| Tabel | `table.mtable` | 8 kolom, header `.th-b` = tombol urut; HP: satu blok per AWB, kolom tanggal `.c-dt` disembunyikan |
+Dipensiunkan: `.sevbar`, `info()` di detail (ikon (i)), kolom Asal/Scope/SLA/Ref terpisah.
